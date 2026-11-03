@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>黃嵩文 · Resume</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400&family=Noto+Sans+TC:wght@300;400&display=swap">
+<style>
+/* ============================================================
+   HALCYON · resume (lean)
+   Layout: one column, max 920px. Sections separated by hairlines.
+   One amber signal (dark) / sage (light). Everything square. No shadows.
+   Edit content in the DATA block at the bottom; edit look here.
+   ============================================================ */
+:root{
+  color-scheme:dark;
+  --bg:#0D0F10; --plate:#101315; --line:#23282B; --strong:#31383C;
+  --fg:#E9E7E2; --dim:#8C8F8C; --faint:#5A5E5D;
+  --signal:#E3A72C; --signal-deep:#2A1F0C;
+  --mono:"JetBrains Mono","Noto Sans TC",ui-monospace,Menlo,monospace;
+  --max:920px;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  color-scheme:light;
+  --bg:#E7E8E4; --plate:#F2F2EF; --line:#C6C8C2; --strong:#9EA39C;
+  --fg:#111312; --dim:#5E6462; --faint:#8A908C;
+  --signal:#5E7A6C; --signal-deep:#DDE4DF;
+}}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#E7E8E4; --plate:#F2F2EF; --line:#C6C8C2; --strong:#9EA39C;
+  --fg:#111312; --dim:#5E6462; --faint:#8A908C;
+  --signal:#5E7A6C; --signal-deep:#DDE4DF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--mono);font-weight:300;font-size:14px;line-height:1.85;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 96px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit;text-decoration:none;border-bottom:1px solid var(--strong)}
+a:hover{color:var(--signal);border-color:var(--signal)}
+button{font:inherit;cursor:pointer;color:inherit;background:none;border:0;padding:0}
+.wrap{max-width:var(--max);margin:0 auto}
+.label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sig{color:var(--signal)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.mark{width:11px;height:11px;border:1px solid var(--signal);position:relative;flex:none}
+.mark::after{content:"";position:absolute;inset:3px;background:var(--signal)}
+.top nav{display:flex;gap:16px;margin-left:auto;color:var(--dim)}
+.top nav a{border:0}
+.lang{border:1px solid var(--strong);padding:3px 9px;letter-spacing:.14em;font-size:11px}
+.lang:hover{border-color:var(--signal);color:var(--signal)}
+@media (max-width:640px){.top nav{display:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 180px;gap:32px;align-items:start;padding-block:56px 44px;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(30px,5vw,48px);font-weight:200;letter-spacing:-.02em;line-height:1.08;margin:14px 0 14px;text-wrap:balance}
+.hero p{margin:0 0 22px;color:var(--dim);max-width:62ch}
+.links{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:12px}
+.links a{border:0}
+.links a::before{content:"› ";color:var(--signal)}
+.photo{position:relative;width:100%;max-width:180px;aspect-ratio:1/1;border:1px solid var(--strong);background:var(--plate);overflow:hidden;display:grid;place-items:center;font-size:10px;letter-spacing:.14em;color:var(--faint)}
+.photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.75)}
+.photo i{position:absolute;width:9px;height:9px;border:1px solid var(--signal)}
+.photo i:nth-child(1){top:-5px;left:-5px;border-right:0;border-bottom:0}
+.photo i:nth-child(2){top:-5px;right:-5px;border-left:0;border-bottom:0}
+.photo i:nth-child(3){bottom:-5px;left:-5px;border-right:0;border-top:0}
+.photo i:nth-child(4){bottom:-5px;right:-5px;border-left:0;border-top:0}
+@media (max-width:640px){.hero{grid-template-columns:1fr}.photo{max-width:120px}}
+
+/* sections */
+section{padding-block:36px 8px}
+.sec{display:flex;align-items:baseline;gap:14px;margin-bottom:18px}
+.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* work */
+.work{border:1px solid var(--line);background:var(--plate);margin-bottom:10px;min-width:0}
+.work summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:4px 18px;align-items:baseline;padding:18px 20px}
+.work summary::-webkit-details-marker{display:none}
+.work summary .no{font-size:10px;letter-spacing:.2em;color:var(--faint)}
+.work summary h3{margin:0;font-size:19px;font-weight:300;letter-spacing:-.01em}
+.work summary .sum{grid-column:2;margin:0;color:var(--dim);font-size:13px}
+.work summary .tog{font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;grid-row:1;grid-column:3}
+.work summary .tog::before{content:"+ "}
+.work[open]{border-color:var(--signal)}
+.work[open] summary .tog::before{content:"– "}
+.work:hover summary .tog{color:var(--signal)}
+.work .body{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;padding:4px 20px 22px;border-top:1px solid var(--line);margin-top:0}
+.work .body dl{margin:14px 0 0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13px}
+.work .body dt{color:var(--signal);letter-spacing:.2em;font-size:10px;text-transform:uppercase;padding-top:4px}
+.work .body dd{margin:0}
+.work .body ul{margin:0;padding-left:1.1em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font-size:10px;letter-spacing:.12em;border:1px solid var(--strong);padding:2px 8px;color:var(--dim);text-transform:uppercase}
+.shot{margin-top:14px;display:grid;gap:10px}
+.shot img{width:100%;border:1px solid var(--strong);filter:saturate(.8)}
+.shot .ph{aspect-ratio:16/9;border:1px solid var(--strong);background:repeating-linear-gradient(135deg,transparent 0 10px,var(--line) 10px 11px);display:grid;place-items:center;font-size:10px;letter-spacing:.14em;color:var(--faint)}
+@media (max-width:640px){.work .body{grid-template-columns:1fr}.work summary{grid-template-columns:1fr auto}.work summary .no,.work summary h3,.work summary .sum{grid-column:1}.work summary .tog{grid-column:2}}
+
+/* education / publications: rows */
+.row{display:grid;grid-template-columns:96px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+.row .yr{color:var(--signal);letter-spacing:.12em;font-size:11px;padding-top:3px;font-variant-numeric:tabular-nums}
+.row b{font-weight:400;display:block}
+.row span{color:var(--dim)}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.skills div{padding:10px 0 14px;border-top:1px solid var(--line)}
+.skills h4{margin:0 0 6px;font-weight:400}
+.skills p{margin:0;font-size:13px;color:var(--fg)}
+@media (max-width:640px){.skills{grid-template-columns:1fr}}
+
+/* footer */
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 28px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+footer b{font-weight:400;color:var(--fg)}
+:focus-visible{outline:1px solid var(--signal);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap">
+  <span class="mark"></span><span id="brand"></span>
+  <nav id="nav"></nav>
+  <button class="lang" id="langbtn" type="button">EN</button>
+</div></div>
+
+<main class="wrap">
+  <header class="hero" id="hero"></header>
+  <section id="work"></section>
+  <section id="edu"></section>
+  <section id="skills"></section>
+  <section id="pub"></section>
+  <footer id="foot"></footer>
+</main>
+<noscript><p style="padding:24px">This page needs JavaScript to render its content.</p></noscript>
+
+<script>
+/* ============================================================
+   DATA — the only block you need to edit for content.
+   Every text field is {zh:"…", en:"…"}. Leave en empty to reuse zh.
+   Photo / screenshots: a filename next to this file, a URL, or a data: URI.
+   Empty string = show a placeholder slot.
+   ============================================================ */
+const DATA = {
+  name: { zh: "黃嵩文", en: "Song-Wen Huang" },
+  role: { zh: "研究助理 · 中央研究院分子生物研究所", en: "Research Assistant · IMB, Academia Sinica" },
+  headline: { zh: "做神經探針與腦機介面硬體，從機構設計、微製程到系統整合都親手做。",
+              en: "Neural probes and brain–computer interface hardware, built end to end: mechanical design, microfabrication, system integration." },
+  intro: { zh: "臺大生命科學碩士。SolidWorks／Shapr3D 建模與公差設計、FDM／DLP 列印與銑床打樣、Arduino／ESP32／樹莓派機電整合。PNAS 2026 共同第一作者，一項美國臨時專利申請。",
+           en: "M.S. in Life Science, NTU. SolidWorks/Shapr3D modeling and tolerancing, FDM/DLP printing and milling, Arduino/ESP32/Raspberry Pi mechatronics. Co-first author in PNAS 2026; one U.S. provisional patent application." },
+  photo: "",                                            // 例："photo.jpg"
+  location: { zh: "臺北", en: "Taipei" },
+  links: [                                              // 顯示在 hero 與 footer
+    { label: "Email",  text: "kouppie0414@gmail.com", href: "mailto:kouppie0414@gmail.com" },
+    { label: "Phone",  text: "+886 909 574 243",      href: "tel:+886909574243" },
+    // { label: "GitHub", text: "github.com/…", href: "https://github.com/…" },   // 有連結再打開
+  ],
+
+  work: [
+    {
+      year: "2025 —",
+      title: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless Brain–Computer Interface" },
+      summary: { zh: "與生亦科技、宜特科技合作開發中：把兩種不同製程的元件整合成可供自由活動小鼠慢性記錄的無線系統。",
+                 en: "Ongoing collaboration with BioPro Scientific and iST: integrating two fabrication processes into one wireless system for chronic recording in freely moving mice." },
+      problem: { zh: "高通道數的電極與無線讀出來自不同製程，要在小鼠可承載的體積與重量內整合成一套可長期配戴的系統。",
+                 en: "High-channel-count electrodes and wireless readout come from different fabrication processes; they must fit a size and weight a mouse can carry for weeks." },
+      role:    { zh: "整體系統架構整合與電極製作。", en: "Overall system architecture integration and electrode fabrication." },
+      method:  { zh: [], en: [] },
+      result:  { zh: "", en: "" },
+      tags: ["System integration", "Microelectrodes", "Wireless", "Chronic recording"],
+      links: [], shots: [""], open: true
+    },
+    {
+      year: "2024 —",
+      title: { zh: "混合式三維微電極陣列 H3D-MEA", en: "Hybrid 3D Microelectrode Array (H3D-MEA)" },
+      summary: { zh: "以模板圖案化微線結合高密度 CMOS 讀出的三維微電極陣列，電極位置與深度可客製。",
+                 en: "A 3D microelectrode array combining template-patterned microwires with high-density CMOS readout; electrode position and depth are customizable." },
+      problem: { zh: "平面 CMOS 陣列密度高但只能記錄表層；要把微線依預設高度差排列並固結，才能同時取得深度與密度。",
+                 en: "Planar CMOS arrays are dense but surface-bound; microwires must be arranged and fixed at preset height offsets to get depth and density at once." },
+      role:    { zh: "由國科會大專生研究計畫與學士論文延伸，碩士論文主題。", en: "Extended from an NSTC undergraduate project and B.S. thesis into the master's thesis." },
+      method:  { zh: ["模板圖案化微線，驗證能依預設高度差排列", "植入小鼠初級運動皮質（M1）記錄局部場電位", "以尖峰排序辨識單一神經元活動"],
+                 en: ["Template-patterned microwires, verified to align at preset height offsets", "Implanted in mouse M1 to record local field potentials", "Single units identified by spike sorting"] },
+      result:  { zh: "微線陣列排列與固結方法已提出美國臨時專利申請（U.S. 64/040,119）。",
+                 en: "The microwire arrangement and fixation method is filed as U.S. provisional patent application 64/040,119." },
+      tags: ["Microfabrication", "CMOS", "Electrophysiology", "Patent"],
+      links: [], shots: [""], open: false
+    },
+    {
+      year: "2025 —",
+      title: { zh: "微尺度探針入腦力學與血管破裂量測", en: "Brain Penetration Mechanics of Microscale Probes" },
+      summary: { zh: "以超高靈敏度力學量測搭配即時顯微影像，量化 7.5–100 µm 探針的入腦力學與血管破裂；成果發表於 PNAS 2026。",
+                 en: "Ultra-sensitive force measurement with real-time microscopy to quantify insertion mechanics and vessel rupture for 7.5–100 µm probes; published in PNAS 2026." },
+      problem: { zh: "微尺度探針如何穿過腦膜與血管，過去幾乎沒有定量資料，無法在探針尺寸、剛性與組織損傷之間取捨。",
+                 en: "How microscale probes pass the pia and vessels was barely quantified, so probe size, stiffness and tissue damage could not be traded off." },
+      role:    { zh: "共同第一作者；與史丹佛大學團隊合作。", en: "Co-first author; collaboration with Stanford University." },
+      method:  { zh: [], en: [] },
+      result:  { zh: "小於約 25 µm 的探針可推開血管而不撕裂，植入時無可見出血。",
+                 en: "Probes below ~25 µm displace vessels instead of tearing them, inserting without visible bleeding." },
+      tags: ["Mechanics", "Two-photon imaging", "PNAS 2026"],
+      links: [ { text: "PNAS", href: "https://doi.org/10.1073/pnas.2529147123" } ],
+      shots: [], open: false
+    },
+    {
+      year: "2025.12",
+      title: { zh: "桌上型四足陪伴機器人", en: "Desktop Quadruped Companion Robot" },
+      summary: { zh: "以樹莓派 5 為核心獨立開發：自行設計機構，整合視覺、聽覺、運動與邊緣運算；辨識使用者、理解對話，以語音與表情回應。",
+                 en: "Built solo on a Raspberry Pi 5: own mechanical design, integrating vision, audio, locomotion and on-device computing; recognises users, understands conversation, answers with voice and expressions." },
+      problem: { zh: "語言模型隔一段時間就分不出「使用者給的」和「自己生成的」，記憶會互相汙染。",
+                 en: "Over time an LLM cannot tell what the user said from what it generated; memories contaminate each other." },
+      role:    { zh: "獨立設計與開發：機構、電控、系統架構、記憶流程、網頁主控台。", en: "Solo design and build: mechanics, electronics, architecture, memory pipeline, web console." },
+      method:  { zh: ["來源在寫入當下由程式判定，不交給模型事後猜", "兩個軸（流向、類型）加連結來組織記憶", "矛盾不覆蓋，排程成一個要問你的問題"],
+                 en: ["Provenance is set by code at write time, never guessed later", "Memories organised on two axes plus links", "Contradictions are never overwritten; they become scheduled questions"] },
+      result:  { zh: "每條記憶可追溯、信心可驗證；透過網頁主控台即時監看與操作。",
+                 en: "Every memory is traceable and its confidence verifiable; monitored and driven in real time from a web dashboard." },
+      tags: ["Raspberry Pi 5", "Mechanical design", "Servo control", "Python", "LLM", "Face / Voice ID"],
+      links: [ { text: "GitHub", href: "" } ],          // href 空＝不顯示
+      shots: [""],                                      // 例：["sw01-console.png"]
+      open: false
+    },
+    {
+      year: "2025",
+      title: { zh: "HALCYON 設計系統", en: "HALCYON Design System" },
+      summary: { zh: "暗色儀表介面的設計語言：183 個 token、21 個元件、雙模式一鍵切換。",
+                 en: "A design language for dark instrument UIs: 183 tokens, 21 components, one-attribute mode switch." },
+      problem: { zh: "", en: "" }, role: { zh: "", en: "" }, method: { zh: [], en: [] }, result: { zh: "", en: "" },
+      tags: ["Design tokens", "React", "CSS"], links: [], shots: [], open: false
+    }
+  ],
+
+  education: [
+    { year: "2024–2026", school: { zh: "國立臺灣大學 · 生命科學系", en: "National Taiwan University · Life Science" }, degree: { zh: "碩士", en: "M.S." }, note: { zh: "GPA 4.15 · 排名 7/29 · 指導教授：吳玉威（中研院分子生物研究所）", en: "GPA 4.15 · Rank 7/29 · Advisor: Prof. Yu-Wei Wu (IMB, Academia Sinica)" } },
+    { year: "2021–2024", school: { zh: "國立臺灣大學 · 生命科學系", en: "National Taiwan University · Life Science" }, degree: { zh: "學士", en: "B.S." }, note: { zh: "", en: "" } },
+  ],
+
+  skills: [
+    { group: { zh: "機械設計與製造", en: "Mechanical design & fabrication" },
+      items: { zh: "SolidWorks · Shapr3D（參數化建模、工程圖、公差設計）· 有限元素分析 · FDM／DLP 3D 列印 · 銑床 · 鑽孔攻牙 · 雷射切割",
+               en: "SolidWorks · Shapr3D (parametric modeling, drawings, tolerancing) · FEA · FDM/DLP 3D printing · milling · drilling & tapping · laser cutting" } },
+    { group: { zh: "機電整合與嵌入式", en: "Mechatronics & embedded" },
+      items: { zh: "Arduino · ESP32 · Raspberry Pi · 伺服／步進馬達控制 · PWM · IMU／視覺／聲音模組 · 電路組裝與硬體除錯",
+               en: "Arduino · ESP32 · Raspberry Pi · servo/stepper control · PWM · IMU/vision/audio modules · circuit assembly & hardware debugging" } },
+    { group: { zh: "程式", en: "Code" },
+      items: "Python · PySide6 · HTML / CSS / JavaScript · Git" },
+    { group: { zh: "微製程與量測", en: "Microfabrication & characterization" },
+      items: { zh: "微電極製造 · 氧氣電漿 · 濕式蝕刻 · 雷射剝除 · SEM · EIS · 阻抗量測 · 雙光子顯微鏡",
+               en: "Microelectrode fabrication · oxygen plasma · wet etching · laser ablation · SEM · EIS · impedance testing · two-photon microscopy" } },
+    { group: { zh: "神經工程與生物實驗", en: "Neuroengineering & biology" },
+      items: { zh: "小鼠立體定位手術 · 開顱 · 電生理記錄 · 動物行為實驗與設備開發 · 心臟灌流 · 冷凍切片 · IHC",
+               en: "Stereotaxic surgery · craniotomy · electrophysiology · behavioral experiments & apparatus · cardiac perfusion · cryosectioning · IHC" } },
+    { group: { zh: "語言", en: "Languages" }, items: { zh: "中文（母語）· 英文（TOEIC 835）", en: "Mandarin (native) · English (TOEIC 835)" } },
+  ],
+
+  publications: [
+    { year: "2026", text: { zh: "期刊論文 · Obaid, Hanna, Huang (共同第一作者) et al. Ultrasensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes. PNAS 123(13).",
+                            en: "Journal article · Obaid, Hanna, Huang (co-first author) et al. Ultrasensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes. PNAS 123(13)." },
+      href: "https://doi.org/10.1073/pnas.2529147123" },
+    { year: "2026", text: { zh: "專利申請 · 微線陣列排列與固結方法（美國臨時專利申請 U.S. 64/040,119）",
+                            en: "Patent · Methods for Producing Patterned Microwire Arrays and Uses Thereof (U.S. Provisional Application No. 64/040,119)" }, href: "" },
+    { year: "2026.09", text: { zh: "青年邀請講者 · CYCU–Leuven Joint International Workshop", en: "Invited young speaker · CYCU–Leuven Joint International Workshop" }, href: "" },
+    { year: "2025.06", text: { zh: "青年邀請講者 · 神經科學技術研討會暨中國神經科學學會神經科學研究技術分會年會，蘇州", en: "Invited young speaker · Neuroscience Technology Symposium, Chinese Neuroscience Society, Suzhou" }, href: "" },
+    { year: "2025", text: { zh: "壁報發表 · 日本神經科學學會年會（JNS）", en: "Poster · Japan Neuroscience Society Annual Meeting (JNS)" }, href: "" },
+    { year: "2024", text: { zh: "壁報發表 · 台灣神經科學學會跨領域神經科學國際研討會（TSfN）", en: "Poster · TSfN Interdisciplinary Neuroscience International Conference" }, href: "" },
+    { year: "2026", text: { zh: "教育部青年署 青年百億海外圓夢基金計畫 · 臺大生命科學系院長獎 · 臺大學術研究績效獎勵金 · 畢業壁報比賽第一名",
+                            en: "Taiwan Global Pathfinders Initiative (Youth Development Administration, MOE) · NTU Life Science Dean's Award · NTU Academic Research Excellence Award · Graduation Poster Competition, 1st place" }, href: "" },
+    { year: "2025", text: { zh: "臺大生科院國際學術交流中心獎學金 · 三校聯盟建築攝影課程第一名",
+                            en: "NTU College of Life Science International Academic Exchange Scholarship · Tri-University Alliance Architectural Photography Course, 1st place" }, href: "" },
+    { year: "2022", text: { zh: "中研院 NPAS 暑期大專生計畫成果發表 第五名", en: "Academia Sinica NPAS Summer Undergraduate Research Program, 5th place" }, href: "" },
+  ],
+
+  ui: {
+    nav:  [ { id: "work", zh: "作品", en: "Work" }, { id: "edu", zh: "學歷", en: "Education" }, { id: "skills", zh: "技能", en: "Skills" }, { id: "pub", zh: "發表", en: "Publications" } ],
+    sec:  { work: { zh: "研究與專案", en: "Research & projects" }, edu: { zh: "學歷", en: "Education" }, skills: { zh: "技能", en: "Skills" }, pub: { zh: "發表、專利與獲獎", en: "Publications, patents & awards" } },
+    dl:   { problem: { zh: "問題", en: "Problem" }, role: { zh: "角色", en: "Role" }, method: { zh: "做法", en: "Method" }, result: { zh: "成果", en: "Result" } },
+    tog:  { zh: "詳情", en: "Details" }, photo: "[ PHOTO ]", shot: "[ SCREENSHOT ]"
+  }
+};
+
+/* ============================================================ render ============================================================ */
+(function(){
+  let lang = "zh";
+  try { lang = localStorage.getItem("lang") || "zh"; } catch(e){}
+  const t = v => (v == null) ? "" : (typeof v === "string" ? v : (v[lang] || v.zh || ""));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const img = (src, ph) => src ? `<img src="${esc(src)}" alt="">` : `<div class="ph">${ph}</div>`;
+  const $ = id => document.getElementById(id);
+
+  function render(){
+    const d = DATA, u = d.ui;
+    document.documentElement.lang = lang === "en" ? "en" : "zh-Hant";
+    $("brand").textContent = t(d.name);
+    $("langbtn").textContent = lang === "en" ? "中" : "EN";
+    $("nav").innerHTML = u.nav.map(n => `<a href="#${n.id}">${esc(t(n))}</a>`).join("");
+
+    $("hero").innerHTML = `
+      <div>
+        <div class="label">// <span class="sig">${esc(t(d.role))}</span></div>
+        <h1>${esc(t(d.headline))}</h1>
+        <p>${esc(t(d.intro))}</p>
+        <div class="links">${d.links.map(l => `<a href="${esc(l.href)}">${esc(l.text)}</a>`).join("")}</div>
+      </div>
+      <div class="photo"><i></i><i></i><i></i><i></i>${d.photo ? `<img src="${esc(d.photo)}" alt="${esc(t(d.name))}">` : u.photo}</div>`;
+
+    $("work").innerHTML = `<div class="sec"><span class="label">SEC 01 · ${esc(t(u.sec.work))}</span></div>` +
+      d.work.map((w, i) => {
+        const dl = ["problem","role","method","result"].map(k => {
+          const v = t(w[k]); if (!v || (Array.isArray(v) && !v.length)) return "";
+          const body = Array.isArray(v) ? `<ul>${v.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : esc(v);
+          return `<dt>${esc(t(u.dl[k]))}</dt><dd>${body}</dd>`;
+        }).join("");
+        const links = (w.links||[]).filter(l => l.href).map(l => `<a href="${esc(l.href)}">${esc(l.text)}</a>`).join(" · ");
+        const shots = (w.shots||[]).map(s => img(s, u.shot)).join("");
+        return `<details class="work"${w.open ? " open" : ""}>
+          <summary><span class="no">NO. ${String(i+1).padStart(2,"0")} · ${esc(w.year)}</span><h3>${esc(t(w.title))}</h3><span class="tog">${esc(t(u.tog))}</span><p class="sum">${esc(t(w.summary))}</p></summary>
+          <div class="body">
+            <div>${dl ? `<dl>${dl}</dl>` : ""}<div class="tags">${w.tags.map(x => `<span class="tag">${esc(x)}</span>`).join("")}</div>${links ? `<p style="margin:14px 0 0;font-size:12px">${links}</p>` : ""}</div>
+            <div>${shots ? `<div class="shot">${shots}</div>` : ""}</div>
+          </div></details>`;
+      }).join("");
+
+    $("edu").innerHTML = `<div class="sec"><span class="label">SEC 02 · ${esc(t(u.sec.edu))}</span></div>` +
+      d.education.map(e => `<div class="row"><span class="yr">${esc(e.year)}</span><div><b>${esc(t(e.school))} · ${esc(t(e.degree))}</b>${t(e.note) ? `<span>${esc(t(e.note))}</span>` : ""}</div></div>`).join("");
+
+    $("skills").innerHTML = `<div class="sec"><span class="label">SEC 03 · ${esc(t(u.sec.skills))}</span></div><div class="skills">` +
+      d.skills.map(s => `<div><h4 class="label">${esc(t(s.group))}</h4><p>${esc(t(s.items))}</p></div>`).join("") + `</div>`;
+
+    $("pub").innerHTML = `<div class="sec"><span class="label">SEC 04 · ${esc(t(u.sec.pub))}</span></div>` +
+      d.publications.map(p => `<div class="row"><span class="yr">${esc(p.year)}</span><div>${p.href ? `<a href="${esc(p.href)}">${esc(t(p.text))}</a>` : esc(t(p.text))}</div></div>`).join("");
+
+    $("foot").innerHTML = d.links.map(l => `<span>${esc(l.label)} <b>${esc(l.text)}</b></span>`).join("") + `<span>${esc(t(d.location))} · ${new Date().getFullYear()}</span>`;
+  }
+
+  $("langbtn").addEventListener("click", () => {
+    lang = lang === "en" ? "zh" : "en";
+    try { localStorage.setItem("lang", lang); } catch(e){}
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
