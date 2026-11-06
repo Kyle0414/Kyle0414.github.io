@@ -1,0 +1,103 @@
+/* HALCYON HUD — colour system.
+   Base ramp (raw values) + semantic aliases. Semantics are re-pointed per mode:
+   :root is DARK (the primary mode); [data-hal-mode="light"] is the print/doc mode.
+   Always consume the semantic alias, never the raw ramp. */
+
+:root {
+  /* ── dark ramp ─────────────────────────────── */
+  --hal-void:        #08090A;
+  --hal-abyss:       #0D0F10;
+  --hal-plate:       #101315;
+  --hal-plate-2:     #15181A;
+  --hal-line:        #23282B;
+  --hal-line-2:      #31383C;
+  --hal-bone:        #E9E7E2;
+  --hal-dim:         #8C8F8C;
+  --hal-faint:       #5A5E5D;
+
+  /* ── signal ────────────────────────────────── */
+  --hal-amber:       #E3A72C;
+  --hal-amber-hi:    #F3C05A;
+  --hal-amber-dim:   #8A6A24;
+  --hal-amber-deep:  #2A1F0C;
+  --hal-mint:        #6FD8B0;
+  --hal-alert:       #D8564B;
+  --hal-rust:        #C4772E;
+
+  /* ── light ramp ────────────────────────────── */
+  --hal-paper:       #E7E8E4;
+  --hal-paper-plate: #F2F2EF;
+  --hal-paper-line:  #C6C8C2;
+  --hal-graphite:    #111312;
+  --hal-graphite-hi: #2A2E2B;
+  --hal-sage:        #5E7A6C;
+  --hal-sage-soft:   #8FA398; /* light mode: decorative rules and empty tracks only — 2.2:1 */
+  --hal-slate:       #6B7370;
+  --hal-slate-2:     #5B6360;
+  --hal-mute:        #9AA29E; /* light mode: DISABLED control text only — 2.1:1, never informational */
+
+  /* ── semantics · DARK ──────────────────────── */
+  --surface-page:        var(--hal-void);
+  --surface-page-2:      var(--hal-abyss);
+  --surface-plate:       var(--hal-plate);
+  --surface-plate-2:     var(--hal-plate-2);
+  --surface-field:       var(--hal-void);
+  --surface-radar:       #0A0806;
+  --surface-poster:      #0A0B0C;
+
+  --border-hair:         var(--hal-line);
+  --border-strong:       var(--hal-line-2);
+  --border-ink:          var(--hal-dim);
+  --border-signal:       var(--hal-amber);
+
+  --text-primary:        var(--hal-bone);
+  --text-secondary:      var(--hal-dim);
+  --text-faint:          var(--hal-faint);
+  --text-signal:         var(--hal-amber);
+  --text-on-signal:      #0A0A0A;
+  --text-on-solid:       var(--hal-void);
+
+  --signal:              var(--hal-amber);
+  --signal-hi:           var(--hal-amber-hi);
+  --signal-dim:          var(--hal-amber-dim);
+  --state-ok:            var(--hal-mint);
+  --state-fault:         var(--hal-alert);
+  --state-warn:          var(--hal-rust);
+  --track-empty:         var(--hal-line-2);
+
+  --grid-line:           var(--hal-line);
+  --grid-line-radar:     rgba(138,106,36,.22);
+}
+
+[data-hal-mode="light"] {
+  --surface-page:        var(--hal-paper);
+  --surface-page-2:      var(--hal-paper);
+  --surface-plate:       var(--hal-paper-plate);
+  --surface-plate-2:     #FFFFFF;
+  --surface-field:       #FFFFFF;
+  --surface-radar:       var(--hal-paper-plate);
+  --surface-poster:      var(--hal-paper-plate);
+
+  --border-hair:         var(--hal-paper-line);
+  --border-strong:       var(--hal-paper-line);
+  --border-ink:          var(--hal-graphite);
+  --border-signal:       var(--hal-sage);
+
+  --text-primary:        var(--hal-graphite);
+  --text-secondary:      var(--hal-slate-2);
+  --text-faint:          var(--hal-slate);
+  --text-signal:         var(--hal-sage);
+  --text-on-signal:      #EDEDEA;
+  --text-on-solid:       #EDEDEA;
+
+  --signal:              var(--hal-sage);
+  --signal-hi:           var(--hal-graphite-hi);
+  --signal-dim:          var(--hal-sage);
+  --state-ok:            var(--hal-sage);
+  --state-fault:         #A8402F;
+  --state-warn:          #8A5A1E;
+  --track-empty:         var(--hal-paper-line);
+
+  --grid-line:           rgba(120,140,125,.35);
+  --grid-line-radar:     rgba(120,140,125,.35);
+}

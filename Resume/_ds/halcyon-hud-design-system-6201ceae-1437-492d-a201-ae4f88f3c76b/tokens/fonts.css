@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;700&display=swap");
+
+@font-face {
+  font-family: "Bahnschrift";
+  src: url("../assets/fonts/Bahnschrift.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 50% 200%;
+  font-display: swap;
+}

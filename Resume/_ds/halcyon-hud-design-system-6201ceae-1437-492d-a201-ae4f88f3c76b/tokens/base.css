@@ -1,0 +1,16 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--t-body);
+  font-weight: var(--fw-light);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--text-signal); text-decoration: none; }
+a:hover { color: var(--signal-hi); }
+
+::selection { background: var(--signal); color: var(--text-on-signal); }

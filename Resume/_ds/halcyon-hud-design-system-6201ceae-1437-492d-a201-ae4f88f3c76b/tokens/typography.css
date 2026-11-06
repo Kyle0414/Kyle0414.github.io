@@ -1,0 +1,41 @@
+/* One mono family carries the whole system. Bahnschrift is reserved for
+   condensed display numerals on instrument faces. Never introduce a third face. */
+
+:root {
+  --font-mono:    "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-display: "Bahnschrift", "JetBrains Mono", ui-monospace, monospace;
+
+  --fw-hairline: 200; /* @kind font */
+  --fw-light:    300; /* @kind font */
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+
+  --t-hero:      96px;
+  --t-title:     44px;
+  --t-metric:    52px;
+  --t-metric-sm: 34px;
+  --t-sub:       26px;
+  --t-body:      15px;
+  --t-small:     12px;
+  --t-micro:     10px;
+  --t-nano:      8px;
+
+  --track-tight: -.02em; /* @kind font */
+  --track-flat:   .01em; /* @kind font */
+  --track-sub:    .06em; /* @kind font */
+  --track-data:   .12em; /* @kind font */
+  --track-nav:    .14em; /* @kind font */
+  --track-key:    .16em; /* @kind font */
+  --track-label:  .20em; /* @kind font */
+  --track-micro:  .24em; /* @kind font */
+  --track-wide:   .30em; /* @kind font */
+
+  --lh-hero:  .98; /* @kind font */
+  --lh-tight: 1.15; /* @kind font */
+  --lh-micro: 1.7; /* @kind font */
+  --lh-body:  1.85; /* @kind font */
+  --lh-print: 2; /* @kind font */
+
+  --measure-body: 62ch; /* @kind other */
+}

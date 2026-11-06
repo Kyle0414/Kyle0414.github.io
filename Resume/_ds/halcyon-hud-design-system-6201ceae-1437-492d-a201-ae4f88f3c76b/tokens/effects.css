@@ -1,0 +1,51 @@
+/* Corners are square. There are no drop shadows anywhere in HALCYON —
+   depth comes from 1px rules, frosted veils and corner ticks. */
+
+:root {
+  --stroke:     1px;
+  --stroke-2:   2px;
+  --radius-0:   0;
+  --radius-1:   2px;
+  --radius-pill: 50%;
+
+  --rule-hair:   1px solid var(--border-hair); /* @kind other */
+  --rule-strong: 1px solid var(--border-strong); /* @kind other */
+  --rule-ink:    1px solid var(--border-ink); /* @kind other */
+  --rule-signal: 1px solid var(--border-signal); /* @kind other */
+  --rule-dashed: 1px dashed var(--border-strong); /* @kind other */
+
+  --veil-chrome: rgba(16,19,21,.62);
+  --veil-plate:  rgba(16,19,21,.66);
+  --veil-solid:  rgba(16,19,21,.92);
+  --veil-field:  rgba(8,9,10,.62);
+  --veil-mask:   rgba(8,9,10,.42);
+
+  --blur-chrome: blur(10px); /* @kind other */
+  --blur-plate:  blur(12px); /* @kind other */
+  --blur-veil:   blur(7px) saturate(.7); /* @kind other */
+  --blur-mask:   blur(8px) saturate(.7); /* @kind other */
+
+  --tick-size:   9px;
+  --tick-inset:  -4px;
+  --handle-size: 6px;
+  --bar-skew:    skewX(-20deg); /* @kind other */
+  --bar-w:       20px;
+  --bar-h:       8px;
+  --meter-h:     3px;
+
+  --shadow-none: none;
+
+  --z-base:    0; /* @kind other */
+  --z-plate:   1; /* @kind other */
+  --z-chrome:  10; /* @kind other */
+  --z-overlay: 100; /* @kind other */
+  --z-modal:   1000; /* @kind other */
+}
+
+[data-hal-mode="light"] {
+  --veil-chrome: rgba(242,242,239,.72);
+  --veil-plate:  rgba(242,242,239,.82);
+  --veil-solid:  rgba(242,242,239,.96);
+  --veil-field:  rgba(255,255,255,.72);
+  --veil-mask:   rgba(231,232,228,.55);
+}
