@@ -51,7 +51,7 @@
     @keyframes lbVeil{from{opacity:0}to{opacity:1}}
     @keyframes lbIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
     @container page (max-width:700px){.work-grid{grid-template-columns:minmax(0,1fr) !important}}
-    @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big{grid-column:1 / -1 !important}}
+    @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big,.pub-grid > .pub-txt{grid-column:1 / -1 !important}}
     @container page (max-width:600px){.pub-grid{grid-template-columns:minmax(0,1fr) !important}}
     .home-grid{grid-template-columns:repeat(60,minmax(0,1fr));column-gap:0}
     @container page (max-width:960px){.home-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}.home-cell{grid-column:auto !important;margin-right:0 !important}}
@@ -538,12 +538,14 @@ const D = {
   publications: [
     { cat: "journal", year: "2026.03", venue: "PNAS", photos: ["photos/acad/pnas.jpg"], head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · PNAS", en: "Journal · PNAS" },
       paper: { authors: ["Abdulmalik Obaid", "Mina-Elraheb Hanna", "Song-Wen Huang", "+5", "Yu-Wei Wu"], self: "Song-Wen Huang", editor: "John A. Rogers, Northwestern University", received: "2025.10.13", accepted: "2026.02.19", published: "2026.03.26", cite: "PNAS 123 (13) e2529147123", doi: "10.1073/pnas.2529147123", url: "https://www.pnas.org/doi/10.1073/pnas.2529147123" } },
-    { cat: "patent", year: "—", head: { zh: "微線陣列排列與固結方法（U.S. 64/040,119）", en: "Methods for Producing Patterned Microwire Arrays (U.S. 64/040,119)" }, org: { zh: "美國臨時專利", en: "U.S. provisional patent" } },
+    { cat: "patent", year: "—", noPic: true, head: { zh: "微線陣列排列與固結方法（U.S. 64/040,119）", en: "Methods for Producing Patterned Microwire Arrays (U.S. 64/040,119)" }, org: { zh: "美國臨時專利", en: "U.S. provisional patent" } },
     { cat: "invited", year: "2026", photos: ["photos/acad/cycu.jpg"], head: { zh: "CYCU-Leuven Joint International Workshop", en: "CYCU-Leuven Joint International Workshop" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
-    { cat: "invited", year: "2025.06", photos: ["photos/acad/cns-3.jpg", "photos/acad/cns-4.jpg", "photos/acad/cns-5.jpg", "photos/acad/cns-1.jpg", "photos/acad/cns-2.jpg"], oneLine: true, head: { zh: "CNS 神經科學技術研討會 · 蘇州", en: "CNS Neuroscience Technology Symposium · Suzhou" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
-    { cat: "conference", year: "2025", photos: ["photos/acad/jns-1.jpg", "photos/acad/jns-2.jpg"], head: { zh: "JNS 日本神經科學學會年會", en: "Japan Neuroscience Society Annual Meeting (JNS)" }, org: { zh: "研討會發表", en: "Presentation" } },
+    { cat: "invited", year: "2025.06", photos: ["photos/acad/cns-5.jpg", "photos/acad/cns-4.jpg", "photos/acad/cns-6.jpg", "photos/acad/cns-1.jpg", "photos/acad/cns-2.jpg"], oneLine: true, head: { zh: "CNS 神經科學技術研討會 · 蘇州", en: "CNS Neuroscience Technology Symposium · Suzhou" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
+    { cat: "conference", year: "2025", photos: ["photos/acad/jns-1.jpg", "photos/acad/jns-2.jpg", "photos/acad/jns-3.jpg"], head: { zh: "JNS 日本神經科學學會年會", en: "Japan Neuroscience Society Annual Meeting (JNS)" }, org: { zh: "研討會發表", en: "Presentation" } },
     { cat: "conference", year: "2024", photos: ["photos/acad/tsfn-1.jpg"], head: { zh: "TSfN 台灣神經科學學會國際研討會", en: "TSfN Interdisciplinary Neuroscience Intl. Conference" }, org: { zh: "研討會發表", en: "Presentation" } },
-    { cat: "conference", year: "2022", head: { zh: "中研院 NPAS 暑期大專生計畫成果發表", en: "Academia Sinica NPAS Summer Research Program" }, org: { zh: "第五名", en: "5th place" } }
+    { cat: "conference", year: "2022", head: { zh: "中研院 NPAS 暑期大專生計畫成果發表", en: "Academia Sinica NPAS Summer Research Program" }, org: { zh: "第五名", en: "5th place" } },
+    { cat: "conference", year: "2024", photos: ["photos/acad/embo-1.jpg"], head: { zh: "EMBO 國際研討會", en: "EMBO International Conference" }, org: { zh: "海報發表", en: "Poster presentation" } },
+    { cat: "conference", year: "2026", photos: ["photos/acad/imb-2.jpg", "photos/acad/imb-1.jpg"], head: { zh: "中研院分生所 IMB Retreat", en: "IMB Retreat, Academia Sinica" }, org: { zh: "口頭與海報發表", en: "Talk & poster" } }
   ],
   skills: [
     { year: "", head: { zh: "基礎", en: "Foundations" }, sub: { zh: "SolidWorks／Shapr3D · 參數化建模與公差 · Python · HTML／CSS／JS · 英文 TOEIC 835", en: "SolidWorks/Shapr3D · parametric CAD & tolerancing · Python · HTML/CSS/JS · English TOEIC 835" } },
@@ -601,12 +603,12 @@ const D = {
   minis: Array.from({ length: 8 }, () => ({ title: { zh: "建模作品", en: "3D model" } })),
   // Photography, first row: the portfolio grouped by colour. pics are file numbers in photos/photo/ (thumbs in photos/photo/t/).
   palettes: [
-    { zh: "紅", en: "Red", sw: "#C8452F", pics: [8, 2, 3] },
-    { zh: "橙", en: "Orange", sw: "#E07B2A", pics: [13, 1, 11, 23, 24] },
-    { zh: "黃", en: "Yellow", sw: "#D9B23A", pics: [16, 14] },
-    { zh: "綠", en: "Green", sw: "#4E9A6A", pics: [5] },
-    { zh: "藍", en: "Blue", sw: "#2F7FB8", pics: [6, 12, 7, 9, 4] },
-    { zh: "黑白", en: "B&W", sw: "linear-gradient(90deg,#1c1c1c 50%,#d8d8d8 50%)", solid: "#8A8A8A", pics: [15, 10] }
+    { zh: "紅", en: "Red", sw: "#C8452F", pics: [8, 25, 2, 3] },
+    { zh: "橙", en: "Orange", sw: "#E07B2A", pics: [13, 1, 29, 11, 23, 24] },
+    { zh: "黃", en: "Yellow", sw: "#D9B23A", pics: [16, 27, 28, 14] },
+    { zh: "綠", en: "Green", sw: "#4E9A6A", pics: [32, 5, 36] },
+    { zh: "藍", en: "Blue", sw: "#2F7FB8", pics: [6, 30, 12, 31, 7, 35, 34, 9, 4] },
+    { zh: "黑白", en: "B&W", sw: "linear-gradient(90deg,#1c1c1c 50%,#d8d8d8 50%)", solid: "#8A8A8A", pics: [33, 26, 15, 10] }
   ],
   // A separate set: the MINDFREAK live show.
   mindfreak: [17, 18, 19, 20, 21, 22],
@@ -661,6 +663,10 @@ const UI = {
 const LANGS = [["zh", "中文", "中"], ["en", "English", "EN"], ["ja", "日本語", "日"], ["de", "Deutsch", "DE"]];
 const YR = { "進行中": { en: "Ongoing", ja: "進行中", de: "Laufend" }, "— 至今": { en: "— present", ja: "— 現在", de: "— heute" } };
 const TR = {
+  "EMBO 國際研討會": ["EMBO 国際会議", "Internationale EMBO-Konferenz"],
+  "海報發表": ["ポスター発表", "Posterpräsentation"],
+  "中研院分生所 IMB Retreat": ["中央研究院 分子生物学研究所 IMB Retreat", "IMB Retreat, Academia Sinica"],
+  "口頭與海報發表": ["口頭・ポスター発表", "Vortrag & Poster"],
   "小專案": ["小プロジェクト", "Nebenprojekte"],
   "之前做的 3D 建模。": ["これまでの 3D モデリング作品。", "Frühere 3D-Modelle."],
   "建模作品": ["3D モデル", "3D-Modell"],
@@ -798,6 +804,34 @@ class Component extends DCLogic {
       else if (e.key === "Escape" && (this.state.langOpen || this.state.themeOpen)) this.setState({ langOpen: false, themeOpen: false });
     };
     window.addEventListener("keydown", this.onKey);
+    // Phones: swipe left / right to go to the next / previous tab. Ignored inside things that scroll sideways
+    // (the tab bar, thumbnail rows), in the photo viewer, and for mostly-vertical or slow drags.
+    this.onSwStart = e => {
+      this._sw = null;
+      if (e.touches.length !== 1 || this.state.lb || this.state.intro === "on") return;
+      // A sideways-scrolling box under the finger: the swipe scrolls it, unless it is already at that end.
+      let canL = false, canR = false;
+      for (let n = e.target; n && n !== document.body; n = n.parentElement) {
+        if (n.matches && n.matches(".tb-nav, [role=dialog], input, textarea")) return;
+        if (n.scrollWidth > n.clientWidth + 2 && /(auto|scroll)/.test(getComputedStyle(n).overflowX)) {
+          canL = canL || n.scrollLeft > 1; canR = canR || n.scrollLeft + n.clientWidth < n.scrollWidth - 1;
+        }
+      }
+      const t = e.touches[0]; this._sw = { x: t.clientX, y: t.clientY, t: Date.now(), canL, canR };
+    };
+    this.onSwEnd = e => {
+      const s = this._sw; this._sw = null;
+      if (!s || !e.changedTouches.length) return;
+      const t = e.changedTouches[0], dx = t.clientX - s.x, dy = t.clientY - s.y;
+      if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.8 || Date.now() - s.t > 700) return;
+      if ((dx < 0 && s.canR) || (dx > 0 && s.canL)) return;
+      const ids = UI.tabs.map(x => x[0]), j = ids.indexOf(this.state.tab || "home") + (dx < 0 ? 1 : -1);
+      if (j < 0 || j >= ids.length) return;
+      this.go(ids[j]);
+      setTimeout(() => { const b = document.querySelector(`[data-tab="${ids[j]}"]`); if (b && b.scrollIntoView) b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }); }, 60);
+    };
+    window.addEventListener("touchstart", this.onSwStart, { passive: true });
+    window.addEventListener("touchend", this.onSwEnd, { passive: true });
     this.onDocDown = e => {
       const inside = sel => e.target.closest && e.target.closest(sel);
       if (this.state.langOpen && !inside("[data-langmenu]")) this.setState({ langOpen: false });
@@ -1110,6 +1144,8 @@ class Component extends DCLogic {
     clearTimeout(this.exitT); clearTimeout(this.measT);
     window.removeEventListener("resize", this.onResize);
     window.removeEventListener("keydown", this.onKey);
+    window.removeEventListener("touchstart", this.onSwStart);
+    window.removeEventListener("touchend", this.onSwEnd);
     document.documentElement.style.overflow = "";
     this.mq && this.mq.removeEventListener("change", this.applyMode);
     window.removeEventListener("beforeprint", this.before);
@@ -1150,7 +1186,7 @@ class Component extends DCLogic {
     // Home education: graduation year on the left.
     const eduRows = () => D.education.map(p => { const m = (p.year || "").match(/(\d{4})(?:\.\d{2})?\s*$/); return { ...it(p), hasCat: true, cat: m ? m[1] : "", catColor: "var(--text-signal)", cols: "40px minmax(0,1fr)", showYear: false, orgCol: "2 / -1" }; });
     // Academic page: honours shown there leave out these two; awards keep the image slot they were first given.
-    const PUB_ORDER = [0, 3, 2, 1, 4, 5, 6];   // PNAS, Suzhou, CYCU, patent, JNS, TSfN, NPAS (indexes into D.publications)
+    const PUB_ORDER = [0, 3, 2, 8, 4, 5, 7, 6, 1];   // PNAS, Suzhou, CYCU, IMB retreat, JNS, TSfN, EMBO, NPAS, then the patent as a text row (indexes into D.publications)
     const ACAD_SKIP = ["三校聯盟建築攝影課程", "青年百億計畫"];
     const AW_SLOT = { "青年百億計畫": 1, "臺大生命科學系 院長獎": 2, "臺大學術研究績效獎勵金": 3, "畢業壁報比賽": 4, "臺大生科院國際學術交流中心獎學金": 5, "三校聯盟建築攝影課程": 6 };
     const PCAT = { journal: L("期刊", "Journal"), patent: L("專利", "Patent"), invited: L("邀請講者", "Invited"), conference: L("研討會發表", "Conference") };
@@ -1468,7 +1504,7 @@ class Component extends DCLogic {
           cite: `${pp.cite} · ${L("出版", "Published")} ${pp.published}`, doi: pp.doi, doiHref: "https://doi.org/" + pp.doi } : { hasPaper: false, authors: [], edit: "", cite: "", doi: "", doiHref: "" };
         // Text-only awards: one full-width row each (year, title) under the image cards.
         const txt = !!r.noPic && !pics.length, firstTxt = txt && !(D[k][D[k].indexOf(r) - 1] || {}).noPic;
-        if (txt) Object.assign(lay, { gc: "1 / -1", headFs: "14px" });
+        if (txt) Object.assign(lay, { gc: "1 / -1", headFs: "14px", cls: "pub-txt" });
         const href = pp && pp.url ? pp.url : "";
         return { ...it(r), ...lay, ...paper, oneLine: !!r.oneLine, multiLine: !r.oneLine, plainHead: !r.oneLine, linkHead: false, href,
           // Papers: "date | journal" on top, then the linked title; everything else: "date | event", then the role below.
