@@ -38,6 +38,9 @@
     main{text-align:justify}
     /* Home: top row 3 sections (span 2 of 6), bottom row 2 wider sections (span 3 of 6). */
     /* 60 fine tracks, no track gap; each cell's right margin makes the gutter. Spans: top 25/15/20, bottom 27/33 (45% / 55%). */
+    @container page (max-width:700px){.work-grid{grid-template-columns:minmax(0,1fr) !important}}
+    @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big{grid-column:1 / -1 !important}}
+    @container page (max-width:600px){.pub-grid{grid-template-columns:minmax(0,1fr) !important}}
     .home-grid{grid-template-columns:repeat(60,minmax(0,1fr));column-gap:0}
     @container page (max-width:960px){.home-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}.home-cell{grid-column:auto !important;margin-right:0 !important}}
     @container page (max-width:600px){.home-grid{grid-template-columns:minmax(0,1fr)}}
@@ -52,14 +55,21 @@
     }
     @container page (max-width:640px){.intro-paras{display:none !important}}
     @media print{[data-pageframe]{max-width:none !important;width:auto !important;height:auto !important;overflow:visible !important;transform:none !important;border:0 !important;margin:0 !important}}
+    /* Colour palettes chosen from the THEME menu; they override light/dark. */
+    html[data-hal-palette="paper"]{--surface-page:#EFE7D6;--surface-page-2:#EFE7D6;--surface-plate:#F6F0E3;--surface-plate-2:#FFFBF2;--border-hair:#D8CCB4;--border-strong:#C8B99B;--border-ink:#2B2620;--text-primary:#2B2620;--text-secondary:#6B5F50;--text-faint:#857866;--text-signal:#9C4A2F;--text-on-signal:#F6F0E3;--text-on-solid:#F6F0E3;--signal:#9C4A2F;--signal-hi:#7A3622;--signal-dim:#B9785E;--state-ok:#5E7A4C;--track-empty:#D8CCB4}
+    html[data-hal-palette="terminal"]{--surface-page:#050805;--surface-page-2:#050805;--surface-plate:#0B120B;--surface-plate-2:#101A10;--border-hair:#163016;--border-strong:#1F4A1F;--border-ink:#5FBF5F;--text-primary:#B6F5B6;--text-secondary:#5FBF5F;--text-faint:#3A7A3A;--text-signal:#39FF6A;--text-on-signal:#041004;--text-on-solid:#041004;--signal:#39FF6A;--signal-hi:#8CFFA8;--signal-dim:#1F8A3A;--state-ok:#39FF6A;--track-empty:#1F4A1F}
+    html[data-hal-palette="nightsea"]{--surface-page:#0A1424;--surface-page-2:#0A1424;--surface-plate:#0F1C30;--surface-plate-2:#13233B;--border-hair:#1C2E4A;--border-strong:#284066;--border-ink:#8FA3BF;--text-primary:#DCE6F2;--text-secondary:#8FA3BF;--text-faint:#5B6F8C;--text-signal:#5CC8E0;--text-on-signal:#06101C;--text-on-solid:#06101C;--signal:#5CC8E0;--signal-hi:#9BE3F2;--signal-dim:#2E7A8C;--state-ok:#6FD8B0;--track-empty:#284066}
     html:lang(ja) body{font-family:var(--font-mono),"Noto Sans JP","Noto Sans TC",ui-monospace,monospace}
+    [data-toc-target]{scroll-margin-top:84px}
+    @container page (max-width:1180px){.toc-panel{display:none !important}}
     @keyframes tab-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     main > sc-if > section, main section[data-screen-label]{animation:tab-in .55s cubic-bezier(.2,.7,.2,1) both}
     @media print{main section[data-screen-label]{animation:none !important}}
     @media (prefers-reduced-motion:reduce){[data-intro],[data-intro] *,main section[data-screen-label]{animation:none !important}[data-tabnav] *{transition:none !important}}
   </style>
 </helmet>
-<div data-pageframe="" style="min-height:100vh;background-color:var(--surface-page);font-weight:300;font-size:14px;line-height:1.85;container-type:inline-size;container-name:page;{{ frameStyle }}">
+<div data-pageframe="" style="min-height:100vh;background-color:var(--surface-page);font-weight:300;font-size:14px;line-height:1.85;container-type:inline-size;container-name:page;position:relative;z-index:0;{{ frameStyle }}">
+  <canvas data-bgfx="" data-noprint="" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 42%,rgba(0,0,0,.35) 0%,rgba(0,0,0,.6) 45%,#000 80%);mask-image:radial-gradient(ellipse 60% 55% at 50% 42%,rgba(0,0,0,.35) 0%,rgba(0,0,0,.6) 45%,#000 80%)"></canvas>
 
   <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ false }}">
     <div data-intro="" data-noprint="" data-screen-label="00 開始畫面" role="button" aria-label="Enter" onClick="{{ enterSite }}" style="position:fixed;inset:0;z-index:50;overflow:hidden;cursor:pointer;line-height:1.5;color:#ececee;background:radial-gradient(ellipse 80% 70% at 50% 42%,#2b2b2f 0%,#151517 55%,#0a0a0b 100%);font-family:'Poppins','Noto Sans TC',sans-serif;animation:{{ introAnim }}">
@@ -102,7 +112,7 @@
       <div class="tb-brand"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.BrandMark" label="{{ brand }}" hint-size="120px,20px"></x-import></div>
       <nav class="tb-nav" data-tabnav="" onMouseLeave="{{ tabLeave }}" style="position:relative;display:flex;gap:0;margin-right:auto;flex-wrap:nowrap;flex:none">
         <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="4">
-          <div role="button" data-tab="{{ tb.id }}" onClick="{{ tb.go }}" onMouseEnter="{{ tb.enter }}" style="position:relative;padding:16px 10px 16px;white-space:nowrap;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:{{ tb.color }};transform:translateY({{ tb.lift }});transition:color .3s ease,transform .35s cubic-bezier(.2,.8,.2,1)">{{ tb.label }}</div>
+          <div role="button" data-tab="{{ tb.id }}" onClick="{{ tb.go }}" onMouseEnter="{{ tb.enter }}" style="position:relative;padding:16px 10px 16px;white-space:nowrap;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:{{ tb.color }};transform:translateY({{ tb.lift }});transition:color .3s ease,transform .35s cubic-bezier(.2,.8,.2,1)">{{ tb.label }}<sc-if value="{{ tb.wip }}" hint-placeholder-val="{{ false }}"><span style="margin-left:6px;padding:1px 4px;border:1px solid var(--border-strong);font-size:9px;letter-spacing:.06em;color:var(--text-faint);vertical-align:1px">{{ tb.wip }}</span></sc-if></div>
         </sc-for>
         <div style="position:absolute;bottom:0;height:2px;left:{{ indHX }};width:{{ indHW }};background:var(--border-strong);opacity:{{ indHO }};transition:left .4s cubic-bezier(.65,0,.35,1),width .4s cubic-bezier(.65,0,.35,1),opacity .25s ease;pointer-events:none"></div>
         <div style="position:absolute;bottom:0;height:2px;left:{{ indX }};width:{{ indW }};background:var(--signal);opacity:{{ indO }};transition:left .45s cubic-bezier(.65,0,.35,1),width .45s cubic-bezier(.65,0,.35,1);pointer-events:none"></div>
@@ -185,15 +195,27 @@
         <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">02 · ACADEMIC</span></div>
         <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 8px">{{ acadTitle }}</h2>
         <sc-for list="{{ acadGroups }}" as="g" hint-placeholder-count="4">
-          <div style="margin-top:44px">
-            <x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="{{ g.index }}" title="{{ g.title }}" hint-size="100%,16px"></x-import>
-            <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:28px 20px">
+          <div id="{{ g.anchor }}" data-toc-target="" style="margin-top:44px">
+            <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="{{ g.index }}" title="{{ g.title }}" hint-size="100%,16px"></x-import></sc-if>
+            <div class="{{ g.cls }}" style="margin-top:16px;display:grid;grid-template-columns:{{ g.cols }};gap:28px 20px">
               <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
-                <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
-                  <div style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div>
-                  <span style="color:var(--text-signal);font-size:10px;letter-spacing:.12em">{{ r.year }}</span>
-                  <span style="font-size:13px;font-weight:400;text-wrap:pretty">{{ r.head }}</span>
+                <div class="{{ r.cls }}" style="grid-column:{{ r.gc }};grid-row:{{ r.gr }};display:flex;flex-direction:column;gap:8px;min-width:0">
+                  <sc-if value="{{ r.hasPhoto }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:6px">
+                      <div style="position:relative;border:1px solid var(--border-strong);overflow:hidden"><img src="{{ r.pic }}" alt="{{ r.head }}" loading="lazy" style="display:block;width:100%;height:auto"><sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.55);color:#fff">{{ r.count }}</span></sc-if></div>
+                      <sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px"><sc-for list="{{ r.thumbs }}" as="th" hint-placeholder-count="3"><div role="button" onClick="{{ th.go }}" style="flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:1 / 1;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;opacity:{{ th.op }}"></div></sc-for></div></sc-if>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><div style="position:relative;{{ r.box }};border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div></sc-if>
+                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><span style="color:var(--text-signal);font-size:10px;letter-spacing:.12em">{{ r.year }}</span></sc-if>
                   <sc-if value="{{ r.org }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--text-secondary)">{{ r.org }}</span></sc-if>
+                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><span style="font-size:{{ r.headFs }};font-weight:400;line-height:1.5;text-align:left;text-wrap:pretty">{{ r.head }}</span></sc-if>
+                  <sc-if value="{{ r.oneLine }}" hint-placeholder-val="{{ false }}"><div data-fit="" data-fit-max="13" data-fit-min="9" style="font-size:13px;font-weight:400;line-height:1.5;white-space:nowrap;overflow:hidden"><span style="color:var(--text-signal);letter-spacing:.06em;margin-right:.6em">{{ r.year }}</span>{{ r.head }}</div></sc-if>
+                  <sc-if value="{{ r.hasPaper }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:3px;margin-top:2px;font-size:12px;line-height:1.6;color:var(--text-secondary);text-align:left">
+                    <div style="text-wrap:pretty"><sc-for list="{{ r.authors }}" as="au" hint-placeholder-count="5"><span style="color:{{ au.color }};font-weight:{{ au.fw }}">{{ au.name }}</span><span>{{ au.sep }}</span></sc-for></div>
+                    <div style="color:var(--text-faint)">{{ r.edit }}</div>
+                    <div style="color:var(--text-faint)">{{ r.cite }} · <a href="{{ r.doiHref }}" target="_blank" rel="noopener" style="color:var(--text-signal);border:0">DOI {{ r.doi }}</a></div>
+                  </div></sc-if>
                 </div>
               </sc-for>
             </div>
@@ -204,18 +226,22 @@
 
     <sc-if value="{{ showWork }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="03 作品" data-pagebreak="" style="padding-top:64px">
-        <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">03 · WORK</span></div>
+        <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">03 · PROJECTS</span></div>
         <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 32px">{{ workTitle }}</h2>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <sc-for list="{{ works }}" as="w" hint-placeholder-count="3">
-            <div style="border:1px solid {{ w.border }};background:var(--surface-plate);min-width:0">
+        <div class="work-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start">
+          <sc-for list="{{ works }}" as="w" hint-placeholder-count="4">
+            <div id="{{ w.anchor }}" data-toc-target="" style="border:1px solid {{ w.border }};background:var(--surface-plate);min-width:0">
               <div role="button" onClick="{{ w.toggle }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;padding:20px 22px;cursor:pointer">
                 <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ w.no }}</span>
                 <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:{{ w.togColor }}">{{ w.tog }}</span>
                 <span style="font-size:20px;font-weight:300;letter-spacing:-.01em;grid-column:1 / -1">{{ w.title }}</span>
                 <span style="font-size:13px;color:var(--text-secondary);grid-column:1 / -1;max-width:70ch;text-wrap:pretty">{{ w.summary }}</span>
               </div>
-              <div style="padding:0 22px 20px"><div style="position:relative;aspect-ratio:16 / 7;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div>
+              <sc-if value="{{ w.noShot }}" hint-placeholder-val="{{ true }}"><div style="padding:0 22px 20px"><div style="position:relative;aspect-ratio:16 / 9;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div></sc-if>
+              <sc-if value="{{ w.hasShot }}" hint-placeholder-val="{{ false }}"><div style="padding:0 22px 20px;display:flex;flex-direction:column;gap:6px">
+                <div style="position:relative;border:1px solid var(--border-strong);overflow:hidden;aspect-ratio:16 / 10;background:#0b0b0b"><img src="{{ w.shot }}" alt="{{ w.shotCap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.6);color:#fff">{{ w.shotCount }}</span></div>
+                <div style="display:flex;gap:4px"><sc-for list="{{ w.thumbs }}" as="th" hint-placeholder-count="5"><div role="button" onClick="{{ th.go }}" title="{{ th.cap }}" style="flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:16 / 10;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="{{ th.cap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:{{ th.op }}"></div></sc-for></div>
+              </div></sc-if>
               <sc-if value="{{ w.open }}" hint-placeholder-val="{{ false }}">
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;padding:20px 22px 24px;border-top:1px solid var(--border-hair)">
                   <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
@@ -358,7 +384,7 @@
     <sc-if value="{{ showOther }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="05 其他" data-pagebreak="" style="padding-top:64px">
         <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">04 · PHOTOGRAPHY</span></div>
-        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 8px">{{ photoTitle }}</h2>
+        <h2 id="sec-photo" data-toc-target="" style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 8px">{{ photoTitle }}</h2>
         <p style="margin:0 0 36px;color:var(--text-secondary);max-width:62ch;text-wrap:pretty">{{ photoIntro }}</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px 20px">
           <sc-for list="{{ photos }}" as="p" hint-placeholder-count="6">
@@ -372,7 +398,7 @@
             </figure>
           </sc-for>
         </div>
-        <div style="margin-top:64px">
+        <div id="sec-clubs" data-toc-target="" style="margin-top:64px">
           <x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="SEC 02" title="{{ clubTitle }}" hint-size="100%,16px"></x-import>
           <div style="margin-top:14px;border-top:1px solid var(--border-hair)">
             <sc-for list="{{ clubs }}" as="r" hint-placeholder-count="3">
@@ -394,6 +420,15 @@
       </div>
     </footer>
   </main>
+
+  <sc-if value="{{ showToc }}" hint-placeholder-val="{{ false }}">
+    <nav class="toc-panel" data-noprint="" aria-label="{{ tocTitle }}" style="position:fixed;right:max(16px,calc(var(--side) - 238px));top:50%;transform:translateY(-50%);z-index:8;width:210px;max-height:70vh;overflow-y:auto;background:var(--surface-plate);border:1px solid var(--border-strong);padding:14px 0 10px;animation:tab-in .4s cubic-bezier(.2,.7,.2,1) both">
+      <div style="padding:0 16px 10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ tocTitle }}</div>
+      <sc-for list="{{ toc }}" as="tc" hint-placeholder-count="4">
+        <div role="button" onClick="{{ tc.go }}" style="display:flex;gap:10px;align-items:baseline;padding:7px 16px 7px 13px;border-left:3px solid {{ tc.bar }};cursor:pointer;font-size:12px;line-height:1.4;color:{{ tc.color }};transition:color .2s ease,border-color .2s ease" style-hover="color:var(--text-primary)"><span style="flex:none;font-size:10px;color:var(--text-faint);font-variant-numeric:tabular-nums">{{ tc.no }}</span><span style="min-width:0">{{ tc.label }}</span></div>
+      </sc-for>
+    </nav>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;intro&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;off&quot;,&quot;session&quot;,&quot;always&quot;],&quot;default&quot;:&quot;off&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
@@ -424,12 +459,13 @@ const D = {
     { year: "2025.12", head: { zh: "桌上型四足陪伴機器人", en: "Desktop quadruped companion robot" }, org: { zh: "Raspberry Pi 5 · 個人專案", en: "Raspberry Pi 5 · personal" } }
   ],
   publications: [
-    { cat: "journal", year: "2026.03", venue: "PNAS", head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · PNAS", en: "Journal · PNAS" } },
+    { cat: "journal", year: "2026.03", venue: "PNAS", head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · PNAS", en: "Journal · PNAS" },
+      paper: { authors: ["Abdulmalik Obaid", "Mina-Elraheb Hanna", "Song-Wen Huang", "+5", "Yu-Wei Wu"], self: "Song-Wen Huang", editor: "John A. Rogers, Northwestern University", received: "2025.10.13", accepted: "2026.02.19", published: "2026.03.26", cite: "PNAS 123 (13) e2529147123", doi: "10.1073/pnas.2529147123" } },
     { cat: "patent", year: "—", head: { zh: "微線陣列排列與固結方法（U.S. 64/040,119）", en: "Methods for Producing Patterned Microwire Arrays (U.S. 64/040,119)" }, org: { zh: "美國臨時專利", en: "U.S. provisional patent" } },
     { cat: "invited", year: "2026", head: { zh: "CYCU-Leuven Joint International Workshop", en: "CYCU-Leuven Joint International Workshop" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
-    { cat: "invited", year: "2025.06", head: { zh: "神經科學技術研討會 · 蘇州", en: "Neuroscience Technology Symposium, CNS · Suzhou" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
-    { cat: "conference", year: "2025", head: { zh: "JNS 日本神經科學學會年會", en: "Japan Neuroscience Society Annual Meeting (JNS)" }, org: { zh: "研討會發表", en: "Presentation" } },
-    { cat: "conference", year: "2024", head: { zh: "TSfN 台灣神經科學學會國際研討會", en: "TSfN Interdisciplinary Neuroscience Intl. Conference" }, org: { zh: "研討會發表", en: "Presentation" } },
+    { cat: "invited", year: "2025.06", photos: ["photos/acad/cns-3.jpg", "photos/acad/cns-4.jpg", "photos/acad/cns-5.jpg", "photos/acad/cns-1.jpg", "photos/acad/cns-2.jpg"], oneLine: true, head: { zh: "CNS 神經科學技術研討會 · 蘇州", en: "CNS Neuroscience Technology Symposium · Suzhou" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
+    { cat: "conference", year: "2025", photos: ["photos/acad/jns-1.jpg", "photos/acad/jns-2.jpg"], head: { zh: "JNS 日本神經科學學會年會", en: "Japan Neuroscience Society Annual Meeting (JNS)" }, org: { zh: "研討會發表", en: "Presentation" } },
+    { cat: "conference", year: "2024", photos: ["photos/acad/tsfn-1.jpg"], head: { zh: "TSfN 台灣神經科學學會國際研討會", en: "TSfN Interdisciplinary Neuroscience Intl. Conference" }, org: { zh: "研討會發表", en: "Presentation" } },
     { cat: "conference", year: "2022", head: { zh: "中研院 NPAS 暑期大專生計畫成果發表", en: "Academia Sinica NPAS Summer Research Program" }, org: { zh: "第五名", en: "5th place" } }
   ],
   skills: [
@@ -455,7 +491,12 @@ const D = {
     { year: "", head: { zh: "EMBO 國際研討會 · 臺大社團與學系", en: "EMBO intl. conference · NTU clubs & departments" }, org: { zh: "自由接案攝影師", en: "Freelance photographer" } }
   ],
   works: [
+    { year: "2024 – 2026", title: { zh: "碩士論文研究：混合式三維微電極陣列（H3D-MEA）", en: "M.Sc. Thesis: Hybrid 3D Microelectrode Array (H3D-MEA)" },
+      summary: { zh: "混合式三維微電極陣列的設計、製作，以及小鼠活體神經記錄驗證。", en: "Design and fabrication of a hybrid 3D microelectrode array, validated by in-vivo neural recording in mice." },
+      tags: ["3D MEA", "Microfabrication", "Neural recording", "In vivo"] },
     { _move: 1, year: "2025.12", title: { zh: "桌上型四足陪伴機器人", en: "Desktop Quadruped Companion Robot" },
+      // Console screenshots: home, memory, I/O, architecture, progress.
+      shots: [["photos/work/robot-1.jpg", "主控台首頁", "Console home"], ["photos/work/robot-2.jpg", "記憶", "Memory"], ["photos/work/robot-3.jpg", "輸入輸出", "I/O"], ["photos/work/robot-4.jpg", "架構圖", "Architecture"], ["photos/work/robot-5.jpg", "進度表", "Progress"]],
       summary: { zh: "樹莓派上的陪伴機器人：對話即時編碼、白天整理、夜間反思；辨識人臉與聲紋，口頭就能教會新規則。", en: "A Raspberry Pi companion that encodes conversation in real time, consolidates by day, reflects at night; recognises faces and voices and learns rules by being told." },
       problem: { zh: "語言模型隔一段時間就分不出「使用者給的」和「自己生成的」，記憶會互相汙染。", en: "Over time an LLM cannot tell what the user said from what it generated; memories contaminate each other." },
       role: { zh: "獨立設計與開發：系統架構、記憶流程、主控台。", en: "Solo design and build: architecture, memory pipeline, console." },
@@ -475,10 +516,7 @@ const D = {
       role: { zh: "共同第一作者；與 Stanford University 團隊合作。", en: "Co-first author, with a Stanford University team." },
       method: { zh: ["審查期間一個月內重建並優化 Stanford 端量測系統與探針設計", "取得高品質實驗數據以回應審查意見"], en: ["Rebuilt and optimised the Stanford measurement rig and probe design within one month of review", "Produced the data that answered the reviewers"] },
       result: { zh: "通過審查，發表於《PNAS》。", en: "Accepted and published in PNAS." },
-      tags: ["PNAS", "Biomechanics", "Neural probes", "Stanford"] },
-    { year: "2025", title: { zh: "HALCYON 設計系統", en: "HALCYON Design System" },
-      summary: { zh: "暗色儀表介面的設計語言：183 個 token、21 個元件、雙模式一鍵切換。", en: "A design language for dark instrument UIs: 183 tokens, 21 components, one-attribute mode switch." },
-      tags: ["Design tokens", "React", "CSS"] }
+      tags: ["PNAS", "Biomechanics", "Neural probes", "Stanford"] }
   ],
   photos: [
     { title: { zh: "建築", en: "Architecture" }, meta: "TAIPEI" },
@@ -494,7 +532,6 @@ const D = {
   ]
 };
 D.works.push(...D.works.splice(D.works.findIndex(w => w._move), 1));
-D.works.push(...D.works.splice(D.works.findIndex(w => /HALCYON/.test(w.title.en)), 1));
 // Skill evidence: set ok:true and p:{zh,en} once confirmed
 const N = (n, c, x) => ({ n, c: c || [], ...(x || {}) });
 const SK = [
@@ -524,7 +561,7 @@ const SK = [
   ], { sub: "照實驗流程排" })
 ];
 const UI = {
-  tabs: [["home", "主頁", "Home"], ["acad", "學術", "Academic"], ["work", "作品集", "Work"], ["skills", "技能", "Skills"], ["other", "其他", "Other"]],
+  tabs: [["home", "主頁", "Home"], ["acad", "學術", "Academic"], ["work", "專案", "Projects"], ["skills", "技能", "Skills"], ["other", "其他", "Other"]],
   dl: { problem: ["問題", "Problem"], role: ["角色", "Role"], method: ["做法", "Method"], result: ["成果", "Result"] }
 };
 // Languages: zh / en live in D; Japanese and German are looked up here by the Chinese text — [日本語, Deutsch].
@@ -532,11 +569,18 @@ const UI = {
 const LANGS = [["zh", "中文", "中"], ["en", "English", "EN"], ["ja", "日本語", "日"], ["de", "Deutsch", "DE"]];
 const YR = { "進行中": { en: "Ongoing", ja: "進行中", de: "Laufend" }, "— 至今": { en: "— present", ja: "— 現在", de: "— heute" } };
 const TR = {
+  "編輯": ["編集", "Herausgegeben von"],
+  "投稿": ["投稿", "Eingereicht"],
+  "接受": ["受理", "Angenommen"],
+  "出版": ["出版", "Veröffentlicht"],
   "黃嵩文": ["黃嵩文", "SONGWEN HUANG"],
   "臺大生命科學系碩士班 · 神經工程": ["国立台湾大学 生命科学系 修士課程 · 神経工学", "M.Sc. Biowissenschaften, NTU · Neurotechnik"],
   "國立臺灣大學 生命科學系 · 神經工程": ["国立台湾大学 生命科学系 · 神経工学", "Biowissenschaften, National Taiwan University · Neurotechnik"],
   "跨領域神經工程": ["学際的神経工学", "Interdisziplinäre Neurotechnik"],
-  "碩士班": ["修士課程", "M.Sc."], "學士班": ["学士課程", "B.Sc."],
+  "碩士班": ["修士課程", "M.Sc."],
+  "待建置": ["準備中", "in Arbeit"], "專案": ["プロジェクト", "Projekte"],
+  "主題": ["テーマ", "THEMA"], "配色": ["配色", "Farben"], "背景": ["背景", "Hintergrund"], "舊紙": ["古紙", "Papier"], "終端機": ["ターミナル", "Terminal"], "夜海": ["夜の海", "Nachtmeer"],
+  "自動": ["自動", "Auto"], "訊號線": ["信号ライン", "Signallinien"], "神經網絡": ["神経ネットワーク", "Neuronales Netz"], "字元訊號": ["文字の信号", "ASCII-Signal"], "字元網絡": ["文字のネット", "ASCII-Netz"], "DNA 字元雨": ["DNA の雨", "DNA-Regen"], "關閉": ["オフ", "Aus"], "本頁目錄": ["このページ", "Auf dieser Seite"], "學士班": ["学士課程", "B.Sc."],
   "開發三維微電極陣列與無線腦機介面，從設計、加工到小鼠活體記錄。": ["三次元微小電極アレイとワイヤレスBCIを、設計・加工からマウスの生体内記録まで一貫して開発。", "3D-Mikroelektrodenarrays und drahtlose BCIs – von Design und Fertigung bis zur In-vivo-Ableitung in Mäusen."],
   "臺北，臺灣": ["台北、台湾", "Taipeh, Taiwan"],
   "國立臺灣大學 生命科學系 碩士班": ["国立台湾大学 生命科学系 修士課程", "M.Sc. Biowissenschaften, National Taiwan University"],
@@ -555,7 +599,7 @@ const TR = {
   "微線陣列排列與固結方法（U.S. 64/040,119）": ["パターン化マイクロワイヤアレイの製造方法（U.S. 64/040,119）", "Verfahren zur Herstellung strukturierter Mikrodraht-Arrays (U.S. 64/040,119)"],
   "美國臨時專利": ["米国仮特許出願", "US-Provisional-Patentanmeldung"],
   "青年邀請講者": ["若手招待講演者", "Eingeladener Nachwuchsredner"],
-  "神經科學技術研討會 · 蘇州": ["神経科学技術シンポジウム · 蘇州", "Symposium für Neurotechnologie · Suzhou"],
+  "CNS 神經科學技術研討會 · 蘇州": ["CNS 神経科学技術シンポジウム · 蘇州", "CNS-Symposium für Neurotechnologie · Suzhou"],
   "JNS 日本神經科學學會年會": ["日本神経科学学会 大会（JNS）", "Jahrestagung der Japan Neuroscience Society (JNS)"],
   "研討會發表": ["学会発表", "Konferenz"],
   "期刊": ["学術誌", "Journal"], "專利": ["特許", "Patent"], "邀請講者": ["招待講演", "Vortrag"],
@@ -652,13 +696,21 @@ class Component extends DCLogic {
     if (this.state.intro === "on") document.documentElement.style.overflow = "hidden";
     this.onKey = e => {
       if (this.state.intro === "on" && ["Enter", " ", "Escape"].includes(e.key)) { e.preventDefault(); this.enterSite(); }
-      else if (e.key === "Escape" && this.state.langOpen) this.setState({ langOpen: false });
+      else if (e.key === "Escape" && (this.state.langOpen || this.state.themeOpen)) this.setState({ langOpen: false, themeOpen: false });
     };
     window.addEventListener("keydown", this.onKey);
-    this.onDocDown = e => { if (this.state.langOpen && !(e.target.closest && e.target.closest("[data-langmenu]"))) this.setState({ langOpen: false }); };
+    this.onDocDown = e => {
+      const inside = sel => e.target.closest && e.target.closest(sel);
+      if (this.state.langOpen && !inside("[data-langmenu]")) this.setState({ langOpen: false });
+      if (this.state.themeOpen && !inside("[data-thememenu]")) this.setState({ themeOpen: false });
+    };
     document.addEventListener("mousedown", this.onDocDown);
     let lang = "zh", tab = "home", theme = null;
-    try { lang = localStorage.getItem("resume-lang") || lang; theme = localStorage.getItem("resume-theme"); } catch (e) {}
+    let palette = null, bg = "auto";
+    try { lang = localStorage.getItem("resume-lang") || lang; theme = localStorage.getItem("resume-theme");  } catch (e) {}
+    if (!["paper", "terminal", "nightsea"].includes(palette)) palette = null;
+    if (!["auto", "line-trace", "line-net", "ascii-trace", "ascii-net", "dna", "off"].includes(bg)) bg = "auto";
+    this.setState({ palette, bg }, () => this.applyMode && this.applyMode());
     if (!LANGS.some(x => x[0] === lang)) lang = "zh";
     if (!["auto", "dark", "light"].includes(theme)) theme = null;
     this.setState({ lang, tab, theme }, () => this.applyMode && this.applyMode());
@@ -668,8 +720,22 @@ class Component extends DCLogic {
       const light = this.state.printing || m === "light" || (m === "auto" && this.mq.matches);
       if (light) document.documentElement.setAttribute("data-hal-mode", "light");
       else document.documentElement.removeAttribute("data-hal-mode");
+      if (this.state.palette && !this.state.printing) document.documentElement.setAttribute("data-hal-palette", this.state.palette);
+      else document.documentElement.removeAttribute("data-hal-palette");
     };
     this.mq.addEventListener("change", this.applyMode);
+    // Highlight the contents-panel entry for the section currently at the top of the screen.
+    this.onTocScroll = () => {
+      if (this._tocRaf) return;
+      this._tocRaf = requestAnimationFrame(() => {
+        this._tocRaf = null;
+        let cur = null;
+        document.querySelectorAll("[data-toc-target]").forEach(el => { if (el.getBoundingClientRect().top < 160) cur = el.id; });
+        if (cur && cur !== this.state.tocActive) this.setState({ tocActive: cur });
+      });
+    };
+    document.addEventListener("scroll", this.onTocScroll, true);
+    this.startBg();
     this.before = () => this.setState({ printing: true }, this.applyMode);
     this.after = () => this.setState({ printing: false }, this.applyMode);
     window.addEventListener("beforeprint", this.before);
@@ -680,6 +746,209 @@ class Component extends DCLogic {
     this.measT = setTimeout(this.onResize, 60);
     try { document.fonts && document.fonts.ready.then(() => this.onResize && this.onResize()); } catch (e) {}
   }
+  // Background animation: neural signal traces on Home, a slowly drifting neuron network on the other tabs.
+  startBg() {
+    const cv = document.querySelector("[data-bgfx]");
+    if (!cv || !cv.getContext) return;
+    const ctx = cv.getContext("2d");
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const STEP = 6;
+    let W = 0, H = 0, mode = null, frame = 0, col = { ink: "#888888", sig: "#888888" }, traces = [], nodes = [], last = performance.now();
+    const rgba = (c, a) => {
+      c = (c || "").trim();
+      let r = 128, g = 128, b = 128;
+      const m = c.match(/^#([0-9a-f]{6})$/i);
+      if (m) { r = parseInt(m[1].slice(0, 2), 16); g = parseInt(m[1].slice(2, 4), 16); b = parseInt(m[1].slice(4, 6), 16); }
+      else { const n = c.match(/\d+(\.\d+)?/g); if (n && n.length >= 3) { r = +n[0]; g = +n[1]; b = +n[2]; } }
+      return `rgba(${r},${g},${b},${a})`;
+    };
+    const readCol = () => { const s = getComputedStyle(cv); col = { ink: s.getPropertyValue("--text-faint"), sig: s.getPropertyValue("--signal") }; };
+    const nextVal = t => {
+      if (t.spike.length) return t.spike.shift();
+      if (Math.random() < 0.012) { t.spike = [-22, 12, -4]; return 0; }
+      return (Math.random() - 0.5) * t.amp;
+    };
+    const seedTraces = () => {
+      const n = W < 700 ? 3 : 5;
+      traces = Array.from({ length: n }, (_, i) => ({
+        y: H * (0.18 + 0.64 * (i + 0.5) / n), amp: 3 + Math.random() * 3,
+        speed: 18 + Math.random() * 22, off: 0, sig: i === Math.floor(n / 2), spike: [], pts: []
+      }));
+      traces.forEach(t => { for (let k = 0; k < Math.ceil(W / STEP) + 3; k++) t.pts.push(nextVal(t)); });
+    };
+    const seedNodes = () => {
+      const n = Math.max(18, Math.min(70, Math.round(W * H / 26000)));
+      nodes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12, fire: 0 }));
+    };
+    // Character-grid (ASCII) scenes share one cell size.
+    const CW = 9, CH = 16;
+    let cols = 0, rows = 0, aTraces = [], drops = [];
+    const put = (ch, c, r) => { if (c >= 0 && c < cols && r >= 0 && r < rows) ctx.fillText(ch, c * CW, r * CH); };
+    const seedATraces = () => {
+      cols = Math.ceil(W / CW) + 1; rows = Math.ceil(H / CH);
+      const n = W < 700 ? 3 : 5;
+      aTraces = Array.from({ length: n }, (_, i) => ({ row: Math.round(rows * (0.18 + 0.64 * (i + 0.5) / n)), speed: 5 + Math.random() * 5, acc: 0, sig: i === Math.floor(n / 2), q: [], v: [] }));
+      const nv = t => { if (t.q.length) return t.q.shift(); if (Math.random() < 0.03) { t.q = [-3, 2, -1]; return 0; } return Math.random() < 0.08 ? (Math.random() < 0.5 ? -1 : 1) : 0; };
+      aTraces.forEach(t => { t.nv = () => nv(t); for (let k = 0; k < cols; k++) t.v.push(t.nv()); });
+    };
+    const seedDrops = () => {
+      cols = Math.ceil(W / CW); rows = Math.ceil(H / CH);
+      drops = Array.from({ length: cols }, () => ({ y: -Math.random() * rows * 1.5, speed: 4 + Math.random() * 8, len: 6 + Math.floor(Math.random() * 12), on: Math.random() < 0.35, ch: [] }));
+      drops.forEach(d => { for (let k = 0; k < rows + 20; k++) d.ch.push("ATCG"[Math.floor(Math.random() * 4)]); });
+    };
+    // Topographic contours: marching squares over slowly drifting value noise; one level picked out in the signal colour.
+    const CSTEP = 24, LEVELS = [0.32, 0.40, 0.48, 0.56, 0.64, 0.72], HI = 3;
+    let ct = 0, cAcc = 1, cvals = null;
+    const hash = (ix, iy) => { const s = Math.sin(ix * 127.1 + iy * 311.7) * 43758.5453; return s - Math.floor(s); };
+    const sm = t => t * t * (3 - 2 * t);
+    const noise2 = (x, y) => { const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy, a = hash(ix, iy), b = hash(ix + 1, iy), c = hash(ix, iy + 1), d = hash(ix + 1, iy + 1), ux = sm(fx), uy = sm(fy); return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy; };
+    const field = (x, y, t) => noise2(x * 1.4 + t, y * 1.4) * 0.62 + noise2(x * 2.9 - t * 0.6, y * 2.9 + t * 0.35) * 0.27 + noise2(x * 6.0, y * 6.0 - t * 1.3) * 0.11;
+    const drawContour = dt => {
+      ct += dt * 0.055; cAcc += dt;
+      if (cAcc < 0.04 && dt > 0) return;   // ~25 fps is plenty for a slow drift
+      cAcc = 0;
+      const C = Math.floor(W / CSTEP) + 2, R = Math.floor(H / CSTEP) + 2;
+      if (!cvals || cvals.length !== C * R) cvals = new Float32Array(C * R);
+      for (let j = 0; j < R; j++) for (let i = 0; i < C; i++) cvals[j * C + i] = field(i * CSTEP / 520, j * CSTEP / 520, ct);
+      ctx.clearRect(0, 0, W, H);
+      const lt = (a, b, L) => (L - a) / (b - a || 1e-9);
+      LEVELS.forEach((L, li) => {
+        ctx.strokeStyle = li === HI ? rgba(col.sig, 0.17) : rgba(col.ink, 0.11);
+        ctx.beginPath();
+        for (let j = 0; j < R - 1; j++) for (let i = 0; i < C - 1; i++) {
+          const a = cvals[j * C + i], b = cvals[j * C + i + 1], c = cvals[(j + 1) * C + i + 1], d = cvals[(j + 1) * C + i];
+          const idx = (a > L ? 8 : 0) | (b > L ? 4 : 0) | (c > L ? 2 : 0) | (d > L ? 1 : 0);
+          if (idx === 0 || idx === 15) continue;
+          const x0 = i * CSTEP, y0 = j * CSTEP;
+          const T = [x0 + CSTEP * lt(a, b, L), y0], Rt = [x0 + CSTEP, y0 + CSTEP * lt(b, c, L)], B = [x0 + CSTEP * lt(d, c, L), y0 + CSTEP], Lf = [x0, y0 + CSTEP * lt(a, d, L)];
+          const sg = (p, q) => { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); };
+          switch (idx) {
+            case 1: case 14: sg(Lf, B); break;
+            case 2: case 13: sg(B, Rt); break;
+            case 3: case 12: sg(Lf, Rt); break;
+            case 4: case 11: sg(T, Rt); break;
+            case 5: sg(T, Lf); sg(B, Rt); break;
+            case 6: case 9: sg(T, B); break;
+            case 7: case 8: sg(T, Lf); break;
+            case 10: sg(Lf, B); sg(T, Rt); break;
+          }
+        }
+        ctx.stroke();
+      });
+    };
+    const sceneFor = () => {
+      const bg = this.state.bg || "auto", home = (this.state.tab || "home") === "home";
+      if (bg === "auto") return (this.state.tab || "home") === "skills" ? "net" : "contour";
+      return { "line-trace": "trace", "line-net": "net", "ascii-trace": "atrace", "ascii-net": "anet", dna: "dna", off: "off" }[bg] || "trace";
+    };
+    const draw = dt => {
+      const want = sceneFor();
+      if (want !== mode) {
+        mode = want;
+        if (mode === "trace") seedTraces(); else if (mode === "net" || mode === "anet") { seedNodes(); cols = Math.ceil(W / CW); rows = Math.ceil(H / CH); }
+        else if (mode === "atrace") seedATraces(); else if (mode === "dna") seedDrops();
+      }
+      if (frame++ % 60 === 0) readCol();
+      if (mode === "contour") { ctx.lineWidth = 1; drawContour(dt); return; }
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1;
+      if (mode === "off") return;
+      ctx.font = '12px "JetBrains Mono", ui-monospace, monospace'; ctx.textBaseline = "top";
+      if (mode === "atrace") {
+        aTraces.forEach(t => {
+          t.acc += t.speed * dt;
+          while (t.acc >= 1) { t.acc -= 1; t.v.shift(); t.v.push(t.nv()); }
+          ctx.fillStyle = t.sig ? rgba(col.sig, 0.45) : rgba(col.ink, 0.3);
+          for (let k = 0; k < t.v.length; k++) {
+            const cur = t.v[k], prev = k ? t.v[k - 1] : cur;
+            if (cur === prev) put("─", k, t.row + cur);
+            else { const lo = Math.min(cur, prev), hi = Math.max(cur, prev); for (let r = lo; r <= hi; r++) put("│", k, t.row + r); }
+          }
+        });
+        return;
+      }
+      if (mode === "dna") {
+        drops.forEach((d, c) => {
+          if (!d.on) { if (Math.random() < 0.002) { d.on = true; d.y = -d.len; } return; }
+          d.y += d.speed * dt;
+          if (d.y - d.len > rows) { d.on = Math.random() < 0.5; d.y = -d.len - Math.random() * 10; d.speed = 4 + Math.random() * 8; }
+          const head = Math.floor(d.y);
+          for (let i = 0; i < d.len; i++) {
+            const r = head - i; if (r < 0 || r >= rows) continue;
+            if (Math.random() < 0.02) d.ch[r] = "ATCG"[Math.floor(Math.random() * 4)];
+            ctx.fillStyle = i === 0 ? rgba(col.sig, 0.6) : rgba(col.ink, 0.32 * (1 - i / d.len));
+            put(d.ch[r] || "A", c, r);
+          }
+        });
+        return;
+      }
+      if (mode === "anet") {
+        const R = 150;
+        nodes.forEach(p => {
+          p.x += p.vx * dt; p.y += p.vy * dt;
+          if (p.x < -20) p.x = W + 20; else if (p.x > W + 20) p.x = -20;
+          if (p.y < -20) p.y = H + 20; else if (p.y > H + 20) p.y = -20;
+          if (p.fire > 0) p.fire = Math.max(0, p.fire - dt * 1.2); else if (Math.random() < 0.0008) p.fire = 1;
+        });
+        for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d > R) continue;
+          const f = Math.max(a.fire, b.fire), k = 1 - d / R;
+          ctx.fillStyle = f > 0 ? rgba(col.sig, 0.15 + 0.45 * f * k) : rgba(col.ink, 0.22 * k);
+          const c0 = a.x / CW, r0 = a.y / CH, c1 = b.x / CW, r1 = b.y / CH, n = Math.max(Math.abs(c1 - c0), Math.abs(r1 - r0));
+          for (let s = 1; s < n; s += 1.4) put("·", Math.round(c0 + (c1 - c0) * s / n), Math.round(r0 + (r1 - r0) * s / n));
+        }
+        nodes.forEach(p => { ctx.fillStyle = p.fire > 0 ? rgba(col.sig, 0.5 + 0.4 * p.fire) : rgba(col.ink, 0.45); put(p.fire > 0 ? "◉" : "o", Math.round(p.x / CW), Math.round(p.y / CH)); });
+        return;
+      }
+      if (mode === "trace") {
+        traces.forEach(t => {
+          t.off += t.speed * dt;
+          while (t.off >= STEP) { t.off -= STEP; t.pts.shift(); t.pts.push(nextVal(t)); }
+          ctx.beginPath();
+          t.pts.forEach((v, k) => { const x = k * STEP - t.off, y = t.y + v; if (k) ctx.lineTo(x, y); else ctx.moveTo(x, y); });
+          ctx.strokeStyle = t.sig ? rgba(col.sig, 0.35) : rgba(col.ink, 0.22);
+          ctx.stroke();
+        });
+      } else {
+        const R = 140;
+        nodes.forEach(p => {
+          p.x += p.vx * dt; p.y += p.vy * dt;
+          if (p.x < -20) p.x = W + 20; else if (p.x > W + 20) p.x = -20;
+          if (p.y < -20) p.y = H + 20; else if (p.y > H + 20) p.y = -20;
+          if (p.fire > 0) p.fire = Math.max(0, p.fire - dt * 1.4); else if (Math.random() < 0.0006) p.fire = 1;
+        });
+        for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d > R) continue;
+          const f = Math.max(a.fire, b.fire), k = 1 - d / R;
+          ctx.strokeStyle = f > 0 ? rgba(col.sig, 0.12 + 0.4 * f * k) : rgba(col.ink, 0.16 * k);
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+        nodes.forEach(p => {
+          ctx.fillStyle = p.fire > 0 ? rgba(col.sig, 0.35 + 0.5 * p.fire) : rgba(col.ink, 0.35);
+          ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 + p.fire * 1.6, 0, Math.PI * 2); ctx.fill();
+        });
+      }
+    };
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      mode = null;
+      if (reduce) draw(0);
+    };
+    const loop = now => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (!document.hidden) draw(dt);
+      this._bgRaf = requestAnimationFrame(loop);
+    };
+    readCol(); resize();
+    this._bgResize = resize; window.addEventListener("resize", resize);
+    if (reduce) { this._bgStatic = () => draw(0); return; }
+    this._bgRaf = requestAnimationFrame(loop);
+  }
   measureTab() {
     const nav = document.querySelector("[data-tabnav]");
     if (!nav) return;
@@ -689,7 +958,9 @@ class Component extends DCLogic {
     if (key !== this._indKey) { this._indKey = key; this.setState({ ind: a, indH: h }); }
   }
   componentDidUpdate(pp, ps) {
-    if (ps && ps.theme !== this.state.theme) this.applyMode();
+    if (ps && (ps.theme !== this.state.theme || ps.palette !== this.state.palette)) this.applyMode();
+    if (pp.device !== this.props.device && this._bgResize) setTimeout(this._bgResize, 60);
+    if (this._bgStatic && ps && (ps.tab !== this.state.tab || ps.theme !== this.state.theme || ps.bg !== this.state.bg || ps.palette !== this.state.palette)) this._bgStatic();
     const hl = { zh: "zh-Hant", en: "en", ja: "ja", de: "de" }[this.state.lang || "zh"] || "zh-Hant";
     if (document.documentElement.lang !== hl) document.documentElement.lang = hl;
     this.measureTab();
@@ -709,6 +980,9 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.onDocDown);
+    document.removeEventListener("scroll", this.onTocScroll, true);
+    cancelAnimationFrame(this._bgRaf);
+    window.removeEventListener("resize", this._bgResize);
     clearTimeout(this.exitT); clearTimeout(this.measT);
     window.removeEventListener("resize", this.onResize);
     window.removeEventListener("keydown", this.onKey);
@@ -719,7 +993,7 @@ class Component extends DCLogic {
   }
 
   go(tab) {
-    this.setState({ tab });
+    this.setState({ tab, tocActive: null });
     try { localStorage.setItem("resume-tab", tab); } catch (e) {}
     window.scrollTo(0, 0);
     const fr = document.querySelector("[data-pageframe]"); if (fr) fr.scrollTop = 0;
@@ -749,6 +1023,10 @@ class Component extends DCLogic {
     const orgRight = r => ({ ...r, showYear: !!r.org, year: r.org, org: "", cols: "minmax(0,1fr) auto", disp: "flex" });
     // Home education: graduation year on the left.
     const eduRows = () => D.education.map(p => { const m = (p.year || "").match(/(\d{4})(?:\.\d{2})?\s*$/); return { ...it(p), hasCat: true, cat: m ? m[1] : "", catColor: "var(--text-signal)", cols: "40px minmax(0,1fr)", showYear: false, orgCol: "2 / -1" }; });
+    // Academic page: honours shown there leave out these two; awards keep the image slot they were first given.
+    const PUB_ORDER = [0, 3, 2, 1, 4, 5, 6];   // PNAS, Suzhou, CYCU, patent, JNS, TSfN, NPAS (indexes into D.publications)
+    const ACAD_SKIP = ["三校聯盟建築攝影課程", "青年百億計畫"];
+    const AW_SLOT = { "青年百億計畫": 1, "臺大生命科學系 院長獎": 2, "臺大學術研究績效獎勵金": 3, "畢業壁報比賽": 4, "臺大生科院國際學術交流中心獎學金": 5, "三校聯盟建築攝影課程": 6 };
     const PCAT = { journal: L("期刊", "Journal"), patent: L("專利", "Patent"), invited: L("邀請講者", "Invited"), conference: L("研討會發表", "Conference") };
     const pubRows = () => ["journal", "patent", "invited", "conference"].flatMap(c => D.publications.filter(p => p.cat === c).map((p, i) => ({ ...it(p), org: "", cols: "78px minmax(0,1fr) auto", hasCat: true, cat: i === 0 ? PCAT[c] : "", gapTop: i === 0 && c !== "journal" ? "8px" : "0px" })));
 
@@ -762,7 +1040,10 @@ class Component extends DCLogic {
       return {
         no: `NO. ${String(i + 1).padStart(2, "0")} · ${yr(w.year)}`,
         title: t(w.title), summary: t(w.summary), tags: w.tags, fields,
-        open, slotId: `work-shot-${i + 1}`,
+        open, slotId: `work-shot-${i + 1}`, anchor: `work-${i + 1}`,
+        ...(() => { const sh = w.shots || [], sel = Math.max(0, Math.min((this.state.workPic || {})[i] || 0, sh.length - 1)), cur = sh[sel];
+          return { hasShot: sh.length > 0, noShot: !sh.length, shot: cur ? cur[0] : "", shotCap: cur ? L(cur[1], cur[2]) : "", shotCount: cur ? `${sel + 1} / ${sh.length} · ${L(cur[1], cur[2])}` : "",
+            thumbs: sh.map(([src, zh, en], j) => ({ src, cap: L(zh, en), ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ workPic: { ...(s.workPic || {}), [i]: j } })) })) }; })(),
         border: open ? "var(--signal)" : "var(--border-hair)",
         tog: open ? L("– 收合", "– Close") : L("+ 詳情", "+ Details"),
         togColor: open ? "var(--text-signal)" : "var(--text-secondary)",
@@ -792,13 +1073,28 @@ class Component extends DCLogic {
       };
     })();
 
+    // Right-side floating contents panel (every tab except home): click to jump to a section.
+    const toc = (() => {
+      const act = this.state.tocActive;
+      const mk = (items) => items.map((x, i) => ({ ...x, no: String(i + 1).padStart(2, "0"),
+        color: x.on ? "var(--text-signal)" : "var(--text-secondary)", bar: x.on ? "var(--signal)" : "transparent" }));
+      const jump = id => () => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); this.setState({ tocActive: id }); };
+      if (tab === "acad") return mk([["publications", "發表、專利與演講", "Publications, patents & talks"], ["awards", "榮譽與獎助", "Honors & grants"]].map(([k, zh, e], i) => ({ label: L(zh, e), go: jump("acad-" + k), on: act ? act === "acad-" + k : i === 0 })));
+      if (tab === "work") return mk(D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })));
+      if (tab === "other") return mk([["sec-photo", L("攝影作品", "Photography")], ["sec-clubs", L("社團與活動", "Leadership & activities")]].map(([id, label], i) => ({ label, go: jump(id), on: act ? act === id : i === 0 })));
+      if (tab === "skills") return mk(SK.map((b, i) => ({ label: b.n, go: () => { this.setState({ skView: "tree", skB: i, sk: i + ".0" }); window.scrollTo({ top: 0, behavior: "smooth" }); }, on: !!this.state.skView && +(this.state.skB || 0) === i })));
+      return [];
+    })();
+
     return {
       ...intro,
+      toc, showToc: !pr && tab !== "home" && toc.length > 0 && this.state.intro === "off",
+      tocTitle: L("本頁目錄", "On this page"),
       eduHead: D.education.map(p => { const m = (p.year || "").match(/(\d{4})(?:\.\d{2})?\s*$/); return { cat: m ? m[1] : "", head: t(p.head) }; }),
       frameStyle: this.props.device === "mobile" ? "min-height:0;width:390px;max-width:100%;height:min(844px,calc(100vh - 40px));margin:20px auto;overflow-y:auto;overflow-x:hidden;border:1px solid var(--border-strong);transform:translateZ(0)" : "",
       brand: t(D.name),
       tabs: UI.tabs.map(([id, zh, e]) => ({
-        id, label: L(zh, e), go: () => this.go(id),
+        id, label: L(zh, e), go: () => this.go(id), wip: id === "home" ? "" : L("待建置", "WIP"),
         enter: () => { if (this.state.tabHover !== id) this.setState({ tabHover: id }); },
         lift: this.state.tabHover === id && id !== tab ? "-2px" : "0px",
         color: id === tab ? "var(--text-primary)" : this.state.tabHover === id ? "var(--text-primary)" : "var(--text-secondary)",
@@ -811,6 +1107,20 @@ class Component extends DCLogic {
       indHO: this.state.indH && this.state.tabHover !== tab ? 1 : 0,
       langLabel: `LANGUAGE · ${(LANGS.find(x => x[0] === lang) || LANGS[0])[2]}`,
       langOpen: !!this.state.langOpen,
+      // Theme menu: colour palettes (override light/dark) and background scenes.
+      themeOpen: !!this.state.themeOpen,
+      toggleThemeMenu: () => this.setState(s => ({ themeOpen: !s.themeOpen, langOpen: false })),
+      themeMenuLabel: L("主題", "THEME"), paletteLabel: L("配色", "Colours"), bgLabel: L("背景", "Background"),
+      palettes: [[null, "HALCYON", "HALCYON", "linear-gradient(135deg,#E7E8E4 50%,#08090A 50%)", "#E3A72C"], ["paper", "舊紙", "Paper", "#EFE7D6", "#9C4A2F"], ["terminal", "終端機", "Terminal", "#050805", "#39FF6A"], ["nightsea", "夜海", "Night Sea", "#0A1424", "#5CC8E0"]].map(([id, zh, e, bgc, acc]) => {
+        const on = (this.state.palette || null) === id;
+        return { name: L(zh, e), bg: bgc, accent: acc, ring: on ? "var(--signal)" : "var(--border-strong)", color: on ? "var(--text-signal)" : "var(--text-secondary)",
+          go: () => { this.setState({ palette: id }, () => { this.applyMode(); this._bgStatic && this._bgStatic(); }); try { if (id) localStorage.setItem("resume-palette", id); else localStorage.removeItem("resume-palette"); } catch (e) {} } };
+      }),
+      bgOpts: [["auto", "自動", "Auto", ""], ["line-trace", "訊號線", "Signal lines", "─"], ["line-net", "神經網絡", "Neural network", "─"], ["ascii-trace", "字元訊號", "ASCII signal", "A"], ["ascii-net", "字元網絡", "ASCII network", "A"], ["dna", "DNA 字元雨", "DNA rain", "A"], ["off", "關閉", "Off", ""]].map(([id, zh, e, tag]) => {
+        const on = (this.state.bg || "auto") === id;
+        return { name: L(zh, e), tag, color: on ? "var(--text-signal)" : "var(--text-secondary)", bg: on ? "var(--surface-plate-2)" : "transparent",
+          go: () => { this.setState({ bg: id }, () => this._bgStatic && this._bgStatic()); try { localStorage.setItem("resume-bg", id); } catch (e) {} } };
+      }),
       langShort: (LANGS.find(x => x[0] === lang) || LANGS[0])[2],
       toggleLangMenu: () => this.setState(s => ({ langOpen: !s.langOpen })),
       langs: LANGS.map(([code, name, short]) => ({
@@ -1010,12 +1320,28 @@ class Component extends DCLogic {
       ],
       acadTitle: L("學術", "Academic"),
       acadGroups: [
-        ["edu", "SEC 01", "學歷", "Education", "[ 畢業證書／成績單 ]"],
-        ["research", "SEC 02", "研究與專案經驗", "Research & projects", "[ 實驗照片／成果圖 ]"],
-        ["publications", "SEC 03", "發表、專利與演講", "Publications, patents & talks", "[ 論文首頁／海報／演講照 ]"],
-        ["awards", "SEC 04", "榮譽與獎助", "Honors & grants", "[ 獎狀 ]"]
-      ].map(([k, idx, zh, e, ph]) => ({ index: idx, title: L(zh, e), rows: D[k === "edu" ? "education" : k].map((r, i) => ({ ...it(r), slotId: `acad-${k}-${i + 1}`, ph })) })),
-      workTitle: L("作品集成果", "Selected work"),
+        ["publications", "SEC 01", "發表、專利與演講", "Publications, patents & talks", "[ 論文首頁／海報／演講照 ]"],
+        ["awards", "SEC 02", "榮譽與獎助", "Honors & grants", "[ 獎狀 ]"]
+      ].map(([k, idx, zh, e, ph]) => ({ anchor: "acad-" + k, index: idx, title: L(zh, e),
+        // Publications: the PNAS paper large on the left, Suzhou + CYCU stacked on the right, the rest in one row below.
+        cls: k === "publications" ? "pub-grid" : "", showHead: k !== "publications",
+        cols: k === "publications" ? "repeat(12,minmax(0,1fr))" : "repeat(auto-fill,minmax(min(100%,260px),1fr))",
+        rows: (k === "publications" ? PUB_ORDER.map(n => D.publications[n]) : D[k].filter(r => k !== "awards" || !ACAD_SKIP.includes(r.head.zh))).map((r, pos) => {
+        const big = k === "publications" && pos === 0, side = k === "publications" && (pos === 1 || pos === 2);
+        const lay = { cls: big ? "pub-big" : "", gc: big ? "span 8" : side ? "span 4" : k === "publications" ? "span 3" : "auto", gr: big ? "span 2" : "auto",
+          box: big ? "aspect-ratio:16 / 9" : "aspect-ratio:4 / 3", headFs: big ? "19px" : "13px" };
+        // Items with their own photos show them (with thumbnails to switch); others keep the drop-in image slot.
+        // Slot ids stay tied to each item (not its position), so a dropped-in image follows its item when the order changes.
+        const sid = k === "awards" ? `acad-awards-${AW_SLOT[r.head.zh] || 9}` : `acad-${k}-${D[k].indexOf(r) + 1}`, pics = r.photos || [], sel = Math.max(0, Math.min((this.state.acadPic || {})[sid] || 0, pics.length - 1));
+        const pp = r.paper;
+        const paper = pp ? { hasPaper: true,
+          authors: pp.authors.map((n, j, a) => ({ name: n, sep: j < a.length - 1 ? ", " : "", color: n === pp.self ? "var(--text-primary)" : "var(--text-secondary)", fw: n === pp.self ? 600 : 400 })),
+          edit: `${L("編輯", "Edited by")} ${pp.editor} · ${L("投稿", "Received")} ${pp.received} · ${L("接受", "Accepted")} ${pp.accepted}`,
+          cite: `${pp.cite} · ${L("出版", "Published")} ${pp.published}`, doi: pp.doi, doiHref: "https://doi.org/" + pp.doi } : { hasPaper: false, authors: [], edit: "", cite: "", doi: "", doiHref: "" };
+        return { ...it(r), ...lay, ...paper, oneLine: !!r.oneLine, multiLine: !r.oneLine, slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length, pic: pics[sel] || "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
+          thumbs: pics.map((src, j) => ({ src, ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
+      }) })),
+      workTitle: L("專案", "Projects"),
       works,
       photoTitle: L("攝影作品", "Photography"),
       photoIntro: L("四年攝影經驗，專注建築攝影；擔任 EMBO 國際研討會官方攝影師、臺大各社團與學系官方攝影師，拍過光舞、火舞、街舞、魔術、樂團、太極拳與擊劍。", "Four years behind the camera, mostly architecture; also club showcases, portraits, and performances — light and fire dance, street dance, magic, bands, tai chi, fencing."),
