@@ -38,6 +38,8 @@
     main{text-align:justify}
     /* Home: top row 3 sections (span 2 of 6), bottom row 2 wider sections (span 3 of 6). */
     /* 60 fine tracks, no track gap; each cell's right margin makes the gutter. Spans: top 25/15/20, bottom 27/33 (45% / 55%). */
+    @container page (max-width:1560px){.tb-long{display:none !important}}
+    @container page (max-width:1300px){.tb-brand{display:none !important}}
     @container page (max-width:700px){.work-grid{grid-template-columns:minmax(0,1fr) !important}}
     @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big{grid-column:1 / -1 !important}}
     @container page (max-width:600px){.pub-grid{grid-template-columns:minmax(0,1fr) !important}}
@@ -52,6 +54,8 @@
       .tb-nav > div[data-tab]{padding:14px 7px !important;letter-spacing:.06em !important;font-size:12px !important}
       main{zoom:.88;padding-left:16px !important;padding-right:16px !important}
       .role-line{letter-spacing:.06em !important}
+      .role-row{flex-direction:column !important;align-items:flex-start !important;gap:6px !important}
+      .role-row > .edu-col{border-left:0 !important;padding-left:0 !important;width:100%}
     }
     @container page (max-width:640px){.intro-paras{display:none !important}}
     @media print{[data-pageframe]{max-width:none !important;width:auto !important;height:auto !important;overflow:visible !important;transform:none !important;border:0 !important;margin:0 !important}}
@@ -142,9 +146,9 @@
             <img src="photos/portrait-1.jpg" alt="{{ brand }}" style="flex:none;width:112px;height:112px;object-fit:cover;object-position:50% 40%;border:1px solid var(--border-strong);display:block">
             <div style="display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-height:112px;flex:1 1 auto;min-width:0">
               <div data-fit="" data-fit-max="60" data-fit-min="20" style="font-size:60px;font-weight:300;letter-spacing:.04em;line-height:1;margin-top:-.06em;white-space:nowrap;overflow:hidden">{{ brand }}</div>
-              <div style="display:flex;align-items:center;gap:0 20px;min-width:0">
-                <div class="role-line" data-fit="" data-fit-max="11" data-fit-min="8" style="flex:0 1 auto;min-width:0;font-size:11px;letter-spacing:.2em;line-height:1.5;text-transform:uppercase;color:var(--text-signal);white-space:nowrap;overflow:hidden">{{ role }}</div>
-                <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:4px;border-left:1px solid var(--border-strong);padding-left:20px">
+              <div class="role-row" style="display:flex;align-items:center;gap:0 20px;min-width:0">
+                <div class="role-line" data-fit="" data-fit-max="11" data-fit-min="8" style="flex:0 1 auto;min-width:0;font-size:11px;letter-spacing:.2em;line-height:1.5;text-transform:uppercase;color:var(--text-signal);white-space:normal;text-wrap:balance">{{ role }}</div>
+                <div class="edu-col" style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:4px;border-left:1px solid var(--border-strong);padding-left:20px">
                   <sc-for list="{{ eduHead }}" as="e" hint-placeholder-count="2">
                     <div style="display:flex;gap:12px;font-size:13px;line-height:1.5;align-items:baseline">
                       <span style="flex:none;color:var(--text-signal);font-size:11px;letter-spacing:.04em;font-variant-numeric:tabular-nums">{{ e.cat }}</span>
@@ -199,7 +203,7 @@
             <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="{{ g.index }}" title="{{ g.title }}" hint-size="100%,16px"></x-import></sc-if>
             <div class="{{ g.cls }}" style="margin-top:16px;display:grid;grid-template-columns:{{ g.cols }};gap:28px 20px">
               <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
-                <div class="{{ r.cls }}" style="grid-column:{{ r.gc }};grid-row:{{ r.gr }};display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div class="{{ r.cls }}" style="grid-column:{{ r.gc }};grid-row:{{ r.gr }};display:flex;flex-direction:column;gap:8px;min-width:0;{{ r.cardCss }}">
                   <sc-if value="{{ r.hasPhoto }}" hint-placeholder-val="{{ false }}">
                     <div style="display:flex;flex-direction:column;gap:6px">
                       <div style="position:relative;border:1px solid var(--border-strong);overflow:hidden"><img src="{{ r.pic }}" alt="{{ r.head }}" loading="lazy" style="display:block;width:100%;height:auto"><sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.55);color:#fff">{{ r.count }}</span></sc-if></div>
@@ -207,13 +211,18 @@
                     </div>
                   </sc-if>
                   <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><div style="position:relative;{{ r.box }};border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div></sc-if>
-                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><span style="color:var(--text-signal);font-size:10px;letter-spacing:.12em">{{ r.year }}</span></sc-if>
-                  <sc-if value="{{ r.org }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--text-secondary)">{{ r.org }}</span></sc-if>
-                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><span style="font-size:{{ r.headFs }};font-weight:400;line-height:1.5;text-align:left;text-wrap:pretty">{{ r.head }}</span></sc-if>
-                  <sc-if value="{{ r.oneLine }}" hint-placeholder-val="{{ false }}"><div data-fit="" data-fit-max="13" data-fit-min="9" style="font-size:13px;font-weight:400;line-height:1.5;white-space:nowrap;overflow:hidden"><span style="color:var(--text-signal);letter-spacing:.06em;margin-right:.6em">{{ r.year }}</span>{{ r.head }}</div></sc-if>
+                  <!-- Title line: date | event (wrapped lines stay right of the date); role/result on the line below. -->
+                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:baseline;gap:0 10px;min-width:0;font-size:{{ r.hdFs }};line-height:1.5">
+                    <span style="flex:none;min-width:4.4ch;color:var(--text-signal);font-size:{{ r.yearFs }};letter-spacing:.06em;font-variant-numeric:tabular-nums">{{ r.year }}</span>
+                    <span style="flex:none;color:var(--border-strong);font-size:{{ r.yearFs }}">|</span>
+                    <sc-if value="{{ r.plainHead }}" hint-placeholder-val="{{ true }}"><span style="flex:1 1 auto;min-width:0;font-weight:400;text-align:left;text-wrap:pretty">{{ r.lineHead }}</span></sc-if>
+                    <sc-if value="{{ r.linkHead }}" hint-placeholder-val="{{ false }}"><a href="{{ r.href }}" target="_blank" rel="noopener" title="{{ r.href }}" style="flex:1 1 auto;min-width:0;font-weight:400;text-align:left;text-wrap:pretty;color:var(--text-primary);border:0;text-decoration:underline;text-decoration-color:var(--border-strong);text-underline-offset:4px" style-hover="color:var(--text-signal);text-decoration-color:var(--signal)">{{ r.head }} <span style="color:var(--text-signal);font-size:.8em">↗</span></a></sc-if>
+                  </div></sc-if>
+                  <sc-if value="{{ r.oneLine }}" hint-placeholder-val="{{ false }}"><div data-fit="" data-fit-max="13" data-fit-min="9" style="font-size:13px;font-weight:400;line-height:1.5;white-space:nowrap;overflow:hidden"><span style="color:var(--text-signal);letter-spacing:.06em;font-size:.85em">{{ r.year }}</span><span style="color:var(--border-strong);margin:0 .6em">|</span>{{ r.head }}</div></sc-if>
+                  <sc-if value="{{ r.orgLine }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--text-secondary)">{{ r.orgLine }}</span></sc-if>
                   <sc-if value="{{ r.hasPaper }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:3px;margin-top:2px;font-size:12px;line-height:1.6;color:var(--text-secondary);text-align:left">
+                    <a href="{{ r.href }}" target="_blank" rel="noopener" title="{{ r.href }}" style="margin-bottom:4px;font-size:{{ r.headFs }};font-weight:400;line-height:1.5;text-wrap:pretty;color:var(--text-primary);border:0;text-decoration:underline;text-decoration-color:var(--border-strong);text-underline-offset:4px" style-hover="color:var(--text-signal);text-decoration-color:var(--signal)">{{ r.head }} <span style="color:var(--text-signal);font-size:.8em">↗</span></a>
                     <div style="text-wrap:pretty"><sc-for list="{{ r.authors }}" as="au" hint-placeholder-count="5"><span style="color:{{ au.color }};font-weight:{{ au.fw }}">{{ au.name }}</span><span>{{ au.sep }}</span></sc-for></div>
-                    <div style="color:var(--text-faint)">{{ r.edit }}</div>
                     <div style="color:var(--text-faint)">{{ r.cite }} · <a href="{{ r.doiHref }}" target="_blank" rel="noopener" style="color:var(--text-signal);border:0">DOI {{ r.doi }}</a></div>
                   </div></sc-if>
                 </div>
@@ -266,6 +275,22 @@
               </sc-if>
             </div>
           </sc-for>
+        </div>
+        <!-- Side projects: earlier 3D modelling work, one drop-in image slot per piece. -->
+        <div id="work-minis" data-toc-target="" style="margin-top:56px;padding-top:28px;border-top:1px solid var(--border-strong)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px">
+            <h3 style="margin:0;font-size:22px;font-weight:300;letter-spacing:-.01em">{{ minisTitle }}</h3>
+            <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ minisCount }}</span>
+          </div>
+          <p style="margin:8px 0 0;font-size:13px;color:var(--text-secondary)">{{ minisIntro }}</p>
+          <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:20px 16px">
+            <sc-for list="{{ minis }}" as="m" hint-placeholder-count="8">
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="position:relative;aspect-ratio:1 / 1;border:1px solid var(--border-strong)"><image-slot id="{{ m.slotId }}" shape="rect" placeholder="[ 3D MODEL ]"></image-slot></div>
+                <div style="display:flex;align-items:baseline;gap:0 10px;font-size:13px;line-height:1.5;min-width:0"><span style="flex:none;color:var(--text-signal);font-size:11px;letter-spacing:.06em">{{ m.no }}</span><span style="flex:none;color:var(--border-strong);font-size:11px">|</span><span style="min-width:0">{{ m.title }}</span></div>
+              </div>
+            </sc-for>
+          </div>
         </div>
       </section>
     </sc-if>
@@ -460,7 +485,7 @@ const D = {
   ],
   publications: [
     { cat: "journal", year: "2026.03", venue: "PNAS", head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · PNAS", en: "Journal · PNAS" },
-      paper: { authors: ["Abdulmalik Obaid", "Mina-Elraheb Hanna", "Song-Wen Huang", "+5", "Yu-Wei Wu"], self: "Song-Wen Huang", editor: "John A. Rogers, Northwestern University", received: "2025.10.13", accepted: "2026.02.19", published: "2026.03.26", cite: "PNAS 123 (13) e2529147123", doi: "10.1073/pnas.2529147123" } },
+      paper: { authors: ["Abdulmalik Obaid", "Mina-Elraheb Hanna", "Song-Wen Huang", "+5", "Yu-Wei Wu"], self: "Song-Wen Huang", editor: "John A. Rogers, Northwestern University", received: "2025.10.13", accepted: "2026.02.19", published: "2026.03.26", cite: "PNAS 123 (13) e2529147123", doi: "10.1073/pnas.2529147123", url: "https://www.pnas.org/doi/10.1073/pnas.2529147123" } },
     { cat: "patent", year: "—", head: { zh: "微線陣列排列與固結方法（U.S. 64/040,119）", en: "Methods for Producing Patterned Microwire Arrays (U.S. 64/040,119)" }, org: { zh: "美國臨時專利", en: "U.S. provisional patent" } },
     { cat: "invited", year: "2026", head: { zh: "CYCU-Leuven Joint International Workshop", en: "CYCU-Leuven Joint International Workshop" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
     { cat: "invited", year: "2025.06", photos: ["photos/acad/cns-3.jpg", "photos/acad/cns-4.jpg", "photos/acad/cns-5.jpg", "photos/acad/cns-1.jpg", "photos/acad/cns-2.jpg"], oneLine: true, head: { zh: "CNS 神經科學技術研討會 · 蘇州", en: "CNS Neuroscience Technology Symposium · Suzhou" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
@@ -480,8 +505,10 @@ const D = {
     { year: "2026", head: { zh: "臺大生命科學系 院長獎", en: "NTU Life Science Dean's Award" } },
     { year: "2026", head: { zh: "畢業壁報比賽", en: "Graduation Poster Competition" }, org: { zh: "第一名", en: "1st place" } },
     { year: "2025", head: { zh: "三校聯盟建築攝影課程", en: "Tri-University Architectural Photography Course" }, org: { zh: "第一名", en: "1st place" } },
-    { year: "2026", head: { zh: "臺大學術研究績效獎勵金", en: "NTU Academic Research Excellence Award" } },
-    { year: "2025", head: { zh: "臺大生科院國際學術交流中心獎學金", en: "NTU CLS Intl. Academic Exchange Scholarship" } }
+    // noPic: no photo for this item, so the Academic page lists it as a text row instead of an image card.
+    { year: "2026", noPic: true, head: { zh: "臺大學術研究績效獎勵金", en: "NTU Academic Research Excellence Award" } },
+    { year: "2025", noPic: true, head: { zh: "臺大生科院國際學術交流中心獎學金", en: "NTU CLS Intl. Academic Exchange Scholarship" } },
+    { year: "", noPic: true, head: { zh: "國科會大專學生研究計畫", en: "NSTC Student Research Grant" } }
   ],
   clubs: [
     { year: "", head: { zh: "臺大轉學生聯會", en: "NTU Transfer Students Association" }, org: { zh: "會長", en: "President" } },
@@ -518,6 +545,8 @@ const D = {
       result: { zh: "通過審查，發表於《PNAS》。", en: "Accepted and published in PNAS." },
       tags: ["PNAS", "Biomechanics", "Neural probes", "Stanford"] }
   ],
+  // Side projects (3D modelling). Drop an image into each slot; rename the titles here.
+  minis: Array.from({ length: 8 }, () => ({ title: { zh: "建模作品", en: "3D model" } })),
   photos: [
     { title: { zh: "建築", en: "Architecture" }, meta: "TAIPEI" },
     { title: { zh: "建築", en: "Architecture" }, meta: "—" },
@@ -569,6 +598,11 @@ const UI = {
 const LANGS = [["zh", "中文", "中"], ["en", "English", "EN"], ["ja", "日本語", "日"], ["de", "Deutsch", "DE"]];
 const YR = { "進行中": { en: "Ongoing", ja: "進行中", de: "Laufend" }, "— 至今": { en: "— present", ja: "— 現在", de: "— heute" } };
 const TR = {
+  "小專案": ["小プロジェクト", "Nebenprojekte"],
+  "之前做的 3D 建模。": ["これまでの 3D モデリング作品。", "Frühere 3D-Modelle."],
+  "建模作品": ["3D モデル", "3D-Modell"],
+  "件": ["点", "STÜCK"],
+  "國科會大專學生研究計畫": ["国家科学及技術委員会 大学生研究計画", "NSTC-Forschungsstipendium für Studierende"],
   "編輯": ["編集", "Herausgegeben von"],
   "投稿": ["投稿", "Eingereicht"],
   "接受": ["受理", "Angenommen"],
@@ -705,7 +739,7 @@ class Component extends DCLogic {
       if (this.state.themeOpen && !inside("[data-thememenu]")) this.setState({ themeOpen: false });
     };
     document.addEventListener("mousedown", this.onDocDown);
-    let lang = "zh", tab = "home", theme = null;
+    let lang = "en", tab = "home", theme = null;
     let palette = null, bg = "auto";
     try { lang = localStorage.getItem("resume-lang") || lang; theme = localStorage.getItem("resume-theme");  } catch (e) {}
     if (!["paper", "terminal", "nightsea"].includes(palette)) palette = null;
@@ -961,7 +995,7 @@ class Component extends DCLogic {
     if (ps && (ps.theme !== this.state.theme || ps.palette !== this.state.palette)) this.applyMode();
     if (pp.device !== this.props.device && this._bgResize) setTimeout(this._bgResize, 60);
     if (this._bgStatic && ps && (ps.tab !== this.state.tab || ps.theme !== this.state.theme || ps.bg !== this.state.bg || ps.palette !== this.state.palette)) this._bgStatic();
-    const hl = { zh: "zh-Hant", en: "en", ja: "ja", de: "de" }[this.state.lang || "zh"] || "zh-Hant";
+    const hl = { zh: "zh-Hant", en: "en", ja: "ja", de: "de" }[this.state.lang || "en"] || "en";
     if (document.documentElement.lang !== hl) document.documentElement.lang = hl;
     this.measureTab();
     this.fitText();
@@ -1000,7 +1034,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const lang = this.state.lang || "zh", en = lang === "en";
+    const lang = this.state.lang || "en", en = lang === "en";
     const tab = this.state.tab || "home";
     const pr = this.state.printing;
     const li = lang === "ja" ? 0 : 1;
@@ -1080,7 +1114,8 @@ class Component extends DCLogic {
         color: x.on ? "var(--text-signal)" : "var(--text-secondary)", bar: x.on ? "var(--signal)" : "transparent" }));
       const jump = id => () => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); this.setState({ tocActive: id }); };
       if (tab === "acad") return mk([["publications", "發表、專利與演講", "Publications, patents & talks"], ["awards", "榮譽與獎助", "Honors & grants"]].map(([k, zh, e], i) => ({ label: L(zh, e), go: jump("acad-" + k), on: act ? act === "acad-" + k : i === 0 })));
-      if (tab === "work") return mk(D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })));
+      if (tab === "work") return mk([...D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })),
+        { label: L("小專案", "Side projects"), go: jump("work-minis"), on: act === "work-minis" }]);
       if (tab === "other") return mk([["sec-photo", L("攝影作品", "Photography")], ["sec-clubs", L("社團與活動", "Leadership & activities")]].map(([id, label], i) => ({ label, go: jump(id), on: act ? act === id : i === 0 })));
       if (tab === "skills") return mk(SK.map((b, i) => ({ label: b.n, go: () => { this.setState({ skView: "tree", skB: i, sk: i + ".0" }); window.scrollTo({ top: 0, behavior: "smooth" }); }, on: !!this.state.skView && +(this.state.skB || 0) === i })));
       return [];
@@ -1248,7 +1283,7 @@ class Component extends DCLogic {
           homeWork: work,
           listSecs: [
             { no: "01", gap: "10px", span: 25, mr: "48px", label: L("研究與專案經驗", "Research & projects"), go: () => this.go("work"), items: D.research.map(it).map(orgRight) },
-            { no: "02", gap: "10px", span: 15, mr: "48px", label: L("榮譽與獎助", "Honors & grants"), go: () => this.go("acad"), items: D.awards.map(it).map(orgRight) },
+            { no: "02", gap: "10px", span: 15, mr: "48px", label: L("榮譽與獎助", "Honors"), go: () => this.go("acad"), items: D.awards.map(it).map(orgRight) },
             { no: "03", gap: "10px", span: 20, mr: "0px", label: L("課外活動", "Activities"), go: () => this.go("other"), items: D.clubs.map(it).map(orgRight) },
             { no: "04", gap: "10px", span: 27, mr: "48px", label: L("發表、專利與演講", "Publications, patents & talks"), go: () => this.go("acad"), items: pubRows().map(noYear) },
             { no: "05", gap: "10px", span: 33, mr: "0px", label: L("技能", "Skills"), go: () => this.go("skills"), items: skillRows() }
@@ -1329,7 +1364,7 @@ class Component extends DCLogic {
         rows: (k === "publications" ? PUB_ORDER.map(n => D.publications[n]) : D[k].filter(r => k !== "awards" || !ACAD_SKIP.includes(r.head.zh))).map((r, pos) => {
         const big = k === "publications" && pos === 0, side = k === "publications" && (pos === 1 || pos === 2);
         const lay = { cls: big ? "pub-big" : "", gc: big ? "span 8" : side ? "span 4" : k === "publications" ? "span 3" : "auto", gr: big ? "span 2" : "auto",
-          box: big ? "aspect-ratio:16 / 9" : "aspect-ratio:4 / 3", headFs: big ? "19px" : "13px" };
+          box: big ? "aspect-ratio:16 / 9" : "aspect-ratio:4 / 3", headFs: big ? "19px" : "13px", yearFs: big ? "13px" : "11px" };
         // Items with their own photos show them (with thumbnails to switch); others keep the drop-in image slot.
         // Slot ids stay tied to each item (not its position), so a dropped-in image follows its item when the order changes.
         const sid = k === "awards" ? `acad-awards-${AW_SLOT[r.head.zh] || 9}` : `acad-${k}-${D[k].indexOf(r) + 1}`, pics = r.photos || [], sel = Math.max(0, Math.min((this.state.acadPic || {})[sid] || 0, pics.length - 1));
@@ -1338,10 +1373,21 @@ class Component extends DCLogic {
           authors: pp.authors.map((n, j, a) => ({ name: n, sep: j < a.length - 1 ? ", " : "", color: n === pp.self ? "var(--text-primary)" : "var(--text-secondary)", fw: n === pp.self ? 600 : 400 })),
           edit: `${L("編輯", "Edited by")} ${pp.editor} · ${L("投稿", "Received")} ${pp.received} · ${L("接受", "Accepted")} ${pp.accepted}`,
           cite: `${pp.cite} · ${L("出版", "Published")} ${pp.published}`, doi: pp.doi, doiHref: "https://doi.org/" + pp.doi } : { hasPaper: false, authors: [], edit: "", cite: "", doi: "", doiHref: "" };
-        return { ...it(r), ...lay, ...paper, oneLine: !!r.oneLine, multiLine: !r.oneLine, slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length, pic: pics[sel] || "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
+        // Text-only awards: one full-width row each (year, title) under the image cards.
+        const txt = !!r.noPic && !pics.length, firstTxt = txt && !(D[k][D[k].indexOf(r) - 1] || {}).noPic;
+        if (txt) Object.assign(lay, { gc: "1 / -1", headFs: "14px" });
+        const href = pp && pp.url ? pp.url : "";
+        return { ...it(r), ...lay, ...paper, oneLine: !!r.oneLine, multiLine: !r.oneLine, plainHead: !r.oneLine, linkHead: false, href,
+          // Papers: "date | journal" on top, then the linked title; everything else: "date | event", then the role below.
+          lineHead: pp ? it(r).org : it(r).head, hdFs: pp ? "14px" : lay.headFs, orgLine: pp ? "" : it(r).org, ...(pp ? { year: pp.published } : {}),
+          cardCss: txt ? `flex-direction:row;align-items:baseline;gap:20px;border-top:1px solid var(--border-hair);padding-top:12px${firstTxt ? "" : ";margin-top:-16px"}` : "",
+          slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length && !txt, pic: pics[sel] || "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
           thumbs: pics.map((src, j) => ({ src, ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
       }) })),
       workTitle: L("專案", "Projects"),
+      minisTitle: L("小專案", "Side projects"), minisIntro: L("之前做的 3D 建模。", "Earlier 3D modelling work."),
+      minisCount: `${D.minis.length} ${L("件", "PIECES")}`,
+      minis: D.minis.map((m, i) => ({ slotId: `mini-${i + 1}`, no: String(i + 1).padStart(2, "0"), title: t(m.title) })),
       works,
       photoTitle: L("攝影作品", "Photography"),
       photoIntro: L("四年攝影經驗，專注建築攝影；擔任 EMBO 國際研討會官方攝影師、臺大各社團與學系官方攝影師，拍過光舞、火舞、街舞、魔術、樂團、太極拳與擊劍。", "Four years behind the camera, mostly architecture; also club showcases, portraits, and performances — light and fire dance, street dance, magic, bands, tai chi, fencing."),
