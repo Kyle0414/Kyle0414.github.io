@@ -98,8 +98,18 @@
     .ph-arrow{position:absolute;top:0;bottom:0;width:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
     .ph-arrow svg{display:block;fill:#BFE6C9;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));opacity:.85;transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .25s}
     .ph-arrow:hover svg{opacity:1;transform:scale(1.18)}
+    .sk-pop .slotwrap:has(image-slot:not([data-filled])){display:none}
+    @media (hover:hover) and (pointer:fine){.sk-pop{pointer-events:none}.sk-pop-more{display:none}}
+    .sk-cn{position:absolute;width:18px;height:18px;border:0 solid var(--signal);pointer-events:none;z-index:6}
+    @keyframes skpanel{from{opacity:0;transform:translate(14px,-50%)}to{opacity:1;transform:translate(0,-50%)}}
+    @keyframes skrunA{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    @keyframes skrunB{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+    .sk-oct{clip-path:polygon(24% 0,76% 0,100% 24%,100% 76%,76% 100%,24% 100%,0 76%,0 24%)}
+    .sk-nd:hover .sk-o{background:var(--signal) !important}
+    .sk-nd:hover .sk-i{background:var(--signal) !important}
+    .sk-nd:hover .sk-nm{color:var(--text-signal) !important}
     @keyframes tab-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-    main > sc-if > section, main section[data-screen-label]{animation:tab-in .55s cubic-bezier(.2,.7,.2,1) both}
+    main > sc-if > section, main section[data-screen-label]{animation:tab-in .55s cubic-bezier(.2,.7,.2,1) backwards}
     @media print{main section[data-screen-label]{animation:none !important}}
     @media (prefers-reduced-motion:reduce){[data-intro],[data-intro] *,main section[data-screen-label]{animation:none !important}[data-tabnav] *{transition:none !important}}
   </style>
@@ -327,35 +337,62 @@
 
     <sc-if value="{{ showSkills }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="04 技能" data-pagebreak="" style="padding-top:32px">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px;margin:0 0 8px">
+        <sc-if value="{{ skTree }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px;margin:0 0 8px">
           <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0">{{ skillTitle }}</h2>
-          <span style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">{{ skillCount }}</span>
-        </div>
+        </div></sc-if>
         <sc-if value="{{ skOverview }}" hint-placeholder-val="{{ true }}">
-          <div style="margin-top:28px;overflow-x:auto;padding-bottom:8px">
-            <div style="position:relative;width:720px;height:620px;margin:0 auto">
-              <sc-for list="{{ skLines }}" as="ln" hint-placeholder-count="10">
-                <div style="position:absolute;left:{{ ln.x }};top:{{ ln.y }};width:{{ ln.w }};height:1px;background:{{ ln.c }};transform-origin:0 0;transform:rotate({{ ln.a }})"></div>
-              </sc-for>
-              <div style="position:absolute;left:270px;top:250px;width:180px;height:120px;border:1px solid var(--signal);background:var(--surface-plate);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.3;padding:8px 0">
-                <span style="font-size:10px;letter-spacing:.24em;color:var(--text-faint)">// ROOT</span>
-                <span style="font-size:18px;font-weight:300;letter-spacing:.06em">{{ brand }}</span>
-                <span style="font-size:22px;font-weight:200;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ skTotal }}</span>
-                <span style="font-size:10px;letter-spacing:.14em;color:var(--text-secondary)">{{ skTotalLabel }}</span>
+          <!-- Skill tree, game style: the root in the middle, five branches around it, octagonal icon nodes joined by rails that turn at 45°.
+               Hover (or tap on a phone) a node for its details. -->
+          <!-- The view is a window onto the tree: on a phone you drag and pinch inside it; clicking (long-pressing on a phone) a node zooms in on it, node on the left, its notes on the right. -->
+          <div data-skview="" class="sk-view" onClick="{{ skMapClick }}" style="position:relative;margin:8px auto 0;width:100%;{{ skView.box }};overflow:{{ skView.clip }};container-type:inline-size;container-name:skview;touch-action:{{ skView.touch }};-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">
+          <div data-skmap="" class="sk-map" style="position:absolute;left:{{ skView.l }};top:{{ skView.t }};width:{{ skView.w }};aspect-ratio:{{ skMap.ar }};container-type:inline-size;container-name:skmap;text-align:left;transform-origin:0 0;transform:{{ skView.cam }};transition:{{ skView.camTr }}">
+            <sc-for list="{{ skMap.lines }}" as="ln" hint-placeholder-count="10">
+              <div style="position:absolute;left:{{ ln.l }};top:{{ ln.t }};width:{{ ln.w }};height:{{ ln.h }};background:{{ ln.c }};transform-origin:0 0;transform:rotate({{ ln.a }}) translateY(-50%);pointer-events:none;opacity:{{ ln.op }};transition:opacity .25s"></div>
+            </sc-for>
+            <sc-for list="{{ skMap.hot }}" as="ht" hint-placeholder-count="0">
+              <div style="position:absolute;left:{{ ht.l }};top:{{ ht.t }};width:{{ ht.w }};height:{{ ht.h }};transform-origin:0 0;transform:rotate({{ ht.a }}) translateY(-50%);pointer-events:none;z-index:1"><div style="width:100%;height:100%;background:var(--signal);box-shadow:0 0 6px var(--signal);transform-origin:0 50%;animation:{{ ht.anim }} {{ ht.dur }} linear {{ ht.delay }} both"></div></div>
+            </sc-for>
+            <div style="position:absolute;left:{{ skMap.root.l }};top:{{ skMap.root.t }};width:{{ skMap.root.w }};aspect-ratio:1 / 1;z-index:1">
+              <span class="sk-oct" style="position:absolute;inset:0;background:var(--signal)"></span>
+              <span class="sk-oct" style="position:absolute;inset:2px;background:var(--surface-plate)"></span>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25em;line-height:1.2">
+                <span style="font-size:{{ skMap.fs.rootName }};font-weight:300;letter-spacing:.06em;max-width:84%;text-align:center;line-height:1.15">{{ skillTitle }}</span>
+                <span style="font-size:{{ skMap.fs.rootSub }};letter-spacing:.1em;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ skTotal }}</span>
               </div>
-              <sc-for list="{{ skPlates }}" as="p" hint-placeholder-count="5">
-                <div role="button" onClick="{{ p.go }}" style="position:absolute;left:{{ p.x }};top:{{ p.y }};width:180px;height:108px;border:1px solid var(--border-strong);background:var(--surface-plate);padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer" style-hover="border-color:var(--signal)">
-                  <div style="display:flex;justify-content:space-between;font-size:9px;letter-spacing:.14em;color:var(--text-faint)"><span>SEC {{ p.no }}</span><span>{{ p.serial }}</span></div>
-                  <span style="font-size:17px;font-weight:300;letter-spacing:.02em;line-height:1.3">{{ p.name }}</span>
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                    <div style="display:flex;gap:3px;flex-wrap:wrap"><sc-for list="{{ p.segs }}" as="sg" hint-placeholder-count="6"><div style="width:7px;height:6px;transform:skewX(-20deg);background:{{ sg }}"></div></sc-for></div>
-                    <span style="font-size:15px;font-weight:200;font-variant-numeric:tabular-nums;color:var(--text-secondary)">{{ p.lv }}</span>
+            </div>
+            <sc-for list="{{ skMap.nodes }}" as="n" hint-placeholder-count="12">
+              <div role="button" data-sknode="" data-skid="{{ n.id }}" class="sk-nd" onMouseEnter="{{ n.enter }}" onMouseMove="{{ n.move }}" onMouseLeave="{{ n.leave }}" onClick="{{ n.click }}" style="position:absolute;left:{{ n.l }};top:{{ n.t }};width:{{ n.w }};aspect-ratio:1 / 1;cursor:pointer;z-index:2;filter:{{ n.fx }};opacity:{{ n.op }};transition:opacity .25s,filter .25s">
+                <span class="sk-oct sk-o" style="position:absolute;inset:0;background:{{ n.border }};transition:background .2s"></span>
+                <span class="sk-oct" style="position:absolute;inset:{{ n.bw }};background:{{ n.bg }}"></span>
+                <span class="sk-i" style="position:absolute;inset:{{ n.pad }};background:{{ n.ink }};-webkit-mask:{{ n.mask }} center / contain no-repeat;mask:{{ n.mask }} center / contain no-repeat;transition:background .2s"></span>
+                <div class="sk-lbl" style="position:absolute;{{ n.lblPos }};width:{{ n.lblW }};display:flex;flex-direction:column;gap:.1em;text-align:{{ n.align }};line-height:1.3;pointer-events:auto">
+                  <sc-if value="{{ n.isCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:{{ skMap.fs.catSub }};letter-spacing:.14em;color:var(--text-faint);white-space:nowrap">SEC {{ n.no }} · {{ n.lv }}</span></sc-if>
+                  <span class="sk-nm" style="font-size:{{ n.fs }};font-weight:{{ n.fw }};color:{{ n.txt }};text-wrap:pretty;transition:color .2s">{{ n.name }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+            <sc-if value="{{ skFoc.on }}" hint-placeholder-val="{{ false }}">
+              <div data-skpanel="" class="sk-panel" onClick="{{ skFoc.stop }}" style="position:absolute;left:{{ skFoc.left }};right:4%;top:50%;transform:translateY(-50%);max-width:460px;max-height:92%;overflow-y:auto;box-sizing:border-box;z-index:5;background:color-mix(in srgb,var(--surface-plate) 62%,transparent);-webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15);border:1px solid var(--border-strong);box-shadow:0 14px 36px rgba(0,0,0,.16);padding:16px 18px 18px;display:flex;flex-direction:column;gap:9px;line-height:1.5;text-align:left;-webkit-user-select:text;user-select:text;animation:skpanel .4s cubic-bezier(.2,.8,.2,1) .12s both">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                  <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skFoc.cat }} · {{ skFoc.no }}</span>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skFoc.tone }};color:{{ skFoc.tone }};white-space:nowrap">{{ skFoc.status }}</span>
+                    <div role="button" aria-label="Close" onClick="{{ skFoc.close }}" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-strong);font-size:12px;line-height:1;cursor:pointer;color:var(--text-secondary)" style-hover="color:var(--text-signal);border-color:var(--signal)">✕</div>
                   </div>
                 </div>
-              </sc-for>
-            </div>
+                <span style="font-size:{{ skFoc.nameFs }};line-height:1.35">{{ skFoc.name }}</span>
+                <sc-if value="{{ skFoc.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px"><sc-for list="{{ skFoc.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
+                <sc-if value="{{ skFoc.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skFoc.link }}</span></sc-if>
+                <sc-for list="{{ skFoc.slots }}" as="sl" hint-placeholder-count="1"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div></sc-for>
+                <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
+                <span style="font-size:13px;color:{{ skFoc.proofColor }};text-wrap:pretty">{{ skFoc.proof }}</span>
+              </div>
+            </sc-if>
+            <!-- Corner marks: inside them the tree can be dragged and zoomed; outside them the page scrolls as usual. -->
+            <span class="sk-cn" style="left:0;top:0;border-width:2px 0 0 2px"></span><span class="sk-cn" style="right:0;top:0;border-width:2px 2px 0 0"></span><span class="sk-cn" style="left:0;bottom:0;border-width:0 0 2px 2px"></span><span class="sk-cn" style="right:0;bottom:0;border-width:0 2px 2px 0"></span>
           </div>
-          <div style="margin-top:12px;text-align:center;font-size:11px;letter-spacing:.08em;color:var(--text-secondary)">工作方式 <span style="color:var(--text-signal)">快速設計 → 製作 → 測試 → 迭代</span></div>
+          <sc-if value="{{ skView.hint }}" hint-placeholder-val="{{ false }}"><div data-noprint="" style="margin-top:8px;text-align:center;font-size:10px;letter-spacing:.08em;color:var(--text-faint)">{{ skView.hint }}</div></sc-if>
         </sc-if>
         <sc-if value="{{ skTree }}" hint-placeholder-val="{{ false }}">
         <div data-noprint="" style="margin-top:20px;display:flex;align-items:stretch;border-bottom:1px solid var(--border-hair);overflow-x:auto">
@@ -512,6 +549,22 @@
       </sc-for>
     </nav>
   </sc-if>
+  <!-- Skill map pop-up: follows the mouse while hovering an item; on a phone, tap an item to open it and tap anywhere else to close. -->
+  <sc-if value="{{ skPop.on }}" hint-placeholder-val="{{ false }}">
+    <div data-skpop="" class="sk-pop" onClick="{{ skPop.stop }}" style="position:fixed;left:{{ skPop.l }};top:{{ skPop.t }};transform:{{ skPop.tf }};z-index:60;width:300px;max-width:calc(100vw - 24px);box-sizing:border-box;background:color-mix(in srgb,var(--surface-plate) 58%,transparent);-webkit-backdrop-filter:blur(9px) saturate(1.15);backdrop-filter:blur(9px) saturate(1.15);border:1px solid var(--border-strong);box-shadow:0 14px 36px rgba(0,0,0,.16);padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;line-height:1.5;text-align:left;font-weight:300">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skPop.cat }} · {{ skPop.no }}</span>
+        <span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skPop.tone }};color:{{ skPop.tone }}">{{ skPop.status }}</span>
+      </div>
+      <span style="font-size:17px;line-height:1.35">{{ skPop.name }}</span>
+      <sc-if value="{{ skPop.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:1px"><sc-for list="{{ skPop.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
+      <sc-if value="{{ skPop.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skPop.link }}</span></sc-if>
+      <div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ skPop.slot }}" shape="rect" placeholder="[ 證明 ]"></image-slot></div>
+      <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
+      <span style="font-size:12px;color:{{ skPop.proofColor }};text-wrap:pretty">{{ skPop.proof }}</span>
+      <div role="button" class="sk-pop-more" onClick="{{ skPop.more }}" style="align-self:flex-end;margin-top:2px;font-size:11px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer">{{ skPop.moreLabel }}</div>
+    </div>
+  </sc-if>
   <!-- Photo viewer: click any photo to see it large; the page behind is blurred (same veil as the robot console's SETTINGS). -->
   <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
     <div data-noprint="" role="dialog" aria-modal="true" aria-label="{{ lbAlt }}" onClick="{{ lbClose }}" style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;background:color-mix(in srgb,var(--surface-page) 50%,transparent);backdrop-filter:blur(8px) saturate(.7);-webkit-backdrop-filter:blur(8px) saturate(.7);animation:lbVeil .25s ease both">
@@ -650,6 +703,82 @@ const D = {
   ]
 };
 D.works.push(...D.works.splice(D.works.findIndex(w => w._move), 1));
+// Skill-tree text in other languages, looked up by the Chinese text — [English, 日本語, Deutsch].
+const SK_TR = {
+  "基礎": ["Foundations", "基礎", "Grundlagen"],
+  "3D 建模與工程設計": ["3D modelling & engineering design", "3D モデリングと設計", "3D-Modellierung & Konstruktion"],
+  "SolidWorks、Shapr3D": ["SolidWorks, Shapr3D", "SolidWorks、Shapr3D", "SolidWorks, Shapr3D"],
+  "參數化建模 → 工程圖 → 公差設計": ["Parametric modelling → drawings → tolerancing", "パラメトリックモデリング → 図面 → 公差設計", "Parametrische Modellierung → Zeichnungen → Toleranzen"],
+  "程式": ["Programming", "プログラミング", "Programmierung"],
+  "Python（含基礎資料處理）": ["Python (incl. basic data processing)", "Python（基礎的なデータ処理を含む）", "Python (inkl. grundlegender Datenverarbeitung)"],
+  "Web UI：HTML／CSS／JavaScript": ["Web UI: HTML / CSS / JavaScript", "Web UI：HTML／CSS／JavaScript", "Web-UI: HTML / CSS / JavaScript"],
+  "語言：中文（母語）、英文（TOEIC 835）": ["Languages: Mandarin (native), English (TOEIC 835)", "言語：中国語（母語）、英語（TOEIC 835）", "Sprachen: Chinesisch (Muttersprache), Englisch (TOEIC 835)"],
+  "機械製造": ["Fabrication", "機械加工", "Fertigung"],
+  "積層：FDM／DLP 3D 列印": ["Additive: FDM / DLP 3D printing", "積層：FDM／DLP 3D プリント", "Additiv: FDM- / DLP-3D-Druck"],
+  "減材：雷射切割、銑床、鑽孔／攻牙": ["Subtractive: laser cutting, milling, drilling / tapping", "除去加工：レーザーカット、フライス、穴あけ／タップ", "Subtraktiv: Laserschneiden, Fräsen, Bohren / Gewindeschneiden"],
+  "機電整合與嵌入式": ["Mechatronics & embedded", "メカトロニクスと組込み", "Mechatronik & Embedded"],
+  "控制平台：Arduino、ESP32、Raspberry Pi": ["Platforms: Arduino, ESP32, Raspberry Pi", "制御プラットフォーム：Arduino、ESP32、Raspberry Pi", "Plattformen: Arduino, ESP32, Raspberry Pi"],
+  "電路組裝 → 硬體除錯": ["Circuit assembly → hardware debugging", "回路組立 → ハードウェアデバッグ", "Schaltungsaufbau → Hardware-Debugging"],
+  "馬達控制": ["Motor control", "モーター制御", "Motorsteuerung"],
+  "PWM／馬達驅動": ["PWM / motor drivers", "PWM／モータードライバ", "PWM / Motortreiber"],
+  "伺服馬達": ["Servo motors", "サーボモーター", "Servomotoren"],
+  "步進馬達": ["Stepper motors", "ステッピングモーター", "Schrittmotoren"],
+  "感測器整合：IMU、視覺、聲音": ["Sensors: IMU, vision, audio", "センサー統合：IMU、ビジョン、音声", "Sensorik: IMU, Kamera, Audio"],
+  "介面：PySide6 桌面主控台、網頁主控台": ["Interfaces: PySide6 desktop console, web console", "インターフェース：PySide6 デスクトップコンソール、Web コンソール", "Oberflächen: PySide6-Desktopkonsole, Webkonsole"],
+  "微製程與電極": ["Microfabrication & electrodes", "微細加工と電極", "Mikrofertigung & Elektroden"],
+  "微電極製造": ["Microelectrode fabrication", "微小電極の作製", "Mikroelektroden-Herstellung"],
+  "氧氣電漿、濕式蝕刻、雷射剝除": ["Oxygen plasma, wet etching, laser ablation", "酸素プラズマ、ウェットエッチング、レーザーアブレーション", "Sauerstoffplasma, Nassätzen, Laserablation"],
+  "元件驗證": ["Device validation", "デバイス評価", "Bauteilvalidierung"],
+  "SEM → 阻抗量測／EIS": ["SEM → impedance / EIS", "SEM → インピーダンス測定／EIS", "REM → Impedanzmessung / EIS"],
+  "神經工程": ["Neuroengineering", "神経工学", "Neurotechnik"],
+  "神經介面：微電極／植入式電極": ["Neural interfaces: microelectrodes / implantable electrodes", "神経インターフェース：微小電極／埋め込み型電極", "Neuronale Schnittstellen: Mikroelektroden / implantierbare Elektroden"],
+  "動物手術：立體定位 → 開顱 → 植入": ["Animal surgery: stereotaxic → craniotomy → implantation", "動物手術：脳定位 → 開頭 → 埋め込み", "Tierchirurgie: Stereotaxie → Kraniotomie → Implantation"],
+  "神經訊號紀錄：電生理、雙光子顯微鏡": ["Neural recording: electrophysiology, two-photon microscopy", "神経信号記録：電気生理、二光子顕微鏡", "Neuronale Ableitung: Elektrophysiologie, Zwei-Photonen-Mikroskopie"],
+  "行為：動物行為實驗、行為設備開發": ["Behaviour: animal behaviour experiments, apparatus development", "行動：動物行動実験、行動実験装置の開発", "Verhalten: Tierverhaltensexperimente, Entwicklung von Versuchsapparaturen"],
+  "組織學：心臟灌流 → 冷凍切片 → IHC": ["Histology: cardiac perfusion → cryosectioning → IHC", "組織学：心臓灌流 → 凍結切片 → IHC", "Histologie: Herzperfusion → Kryoschnitte → IHC"],
+  "跨領域共用": ["shared across fields", "分野横断で共通", "fachübergreifend"],
+  "照實驗流程排": ["in experimental order", "実験の流れ順", "in Versuchsreihenfolge"],
+  "→ 產出供神經工程使用": ["→ feeds into neuroengineering", "→ 神経工学で使用", "→ fließt in die Neurotechnik ein"],
+  "← 微製程產出": ["← from microfabrication", "← 微細加工の成果", "← aus der Mikrofertigung"],
+  "← 用到機械＋機電": ["← uses fabrication + mechatronics", "← 機械加工＋メカトロを活用", "← nutzt Fertigung + Mechatronik"],
+  "工作方式": ["Workflow", "進め方", "Arbeitsweise"],
+  "快速設計 → 製作 → 測試 → 迭代": ["rapid design → build → test → iterate", "素早く設計 → 製作 → テスト → 反復", "schnell entwerfen → bauen → testen → iterieren"],
+  "查看詳細 →": ["Details →", "詳細を見る →", "Details →"]
+};
+// Skill-tree icons: Lucide (lucide.dev, ISC licence), keyed by node id ("branch.item.sub"). Swap one by pasting another icon's inner SVG.
+const SK_IC = {
+  "0": "<path d=\"M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z\" /><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\" /><circle cx=\"17.5\" cy=\"17.5\" r=\"3.5\" />",
+  "0.0": "<path d=\"M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z\" /><path d=\"m3.3 7 8.7 5 8.7-5\" /><path d=\"M12 22V12\" />",
+  "0.0.0": "<path d=\"m21.12 6.4-6.05-4.06a2 2 0 0 0-2.17-.05L2.95 8.41a2 2 0 0 0-.95 1.7v5.82a2 2 0 0 0 .88 1.66l6.05 4.07a2 2 0 0 0 2.17.05l9.95-6.12a2 2 0 0 0 .95-1.7V8.06a2 2 0 0 0-.88-1.66Z\" /><path d=\"M10 22v-8L2.25 9.15\" /><path d=\"m10 14 11.77-6.87\" />",
+  "0.0.1": "<path d=\"m12.99 6.74 1.93 3.44\" /><path d=\"M19.136 12a10 10 0 0 1-14.271 0\" /><path d=\"m21 21-2.16-3.84\" /><path d=\"m3 21 8.02-14.26\" /><circle cx=\"12\" cy=\"5\" r=\"2\" />",
+  "0.1": "<path d=\"m18 16 4-4-4-4\" /><path d=\"m6 8-4 4 4 4\" /><path d=\"m14.5 4-5 16\" />",
+  "0.1.0": "<path d=\"m7 11 2-2-2-2\" /><path d=\"M11 13h4\" /><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" ry=\"2\" />",
+  "0.1.1": "<rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\" /><path d=\"M10 4v4\" /><path d=\"M2 8h20\" /><path d=\"M6 4v4\" />",
+  "0.2": "<path d=\"m5 8 6 6\" /><path d=\"m4 14 6-6 2-3\" /><path d=\"M2 5h12\" /><path d=\"M7 2h1\" /><path d=\"m22 22-5-10-5 10\" /><path d=\"M14 18h6\" />",
+  "1": "<path d=\"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z\" /><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z\" /><path d=\"M12 2v2\" /><path d=\"M12 22v-2\" /><path d=\"m17 20.66-1-1.73\" /><path d=\"M11 10.27 7 3.34\" /><path d=\"m20.66 17-1.73-1\" /><path d=\"m3.34 7 1.73 1\" /><path d=\"M14 12h8\" /><path d=\"M2 12h2\" /><path d=\"m20.66 7-1.73 1\" /><path d=\"m3.34 17 1.73-1\" /><path d=\"m17 3.34-1 1.73\" /><path d=\"m11 13.73-4 6.93\" />",
+  "1.0": "<path d=\"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z\" /><path d=\"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65\" /><path d=\"m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65\" />",
+  "1.1": "<path d=\"M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z\" /><path d=\"M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8\" /><path d=\"M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3\" /><path d=\"M18 6h4\" /><path d=\"m5 10-2 8\" /><path d=\"m7 18 2-8\" />",
+  "2": "<path d=\"M12 8V4H8\" /><rect width=\"16\" height=\"12\" x=\"4\" y=\"8\" rx=\"2\" /><path d=\"M2 14h2\" /><path d=\"M20 14h2\" /><path d=\"M15 13v2\" /><path d=\"M9 13v2\" />",
+  "2.0": "<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" /><path d=\"M11 9h4a2 2 0 0 0 2-2V3\" /><circle cx=\"9\" cy=\"9\" r=\"2\" /><path d=\"M7 21v-4a2 2 0 0 1 2-2h4\" /><circle cx=\"15\" cy=\"15\" r=\"2\" />",
+  "2.1": "<path d=\"M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1\" /><path d=\"M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9\" /><path d=\"M21 21v-2h-4\" /><path d=\"M3 5h4V3\" /><path d=\"M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3\" />",
+  "2.2": "<path d=\"M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z\" /><path d=\"M12 12v.01\" />",
+  "2.2.0": "<path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\" />",
+  "2.2.0.0": "<path d=\"m12 14 4-4\" /><path d=\"M3.34 19a10 10 0 1 1 17.32 0\" />",
+  "2.2.0.1": "<line x1=\"6\" x2=\"6\" y1=\"4\" y2=\"20\" /><polygon points=\"10,4 20,12 10,20\" />",
+  "2.3": "<path d=\"M19.07 4.93A10 10 0 0 0 6.99 3.34\" /><path d=\"M4 6h.01\" /><path d=\"M2.29 9.62A10 10 0 1 0 21.31 8.35\" /><path d=\"M16.24 7.76A6 6 0 1 0 8.23 16.67\" /><path d=\"M12 18h.01\" /><path d=\"M17.99 11.66A6 6 0 0 1 15.77 16.67\" /><circle cx=\"12\" cy=\"12\" r=\"2\" /><path d=\"m13.41 10.59 5.66-5.66\" />",
+  "2.4": "<rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\" />",
+  "3": "<path d=\"M18 12h2\" /><path d=\"M18 16h2\" /><path d=\"M18 20h2\" /><path d=\"M18 4h2\" /><path d=\"M18 8h2\" /><path d=\"M4 12h2\" /><path d=\"M4 16h2\" /><path d=\"M4 20h2\" /><path d=\"M4 4h2\" /><path d=\"M4 8h2\" /><path d=\"M8 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-1.5c-.276 0-.494.227-.562.495a2 2 0 0 1-3.876 0C9.994 2.227 9.776 2 9.5 2z\" />",
+  "3.0": "<circle cx=\"12\" cy=\"5\" r=\"1\" /><circle cx=\"19\" cy=\"5\" r=\"1\" /><circle cx=\"5\" cy=\"5\" r=\"1\" /><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /><circle cx=\"5\" cy=\"12\" r=\"1\" /><circle cx=\"12\" cy=\"19\" r=\"1\" /><circle cx=\"19\" cy=\"19\" r=\"1\" /><circle cx=\"5\" cy=\"19\" r=\"1\" />",
+  "3.0.0": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />",
+  "3.1": "<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\" /><path d=\"m9 12 2 2 4-4\" />",
+  "3.1.0": "<path d=\"M3 3v16a2 2 0 0 0 2 2h16\" /><path d=\"M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7\" />",
+  "4": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z\" /><path d=\"M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4\" /><path d=\"M17.599 6.5a3 3 0 0 0 .399-1.375\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M19.938 10.5a4 4 0 0 1 .585.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M19.967 17.484A4 4 0 0 1 18 18\" />",
+  "4.0": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M9 13a4.5 4.5 0 0 0 3-4\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M12 13h4\" /><path d=\"M12 18h6a2 2 0 0 1 2 2v1\" /><path d=\"M12 8h8\" /><path d=\"M16 8V5a2 2 0 0 1 2-2\" /><circle cx=\"16\" cy=\"13\" r=\".5\" /><circle cx=\"18\" cy=\"3\" r=\".5\" /><circle cx=\"20\" cy=\"21\" r=\".5\" /><circle cx=\"20\" cy=\"8\" r=\".5\" />",
+  "4.1": "<path d=\"M11 16.586V19a1 1 0 0 1-1 1H2L18.37 3.63a1 1 0 1 1 3 3l-9.663 9.663a1 1 0 0 1-1.414 0L8 14\" />",
+  "4.2": "<path d=\"M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2\" />",
+  "4.3": "<path d=\"M17 5c0-1.7-1.3-3-3-3s-3 1.3-3 3c0 .8.3 1.5.8 2H11c-3.9 0-7 3.1-7 7c0 2.2 1.8 4 4 4\" /><path d=\"M16.8 3.9c.3-.3.6-.5 1-.7 1.5-.6 3.3.1 3.9 1.6.6 1.5-.1 3.3-1.6 3.9l1.6 2.8c.2.3.2.7.2 1-.2.8-.9 1.2-1.7 1.1 0 0-1.6-.3-2.7-.6H17c-1.7 0-3 1.3-3 3\" /><path d=\"M13.2 18a3 3 0 0 0-2.2-5\" /><path d=\"M13 22H4a2 2 0 0 1 0-4h12\" /><path d=\"M16 9h.01\" />",
+  "4.4": "<path d=\"M6 18h8\" /><path d=\"M3 22h18\" /><path d=\"M14 22a7 7 0 1 0 0-14h-1\" /><path d=\"M9 14h2\" /><path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\" /><path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\" />"
+  };
 // Skill evidence: set ok:true and p:{zh,en} once confirmed
 const N = (n, c, x) => ({ n, c: c || [], ...(x || {}) });
 const SK = [
@@ -826,6 +955,8 @@ class Component extends DCLogic {
       else if (this.state.lb && e.key === "Escape") this.setState({ lb: null });
       else if (this.state.lb && (e.key === "ArrowLeft" || e.key === "ArrowRight")) { const d = e.key === "ArrowLeft" ? -1 : 1; this.setState(s => ({ lb: { ...s.lb, i: s.lb.i + d } })); }
       else if (e.key === "Escape" && (this.state.langOpen || this.state.themeOpen)) this.setState({ langOpen: false, themeOpen: false });
+      else if (e.key === "Escape" && this.state.skFocus) this.skUnfocus();
+      else if (e.key === "Escape" && this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); }
     };
     window.addEventListener("keydown", this.onKey);
     // Phones: swipe left / right to go to the next / previous tab. Ignored inside things that scroll sideways
@@ -833,6 +964,7 @@ class Component extends DCLogic {
     this.onSwStart = e => {
       this._sw = null;
       if (e.touches.length !== 1 || this.state.lb || this.state.intro === "on") return;
+      if (e.target.closest && e.target.closest("[data-skview]")) return;   // the skill tree handles its own dragging
       // A sideways-scrolling box under the finger: the swipe scrolls it, unless it is already at that end.
       let canL = false, canR = false;
       for (let n = e.target; n && n !== document.body; n = n.parentElement) {
@@ -860,6 +992,7 @@ class Component extends DCLogic {
       const inside = sel => e.target.closest && e.target.closest(sel);
       if (this.state.langOpen && !inside("[data-langmenu]")) this.setState({ langOpen: false });
       if (this.state.themeOpen && !inside("[data-thememenu]")) this.setState({ themeOpen: false });
+      if (this.state.skPop && !inside("[data-sknode]") && !inside("[data-skpop]")) { this._popPos = null; this.setState({ skPop: null }); }
     };
     document.addEventListener("mousedown", this.onDocDown);
     let lang = "en", tab = "home", theme = null;
@@ -898,7 +1031,59 @@ class Component extends DCLogic {
     window.addEventListener("beforeprint", this.before);
     window.addEventListener("afterprint", this.after);
     this.applyMode();
-    this.onResize = () => { this._indKey = null; this.measureTab(); this.fitText && this.fitText(true); };
+    this.onResize = () => { this._indKey = null; this.measureTab(); this.fitText && this.fitText(true);
+      const fr = document.querySelector("[data-pageframe]"), fw = fr ? fr.clientWidth : 0, nar = !!fr && fw < 760;
+      // A different width means a different window onto the skill tree: drop any zoom / pan and start from the default view.
+      if (fw !== this._skLastW) { this._skLastW = fw; this._skCam = null; this._skCamPrev = null; if (this.state.skFocus || this.state.skClip) this.setState({ skFocus: null, skClip: false }); }
+      if (nar !== !!this.state.skNarrow) this.setState({ skNarrow: nar }); };
+    // ---- Skill tree camera ----
+    const camEl = () => document.querySelector("[data-skmap]"), viewEl = () => document.querySelector("[data-skview]");
+    const camSet = c => { this._skCam = c; const el = camEl(); if (el) { el.style.transition = "none"; el.style.transform = `translate(${c.x}px,${c.y}px) scale(${c.s})`; } };
+    // Zoom in on one node: it goes to the left of the window, its notes open on the right.
+    this.skFocus = id => {
+      const v = viewEl(), m = camEl(), g = this._skGeo; if (!v || !m || !g || !g.pos[id]) return;
+      const ph = !!this.state.skNarrow, q = g.pos[id], isCat = !id.includes("."), vw = v.clientWidth, vh = v.clientHeight, wi = m.offsetWidth, hi = wi * g.H / g.W;
+      const s = ph ? (isCat ? 1.25 : 1.7) : (isCat ? 1.45 : 1.75), fx = ph ? 0.17 : q.side === "l" ? 0.3 : 0.2;
+      if (!this.state.skFocus) this._skCamPrev = this._skCam || { s: 1, x: 0, y: 0 };
+      this._skCam = { s, x: fx * vw - m.offsetLeft - s * q.x / g.W * wi, y: 0.5 * vh - m.offsetTop - s * q.y / g.H * hi };
+      this._skAnimAt = Date.now(); this._popPos = null; this._hotN = (this._hotN || 0) + 1;
+      clearTimeout(this._skClipT); this.setState({ skFocus: id, skPop: null, skClip: true });
+    };
+    this.skUnfocus = () => {
+      if (!this.state.skFocus) return;
+      this._skCam = this._skCamPrev || { s: 1, x: 0, y: 0 }; this._skCamPrev = null; this._skAnimAt = Date.now();
+      this.setState({ skFocus: null }); clearTimeout(this._skClipT); this._skClipT = setTimeout(() => this.setState({ skClip: false }), 520);
+    };
+    // Phone: one finger drags the tree, two fingers zoom it, and holding a node zooms in on it.
+    const ptrs = new Map(); let gs = null;
+    const rebase = () => { const v = viewEl(), m = camEl(); if (!v || !m || !ptrs.size) { gs = null; return; }
+      // z: the page is slightly zoomed on phones, so finger positions (screen px) are converted to the window's own px.
+      const r = v.getBoundingClientRect(), z = r.width / (v.offsetWidth || r.width) || 1, p = [...ptrs.values()].map(a => [(a.x - r.left) / z, (a.y - r.top) / z]);
+      gs = { cam: { ...(this._skCam || { s: 1, x: 0, y: 0 }) }, p, z, bx: m.offsetLeft, by: m.offsetTop, vw: v.clientWidth, vh: v.clientHeight, wi: m.offsetWidth, hi: m.offsetHeight, r, moved: gs ? gs.moved : false }; };
+    this.onSkDown = e => {
+      const v = e.target.closest && e.target.closest("[data-skview]");
+      if (!v || !this.state.skNarrow || e.pointerType === "mouse" || this.state.skFocus || e.target.closest("[data-skpanel]")) return;
+      ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 1) gs = null; rebase(); if (gs && ptrs.size === 1) gs.moved = false;
+      clearTimeout(this._skLT); const nd = e.target.closest("[data-skid]");
+      if (nd && ptrs.size === 1) this._skLT = setTimeout(() => { if (gs && !gs.moved && ptrs.size === 1) { this._skLong = Date.now(); ptrs.clear(); gs = null; this.skFocus(nd.getAttribute("data-skid")); } }, 460);
+    };
+    this.onSkMove = e => {
+      if (!ptrs.has(e.pointerId) || !gs) return;
+      ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      const p = [...ptrs.values()].map(a => [(a.x - gs.r.left) / gs.z, (a.y - gs.r.top) / gs.z]), c0 = gs.cam; let c;
+      if (p.length === 1) { const dx = p[0][0] - gs.p[0][0], dy = p[0][1] - gs.p[0][1]; if (!gs.moved && Math.hypot(dx, dy) < 8) return; gs.moved = true; c = { s: c0.s, x: c0.x + dx, y: c0.y + dy }; }
+      else { gs.moved = true; const d0 = Math.hypot(gs.p[0][0] - gs.p[1][0], gs.p[0][1] - gs.p[1][1]) || 1, d1 = Math.hypot(p[0][0] - p[1][0], p[0][1] - p[1][1]);
+        const m0 = [(gs.p[0][0] + gs.p[1][0]) / 2, (gs.p[0][1] + gs.p[1][1]) / 2], m1 = [(p[0][0] + p[1][0]) / 2, (p[0][1] + p[1][1]) / 2];
+        const s = Math.max(gs.vw / gs.wi * 0.95, Math.min(2.6, c0.s * d1 / d0)), cx = (m0[0] - gs.bx - c0.x) / c0.s, cy = (m0[1] - gs.by - c0.y) / c0.s;
+        c = { s, x: m1[0] - gs.bx - cx * s, y: m1[1] - gs.by - cy * s }; }
+      // keep at least a strip of the tree inside the window
+      c.x = Math.max(70 - gs.bx - c.s * gs.wi, Math.min(gs.vw - 70 - gs.bx, c.x)); c.y = Math.max(70 - gs.by - c.s * gs.hi, Math.min(gs.vh - 70 - gs.by, c.y));
+      clearTimeout(this._skLT); camSet(c);
+    };
+    this.onSkUp = e => { if (!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId); clearTimeout(this._skLT); if (gs && gs.moved) this._skDragT = Date.now(); rebase(); };
+    this.onSkMenu = e => { if (this.state.skNarrow && e.target.closest && e.target.closest("[data-skview]") && !e.target.closest("[data-skpanel]")) e.preventDefault(); };
+    document.addEventListener("pointerdown", this.onSkDown); document.addEventListener("pointermove", this.onSkMove);
+    document.addEventListener("pointerup", this.onSkUp); document.addEventListener("pointercancel", this.onSkUp); document.addEventListener("contextmenu", this.onSkMenu);
     window.addEventListener("resize", this.onResize);
     this.measT = setTimeout(this.onResize, 60);
     try { document.fonts && document.fonts.ready.then(() => this.onResize && this.onResize()); } catch (e) {}
@@ -919,7 +1104,7 @@ class Component extends DCLogic {
       else { const n = c.match(/\d+(\.\d+)?/g); if (n && n.length >= 3) { r = +n[0]; g = +n[1]; b = +n[2]; } }
       return `rgba(${r},${g},${b},${a})`;
     };
-    const readCol = () => { const s = getComputedStyle(cv); col = { ink: s.getPropertyValue("--text-faint"), sig: s.getPropertyValue("--signal") }; };
+    const readCol = () => { const s = getComputedStyle(cv); col = { ink: s.getPropertyValue("--text-faint"), sig: s.getPropertyValue("--signal"), dark: s.getPropertyValue("--text-secondary") }; };
     const nextVal = t => {
       if (t.spike.length) return t.spike.shift();
       if (Math.random() < 0.012) { t.spike = [-22, 12, -4]; return 0; }
@@ -934,8 +1119,9 @@ class Component extends DCLogic {
       traces.forEach(t => { for (let k = 0; k < Math.ceil(W / STEP) + 3; k++) t.pts.push(nextVal(t)); });
     };
     const seedNodes = () => {
-      const n = Math.max(18, Math.min(70, Math.round(W * H / 26000)));
+      const n = mode === "net" ? Math.max(34, Math.min(150, Math.round(W * H / 12000))) : Math.max(18, Math.min(70, Math.round(W * H / 26000)));
       nodes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12, fire: 0 }));
+      pulses = [];
     };
     // Character-grid (ASCII) scenes share one cell size.
     const CW = 9, CH = 16;
@@ -995,6 +1181,7 @@ class Component extends DCLogic {
     };
     // Sparkles (Other page): four-pointed stars flash once at random spots, like a camera flash going off; small and faint.
     let sparks = [], sparkWait = 0.4;
+    let pulses = [], netWait = 0.6;   // neuron network: spikes in transit, and the countdown to the next spontaneous one
     const star = (x, y, r) => {
       const w = r * 0.78, k = r * 0.1;
       ctx.beginPath(); ctx.moveTo(x, y - r);
@@ -1093,23 +1280,47 @@ class Component extends DCLogic {
           ctx.stroke();
         });
       } else {
-        const R = 140;
+        // Neuron network: every so often one neuron fires and the spike runs along its connections, neuron to neuron, for a few hops. Drawn in grey.
+        const R = 140, SPEED = 230;
         nodes.forEach(p => {
           p.x += p.vx * dt; p.y += p.vy * dt;
           if (p.x < -20) p.x = W + 20; else if (p.x > W + 20) p.x = -20;
           if (p.y < -20) p.y = H + 20; else if (p.y > H + 20) p.y = -20;
-          if (p.fire > 0) p.fire = Math.max(0, p.fire - dt * 1.4); else if (Math.random() < 0.0006) p.fire = 1;
+          if (p.fire > 0) p.fire = Math.max(0, p.fire - dt * 1.5);
         });
+        const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+        const emit = (i, hops, from) => {
+          nodes[i].fire = 1;
+          if (hops <= 0) return;
+          const nb = []; for (let j = 0; j < nodes.length; j++) if (j !== i && j !== from && dist(nodes[i], nodes[j]) < R) nb.push(j);
+          nb.sort(() => Math.random() - 0.5);
+          nb.slice(0, from < 0 ? 2 : Math.random() < 0.3 ? 2 : 1).forEach(j => { if (pulses.length < 16) pulses.push({ a: i, b: j, t: 0, hops: hops - 1 }); });
+        };
+        netWait -= dt;
+        if (netWait <= 0 && dt > 0) { emit(Math.floor(Math.random() * nodes.length), 3 + Math.floor(Math.random() * 3), -1); netWait = (0.7 + Math.random() * 1.3) * Math.min(1.8, 1300 * 800 / Math.max(1, W * H)); }
+        const live = new Set(pulses.map(p => p.a < p.b ? p.a + "-" + p.b : p.b + "-" + p.a));
         for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d > R) continue;
-          const f = Math.max(a.fire, b.fire), k = 1 - d / R;
-          ctx.strokeStyle = f > 0 ? rgba(col.sig, 0.12 + 0.4 * f * k) : rgba(col.ink, 0.16 * k);
+          const a = nodes[i], b = nodes[j], d = dist(a, b);
+          if (d > R && !live.has(i + "-" + j)) continue;
+          const k = Math.max(0, 1 - d / R);
+          ctx.strokeStyle = live.has(i + "-" + j) ? rgba(col.dark, 0.22) : rgba(col.ink, 0.16 * k);
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
+        pulses = pulses.filter(p => {
+          const a = nodes[p.a], b = nodes[p.b], d = Math.max(40, dist(a, b));
+          p.t += dt * SPEED / d;
+          if (p.t >= 1) { emit(p.b, p.hops, p.a); return false; }
+          const t0 = Math.max(0, p.t - 46 / d), hx = a.x + (b.x - a.x) * p.t, hy = a.y + (b.y - a.y) * p.t, tx = a.x + (b.x - a.x) * t0, ty = a.y + (b.y - a.y) * t0;
+          const g = ctx.createLinearGradient(tx, ty, hx, hy); g.addColorStop(0, rgba(col.dark, 0)); g.addColorStop(1, rgba(col.dark, 0.75));
+          ctx.strokeStyle = g; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(hx, hy); ctx.stroke(); ctx.lineWidth = 1;
+          ctx.fillStyle = rgba(col.dark, 0.9); ctx.beginPath(); ctx.arc(hx, hy, 2.1, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = rgba(col.dark, 0.16); ctx.beginPath(); ctx.arc(hx, hy, 5.5, 0, Math.PI * 2); ctx.fill();
+          return true;
+        });
         nodes.forEach(p => {
-          ctx.fillStyle = p.fire > 0 ? rgba(col.sig, 0.35 + 0.5 * p.fire) : rgba(col.ink, 0.35);
-          ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 + p.fire * 1.6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = p.fire > 0 ? rgba(col.dark, 0.35 + 0.55 * p.fire) : rgba(col.ink, 0.35);
+          ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 + p.fire * 1.8, 0, Math.PI * 2); ctx.fill();
+          if (p.fire > 0) { ctx.strokeStyle = rgba(col.dark, 0.4 * p.fire); ctx.beginPath(); ctx.arc(p.x, p.y, 3 + (1 - p.fire) * 13, 0, Math.PI * 2); ctx.stroke(); }
         });
       }
     };
@@ -1162,6 +1373,9 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.onDocDown);
+    document.removeEventListener("pointerdown", this.onSkDown); document.removeEventListener("pointermove", this.onSkMove);
+    document.removeEventListener("pointerup", this.onSkUp); document.removeEventListener("pointercancel", this.onSkUp); document.removeEventListener("contextmenu", this.onSkMenu);
+    clearTimeout(this._skLT); clearTimeout(this._skClipT);
     document.removeEventListener("scroll", this.onTocScroll, true);
     cancelAnimationFrame(this._bgRaf);
     window.removeEventListener("resize", this._bgResize);
@@ -1194,8 +1408,8 @@ class Component extends DCLogic {
     }
     const dr = x => (!pub && x && x.draft ? "[DRAFT] " : "");
     const lang = this.state.lang || "en", en = lang === "en";
-    // Tabs hidden on the public site (still there in the editor while they're being written).
-    const HIDE = pub ? ["skills"] : [];
+    // Tabs hidden on the public site (still there in the editor while they're being written). None at the moment; to hide one again: pub ? ["skills"] : [].
+    const HIDE = [];
     this._hideTabs = HIDE;
     const tab = HIDE.includes(this.state.tab) ? "home" : (this.state.tab || "home");
     const pr = this.state.printing;
@@ -1210,6 +1424,7 @@ class Component extends DCLogic {
     };
     const t = v => v == null ? "" : typeof v === "string" ? v : (tv(v) || "");
     const L = (zh, e) => lang === "zh" ? zh : lang === "en" ? e : tf(zh, e);
+    const sk = s => !s || lang === "zh" ? (s || "") : (SK_TR[s] && SK_TR[s][lang === "en" ? 0 : lang === "ja" ? 1 : 2]) || s;
     const yr = y => (YR[y] && YR[y][lang]) || y;
     const rows = arr => arr.map(r => ({ year: yr(r.year), main: t(r.main) || [t(r.head), t(r.org)].filter(Boolean).join(" · "), sub: "" }));
     const it = r => ({ year: yr(r.year) || "—", head: t(r.head), org: t(r.org), sub: t(r.sub), cols: "minmax(0,1fr) auto", hasCat: false, cat: "", fs: "13px", lh: "inherit", disp: "grid", catColor: "var(--text-secondary)", catWrap: "nowrap", gapTop: "0px", orgCol: "1 / -1" });
@@ -1282,13 +1497,13 @@ class Component extends DCLogic {
       if (tab === "work") return mk([...D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })),
         { label: L("小專案", "Side projects"), go: jump("work-minis"), on: act === "work-minis", cls: "toc-minis" }]);
       if (tab === "other") return mk([["sec-photo", L("攝影作品", "Photography")], ["sec-clubs", L("社團與活動", "Leadership & activities")]].map(([id, label], i) => ({ label, go: jump(id), on: act ? act === id : i === 0 })));
-      if (tab === "skills") return mk(SK.map((b, i) => ({ label: b.n, go: () => { this.setState({ skView: "tree", skB: i, sk: i + ".0" }); window.scrollTo({ top: 0, behavior: "smooth" }); }, on: !!this.state.skView && +(this.state.skB || 0) === i })));
+      if (tab === "skills") return mk(SK.map((b, i) => ({ label: sk(b.n), go: () => { this.setState({ skView: "tree", skB: i, sk: i + ".0" }); window.scrollTo({ top: 0, behavior: "smooth" }); }, on: !!this.state.skView && +(this.state.skB || 0) === i })));
       return [];
     })();
 
     return {
       ...intro,
-      curTab: tab, toc, showToc: !pr && tab !== "home" && toc.length > 0 && this.state.intro === "off",
+      curTab: tab, toc, showToc: !pr && tab !== "home" && tab !== "skills" && toc.length > 0 && this.state.intro === "off",
       tocTitle: L("本頁目錄", "On this page"),
       eduHead: D.education.map(p => { const m = (p.year || "").match(/(\d{4})(?:\.\d{2})?\s*$/); return { cat: m ? m[1] : "", head: t(p.head) }; }),
       frameStyle: this.props.device === "mobile" ? "min-height:0;width:390px;max-width:100%;height:min(844px,calc(100vh - 40px));margin:20px auto;overflow-y:auto;overflow-x:hidden;border:1px solid var(--border-strong);transform:translateZ(0)" : "",
@@ -1360,7 +1575,7 @@ class Component extends DCLogic {
           bg: n.ok ? "var(--state-ok)" : hatch,
           ink: n.ok ? "var(--text-on-solid)" : id === sel ? "var(--text-signal)" : "var(--text-secondary)",
           label: id === sel ? "var(--text-signal)" : n.ok ? "var(--text-primary)" : "var(--text-secondary)",
-          link: n.link || ""
+          link: sk(n.link)
         });
         const lvOf = n => { const d = [n, ...desc(n)]; return `${d.filter(x => x.ok).length}/${d.length}`; };
         const go = i => this.setState({ skB: i, sk: i + ".0" });
@@ -1369,40 +1584,136 @@ class Component extends DCLogic {
           skillTitle: L("技能樹", "Skill tree"),
           skillCount: `${nodes.filter(r => r.n.ok).length} / ${nodes.length} ${L("已驗證", "VERIFIED")}`,
           skProofLabel: L("證明", "Evidence"),
-          skTabs: SK.map((b, i) => ({ label: b.n, no: "0" + (i + 1), lv: lvOf(b).replace(/^(\d+)\/(\d+)$/, (m, a, c) => `${a}/${c - 1}`), go: () => go(i),
+          skTabs: SK.map((b, i) => ({ label: sk(b.n), no: "0" + (i + 1), lv: lvOf(b).replace(/^(\d+)\/(\d+)$/, (m, a, c) => `${a}/${c - 1}`), go: () => go(i),
             color: i === B ? "var(--text-signal)" : "var(--text-secondary)", rule: i === B ? "var(--signal)" : "transparent" })),
           skOverview: !this.state.skView, skTree: !!this.state.skView,
           skBack: () => this.setState({ skView: null }), skBackLabel: L("總覽", "Overview"),
           skTotal: `${nodes.filter(r => r.n.ok).length} / ${nodes.length}`, skTotalLabel: L("已驗證節點", "NODES VERIFIED"),
           ...(() => {
-            const cx = 360, cy = 310, R = 236, order = [0, 2, 4, 3, 1];
-            const V = order.map((_, k) => { const t = (-90 + 72 * k) * Math.PI / 180; return [cx + R * Math.cos(t), cy + R * Math.sin(t)]; });
-            const line = (p, q, c) => { const dx = q[0] - p[0], dy = q[1] - p[1]; return { x: p[0] + "px", y: p[1] + "px", w: Math.hypot(dx, dy) + "px", a: Math.atan2(dy, dx) + "rad", c }; };
-            const hot = new Set(["2-4", "4-3"]);
+            // Skill-tree layout (design units; everything is placed in % so the tree scales with the page).
+            const phone = !!this.state.skNarrow, P = [], L1 = [];
+            const W = 1240;
+            const hov = () => !!(window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches);
+            const foc = this.state.skFocus || null, recent = (t, ms) => Date.now() - (t || 0) < ms;
+            const place = (x, y) => { const vw = window.innerWidth, vh = window.innerHeight, w = Math.min(300, vw - 24);
+              let l = x + 18; if (l + w > vw - 12) l = x - 18 - w; if (l < 12) l = Math.max(12, (vw - w) / 2);
+              return y > vh * 0.55 ? { l: l + "px", t: (y - 18) + "px", tf: "translateY(-100%)" } : { l: l + "px", t: (y + 18) + "px", tf: "none" }; };
+            const hand = id => ({
+              enter: e => { if (!hov() || foc) return; this._popPos = place(e.clientX, e.clientY); this._hotN = (this._hotN || 0) + 1; this.setState({ skPop: id }); },
+              move: e => { if (!hov() || this.state.skPop !== id) return; const p = place(e.clientX, e.clientY); this._popPos = p; const el = document.querySelector("[data-skpop]"); if (el) { el.style.left = p.l; el.style.top = p.t; el.style.transform = p.tf; } },
+              leave: () => { if (hov() && !foc) { this._popPos = null; this.setState({ skPop: null }); } },
+              // Computer: click = zoom in on the node. Phone: tap = light its route (long-press zooms; handled by the touch listeners).
+              click: e => { if (e && e.stopPropagation) e.stopPropagation(); if (recent(this._skDragT, 350) || recent(this._skLong, 900)) return;
+                if (hov() || foc) return this.skFocus(id);
+                if (this.state.skPop === id) { this._popPos = null; return this.setState({ skPop: null }); }
+                this._popPos = place(e.clientX, e.clientY); this._hotN = (this._hotN || 0) + 1; this.setState({ skPop: id }); }
+            });
+            // Every node: position, which side its label sits on, and how the rail reaches it from its parent
+            // ("v" = leaves the parent vertically, "h" = horizontally, "e" = drops down then turns in; all corners are 45°).
+            const pos = {}, kidsOf = id => { const n = id === "root" ? { c: SK } : all.find(r => r.id === id).n; return n.c.map((_, i) => id === "root" ? String(i) : id + "." + i); };
+            // A wide, low layout so the whole tree fits on a laptop screen without scrolling:
+            // Foundations fans out above, Neuro to the left, Mechatronics (the deepest branch) steps down the right, Fabrication and Microfabrication below.
+            const H = 674, rootSz = 108, catSz = 66, itSz = 42, C = 14;
+            const T = {
+              root: [620, 320],
+              "0": [620, 186, "r", "v"], "0.0": [290, 104, "r", "v"], "0.0.0": [210, 30, "r", "v"], "0.0.1": [370, 30, "r", "v"], "0.1": [620, 104, "r", "v"], "0.1.0": [540, 30, "r", "v"], "0.1.1": [700, 30, "r", "v"], "0.2": [950, 104, "r", "v"],
+              "1": [540, 500, "l", "y"], "1.0": [410, 580, "r", "v"], "1.1": [560, 580, "r", "v"],
+              "3": [700, 500, "r", "y"], "3.0": [700, 580, "r", "v"], "3.0.0": [700, 646, "r", "v"], "3.1": [880, 580, "r", "v"], "3.1.0": [880, 646, "r", "v"],
+              "2": [850, 320, "t", "h"], "2.0": [1000, 170, "r", "h"], "2.1": [1000, 230, "r", "h"], "2.3": [1000, 290, "r", "h"], "2.4": [1000, 350, "r", "h"], "2.2": [1000, 410, "r", "h"], "2.2.0": [1055, 470, "r", "e"], "2.2.0.0": [1110, 530, "r", "e"], "2.2.0.1": [1110, 590, "r", "e"],
+              "4": [390, 320, "t", "h"], "4.0": [230, 200, "l", "h"], "4.1": [230, 260, "l", "h"], "4.2": [230, 320, "l", "h"], "4.3": [230, 380, "l", "h"], "4.4": [230, 440, "l", "h"]
+            };
+            Object.keys(T).forEach(k => pos[k] = { x: T[k][0], y: T[k][1], side: T[k][2] || "r", via: T[k][3] || "" });
+            const pct = (v, of) => (v / of * 100).toFixed(3) + "%";
+            const fs = px => (px / W * 100).toFixed(3) + "cqi";
+            let OWN = ""; const EDGE = {};   // OWN: which node the rail being drawn leads to; EDGE: each node's rail from its parent
+            const seg = (x1, y1, x2, y2, h, c) => { const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy); if (len < 0.5) return; L1.push({ l: pct(x1, W), t: pct(y1, H), w: pct(len, W), a: Math.atan2(dy, dx).toFixed(4) + "rad", h: (h || 2) + "px", c: c || "var(--border-strong)", own: OWN }); };
+            const poly = (pts, h, c) => pts.slice(1).forEach((p, i) => seg(pts[i][0], pts[i][1], p[0], p[1], h, c));
+            // Main rails (root → branch): a thick centre line with a thin line on each side, mitred at the 45° turns.
+            const offs = (pts, d) => { const u = pts.slice(1).map((p, i) => { const dx = p[0] - pts[i][0], dy = p[1] - pts[i][1], l = Math.hypot(dx, dy) || 1; return [dx / l, dy / l]; });
+              return pts.map((p, j) => { const a = u[Math.max(0, j - 1)], b = u[Math.min(u.length - 1, j)], pa = [p[0] - a[1] * d, p[1] + a[0] * d], pb = [p[0] - b[1] * d, p[1] + b[0] * d], den = a[0] * b[1] - a[1] * b[0];
+                if (Math.abs(den) < 1e-6) return pa; const t = ((pb[0] - pa[0]) * b[1] - (pb[1] - pa[1]) * b[0]) / den; return [pa[0] + a[0] * t, pa[1] + a[1] * t]; }); };
+            const mainRail = pts => { [-7, 7].forEach(d => poly(offs(pts, d), 1.5, "var(--border-strong)")); poly(pts, 4, "var(--text-faint)"); };
+            const szOf = id => id === "root" ? rootSz : id.includes(".") ? itSz : catSz;
+            const rail = (pid, id) => {
+              const p = pos[pid], q = pos[id], sx = Math.sign(q.x - p.x), sy = Math.sign(q.y - p.y), dx = Math.abs(q.x - p.x), dy = Math.abs(q.y - p.y);
+              const main = pid === "root", h = main ? 4 : !pid.includes(".") ? 3 : 2; let pts;      // root → branch: triple rail; branch → item: 3px; deeper: 2px
+              if (!dx || !dy) pts = [[p.x, p.y], [q.x, q.y]];
+              else if (q.via === "v") { const yb = (p.y + sy * szOf(pid) / 2 + q.y - sy * szOf(id) / 2) / 2, c = Math.min(C, dx / 2);
+                pts = [[p.x, p.y], [p.x, yb - sy * c], [p.x + sx * c, yb], [q.x - sx * c, yb], [q.x, yb + sy * c], [q.x, q.y]]; }
+              else if (q.via === "h") { const xb = (p.x + sx * szOf(pid) / 2 + q.x - sx * szOf(id) / 2) / 2, c = Math.min(C, dy / 2);
+                pts = [[p.x, p.y], [xb - sx * c, p.y], [xb, p.y + sy * c], [xb, q.y - sy * c], [xb + sx * c, q.y], [q.x, q.y]]; }
+              else if (q.via === "x") { const d = Math.min(dx, dy); pts = dx === dy ? [[p.x, p.y], [q.x, q.y]] : [[p.x, p.y], [p.x + sx * d, p.y + sy * d], [q.x, q.y]]; }       // leaves at 45°, then runs straight into the node
+              else if (q.via === "y") { const ox = p.x + sx * 16, d = Math.abs(q.x - ox); pts = [[ox, p.y], [ox, q.y - sy * d], [q.x, q.y]]; }       // straight out of the node first, then a 45° run
+              else { const c = Math.min(C, dx, dy); pts = [[p.x, p.y], [p.x, q.y - sy * c], [p.x + sx * c, q.y], [q.x, q.y]]; }       // "e": down the parent's side, 45° turn, then in
+              OWN = id; EDGE[id] = { pts, h };
+              return main ? mainRail(pts) : poly(pts, h);
+            };
+            const walkAll = pid => kidsOf(pid).forEach(id => { rail(pid, id); walkAll(id); });
+            walkAll("root");
+            // Hovering (or tapping) a node: everything off its route goes soft and faint, and the route lights up from the centre out to it.
+            const hv = foc || this.state.skPop, chain = hv ? hv.split(".").map((_, i, a) => a.slice(0, i + 1).join(".")) : [];
+            const keep = id => !hv || chain.includes(id) || id.startsWith(hv + ".");
+            L1.forEach(ln => { ln.op = keep(ln.own) ? 1 : 0.28; });
+            const HOT = [];
+            if (hv) { const parts = []; chain.forEach(c => { const e = EDGE[c]; if (e) e.pts.slice(1).forEach((b, i) => parts.push([e.pts[i], b, e.h])); });
+              const lenOf = ([a, b]) => Math.hypot(b[0] - a[0], b[1] - a[1]), total = parts.reduce((t, p) => t + lenOf(p), 0) || 1, DUR = 0.15; let acc = 0;
+              parts.forEach(pt => { const [a, b, h] = pt, len = lenOf(pt); if (len < 0.5) return;
+                HOT.push({ l: pct(a[0], W), t: pct(a[1], H), w: pct(len, W), a: Math.atan2(b[1] - a[1], b[0] - a[0]).toFixed(4) + "rad", h: (h < 4 ? h + 1 : h) + "px",
+                  dur: Math.max(0.01, len / total * DUR).toFixed(3) + "s", delay: (acc / total * DUR).toFixed(3) + "s", anim: (this._hotN || 0) % 2 ? "skrunA" : "skrunB" }); acc += len; }); }
+            const short = s => s.split(/[：（]|: | \(/)[0].trim();
+            const svgUri = id => "url(data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${SK_IC[id] || '<circle cx="12" cy="12" r="4"/>'}</svg>`).replace(/[()']/g, ch => "%" + ch.charCodeAt(0).toString(16)) + ")";
+            Object.keys(pos).filter(id => id !== "root").forEach(id => {
+              const isCat = !id.includes("."), n = isCat ? SK[+id] : all.find(r => r.id === id).n, q = pos[id], sz = szOf(id), d = isCat ? desc(n) : [];
+              const on = chain.includes(id), dim = !keep(id), gapEm = isCat ? ".7em" : ".6em";
+              const lblW = isCat ? 190 : q.side === "l" ? 170 : 126;
+              const lblPos = q.side === "r" ? `left:100%;top:50%;transform:translateY(-50%);margin-left:${gapEm}` : q.side === "l" ? `right:100%;top:50%;transform:translateY(-50%);margin-right:${gapEm}`
+                : q.side === "t" ? `bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:.5em` : `top:100%;left:50%;transform:translateX(-50%);margin-top:.5em`;
+              P.push({ ...hand(id), id, isCat, no: "0" + (+id + 1), lv: isCat ? `${d.filter(x => x.ok).length}/${d.length}` : "", name: isCat ? sk(n.n) : short(sk(n.n)),
+                l: pct(q.x - sz / 2, W), t: pct(q.y - sz / 2, H), w: pct(sz, W),
+                border: on ? "var(--signal)" : n.ok ? "var(--state-ok)" : isCat ? "var(--border-ink)" : "var(--border-strong)", bw: isCat ? "2px" : "1.5px",
+                bg: "var(--surface-plate)", ink: on ? "var(--signal)" : n.ok ? "var(--state-ok)" : isCat ? "var(--text-primary)" : "var(--text-secondary)",
+                pad: isCat ? "24%" : "23%", mask: svgUri(id), fx: dim ? "blur(1.6px)" : n.ok ? "drop-shadow(0 0 5px var(--state-ok))" : "none", op: dim ? 0.42 : 1,
+                lblPos, lblW: (lblW / sz * 100).toFixed(1) + "%", align: q.side === "l" ? "right" : q.side === "r" ? "left" : "center",
+                fs: fs(isCat ? 16 : 13), fw: isCat ? 400 : 300, txt: on ? "var(--text-signal)" : isCat || n.ok ? "var(--text-primary)" : "var(--text-secondary)" });
+            });
+            // Details for the pop-up (hover / tap) and for the zoomed-in panel.
+            const info = pid => { const pn = pid.includes(".") ? all.find(r => r.id === pid).n : SK[+pid], pb = SK[+pid.split(".")[0]], pd = pn.c.map(ch => sk(ch.n));
+              return { cat: sk(pb.n), no: pid.split(".").map(x => +x + 1).join("."), name: sk(pn.n), status: pn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: pn.ok ? "var(--state-ok)" : "var(--text-faint)",
+                d: pd, hasD: pd.length > 0, link: sk(pn.link), slot: pid.includes(".") ? `skill-${pid}` : `skill-cat-${pid}`,
+                proof: pn.p ? (pn.p[lang] || pn.p.zh) : L("待補證明", "Evidence pending"), proofColor: pn.p ? "var(--text-primary)" : "var(--text-faint)" }; };
+            const pid = foc ? null : this.state.skPop, ppos = this._popPos || { l: "-9999px", t: "0px", tf: "none" };
+            const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
+            // Camera: where the tree sits inside its window. Dragging / pinching / zooming in on a node all just change this.
+            const cam = this._skCam || { s: 1, x: 0, y: 0 };
+            this._skGeo = { W, H, pos };
             return {
-              skLines: [
-                ...V.map(v => line([cx, cy], v, "var(--border-strong)")),
-                ...V.map((v, k) => { const n = (k + 1) % 5, key = order[k] + "-" + order[n], rk = order[n] + "-" + order[k]; return line(v, V[n], hot.has(key) || hot.has(rk) ? "var(--signal-dim)" : "var(--border-hair)"); })
-              ],
-              skPlates: order.map((i, k) => { const b = SK[i], d = desc(b);
-                return { no: "0" + (i + 1), name: b.n, serial: ["8W7F1 1A1T1", "8W7F2 0C4R9", "8W7F3 2E1M7", "8W7F4 1M3E2", "8W7F5 4N0X6"][i],
-                  lv: `${d.filter(x => x.ok).length}/${d.length}`, segs: d.map(x => x.ok ? "var(--state-ok)" : "var(--track-empty)"),
-                  x: (V[k][0] - 90) + "px", y: (V[k][1] - 54) + "px", go: () => this.setState({ skView: "tree", skB: i, sk: i + ".0" }) }; })
+              skMap: { ar: `${W} / ${H}`, lines: L1, hot: HOT, nodes: P,
+                root: { l: pct(pos.root.x - rootSz / 2, W), t: pct(pos.root.y - rootSz / 2, H), w: pct(rootSz, W) },
+                fs: { rootName: fs(20 * (L("技能樹", "Skill tree").length > 5 ? 0.66 : 1)), rootSub: fs(11), catSub: fs(10) } },
+              // Computer: the whole tree fits the window. Phone: the window opens on the root and its five branches (the tree is ~2× the window; drag / pinch to see the rest).
+              skView: phone ? { box: "height:min(64vh,560px);height:min(64svh,560px)", clip: "hidden", touch: "none", w: "206.7%", l: "-53.35%", t: `calc(50% - ${(pos.root.y / W * 206.7).toFixed(2)}cqi)`,
+                  cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none",
+                  hint: foc ? "" : L("角標內：拖曳移動、雙指縮放 · 點一下看路線 · 長按放大看說明", "Inside the corner marks: drag to move, pinch to zoom · tap for the route · long-press for details") }
+                : { box: `aspect-ratio:${W} / ${H};max-width:min(1400px,calc((100vh - 130px) * ${(W / H).toFixed(3)}))`, clip: foc || this.state.skClip ? "hidden" : "visible", touch: "auto", w: "100%", l: "0", t: "0",
+                  cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none", hint: "" },
+              skMapClick: () => { if (recent(this._skDragT, 350) || recent(this._skLong, 900)) return; if (foc) return this.skUnfocus(); if (this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); } },
+              skPop: pid ? { on: true, ...ppos, ...info(pid), moreLabel: sk("查看詳細 →"), more: e => { stop(e); this.skFocus(pid); }, stop } : { on: false },
+              skFoc: foc ? { on: true, ...info(foc), slots: [{ id: info(foc).slot }], left: phone ? "36%" : "42%", nameFs: phone ? "15px" : "20px", stop, close: e => { stop(e); this.skUnfocus(); } } : { on: false, slots: [] }
             };
           })(),
           skPrev: () => go((B + SK.length - 1) % SK.length), skNext: () => go((B + 1) % SK.length),
-          skBr: { no: "0" + (B + 1), name: br.n, sub: br.sub || "", link: br.link || "", lv: `LV ${bd.filter(x => x.ok).length} / ${bd.length}`,
+          skBr: { no: "0" + (B + 1), name: sk(br.n), sub: sk(br.sub), link: sk(br.link), lv: `LV ${bd.filter(x => x.ok).length} / ${bd.length}`,
             segs: bd.map(x => x.ok ? "var(--state-ok)" : "var(--track-empty)") },
           skHubs: br.c.map((hb, hi) => {
             const id = `${B}.${hi}`;
-            return { ...st(hb, id), no: String(hi + 1).padStart(2, "0"), name: hb.n, lv: lvOf(hb),
+            return { ...st(hb, id), no: String(hi + 1).padStart(2, "0"), name: sk(hb.n), lv: lvOf(hb),
               rows: hb.c.flatMap((ch, i) => rowsOf(ch, [B, hi, i], [i === hb.c.length - 1])).map(r => ({
-                ...st(r.n, r.id), name: r.n.n, no: String(+r.id.split(".").pop() + 1).padStart(2, "0"),
+                ...st(r.n, r.id), name: sk(r.n.n), no: String(+r.id.split(".").pop() + 1).padStart(2, "0"),
                 guides: r.last.slice(0, -1).map(l => ({ bg: l ? "transparent" : "var(--border-strong)" })),
                 vh: r.last[r.last.length - 1] ? "17px" : "100%"
               })) };
           }),
-          skSel: { cat: br.n, no: sel.split(".").map(x => +x + 1).join("."), name: sn.n, d: sn.c.map(ch => ch.n), link: sn.link || "",
+          skSel: { cat: sk(br.n), no: sel.split(".").map(x => +x + 1).join("."), name: sk(sn.n), d: sn.c.map(ch => sk(ch.n)), link: sk(sn.link),
             status: sn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: sn.ok ? "ok" : "idle",
             proof: sn.p ? (sn.p[lang] || sn.p.zh) : L("待補證明", "Evidence pending"),
             proofColor: sn.p ? "var(--text-primary)" : "var(--text-faint)" },
