@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>黃嵩文 Songwen Huang</title>
+<!-- Browser-tab icon: the logo (素材/壁報logo_小.svg, black outlines removed) in the site's green; amber when the browser is in dark mode. -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -65,6 +70,13 @@
     @keyframes pcSegB{0%{opacity:0;transform:translateY(0) scaleY(1)}18%{opacity:1}32%{transform:translateY(-6px) scaleY(2.4)}62%{transform:translateY(1.3px) scaleY(1)}82%{transform:translateY(-.35px)}100%{opacity:1;transform:none}}
     @keyframes pcPicA{0%{opacity:0;transform:translateY(14px) scale(.96);box-shadow:0 0 0 0 transparent}32%{opacity:1;transform:translateY(-7px) scale(1.02);box-shadow:0 0 0 2px var(--pc),0 10px 18px rgba(0,0,0,.18)}62%{transform:translateY(1.5px) scale(1);box-shadow:0 0 0 1px var(--pc)}82%{transform:translateY(-.4px)}100%{opacity:1;transform:none;box-shadow:0 0 0 0 transparent}}
     @keyframes pcPicB{0%{opacity:0;transform:translateY(14px) scale(.96);box-shadow:0 0 0 0 transparent}32%{opacity:1;transform:translateY(-7px) scale(1.02);box-shadow:0 0 0 2px var(--pc),0 10px 18px rgba(0,0,0,.18)}62%{transform:translateY(1.5px) scale(1);box-shadow:0 0 0 1px var(--pc)}82%{transform:translateY(-.4px)}100%{opacity:1;transform:none;box-shadow:0 0 0 0 transparent}}
+    .pc-wall{--rh:calc(176px * var(--k,1))}
+    @container page (max-width:700px){.pc-wall{--rh:calc(108px * var(--k,1))}}
+    .pc-car{--cw:232px;--sp:198px}
+    @container page (max-width:700px){.pc-car{--cw:158px;--sp:128px}}
+    .pc-card{transition:transform var(--tr,.5s) cubic-bezier(.2,.8,.2,1)}
+    .pc-in{transition:transform .5s cubic-bezier(.2,.8,.2,1),filter .5s,opacity .5s,border-color .3s}
+    @media (prefers-reduced-motion: reduce){.pc-card,.pc-in{transition:none}}
     @media (prefers-reduced-motion: reduce){.pc-seg,.pc-pic{animation:none !important}}
     @keyframes lbVeil{from{opacity:0}to{opacity:1}}
     @keyframes lbIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
@@ -344,7 +356,7 @@
           <!-- Skill tree, game style: the root in the middle, five branches around it, octagonal icon nodes joined by rails that turn at 45°.
                Hover (or tap on a phone) a node for its details. -->
           <!-- The view is a window onto the tree: on a phone you drag and pinch inside it; clicking (long-pressing on a phone) a node zooms in on it, node on the left, its notes on the right. -->
-          <div data-skview="" class="sk-view" onClick="{{ skMapClick }}" style="position:relative;margin:8px auto 0;width:100%;{{ skView.box }};overflow:{{ skView.clip }};container-type:inline-size;container-name:skview;touch-action:{{ skView.touch }};-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">
+          <div data-skview="" class="sk-view" onClick="{{ skMapClick }}" style="position:relative;isolation:isolate;margin:8px auto 0;width:100%;{{ skView.box }};overflow:{{ skView.clip }};container-type:inline-size;container-name:skview;touch-action:{{ skView.touch }};-webkit-user-select:none;user-select:none;-webkit-touch-callout:none">
           <div data-skmap="" class="sk-map" style="position:absolute;left:{{ skView.l }};top:{{ skView.t }};width:{{ skView.w }};aspect-ratio:{{ skMap.ar }};container-type:inline-size;container-name:skmap;text-align:left;transform-origin:0 0;transform:{{ skView.cam }};transition:{{ skView.camTr }}">
             <sc-for list="{{ skMap.lines }}" as="ln" hint-placeholder-count="10">
               <div style="position:absolute;left:{{ ln.l }};top:{{ ln.t }};width:{{ ln.w }};height:{{ ln.h }};background:{{ ln.c }};transform-origin:0 0;transform:rotate({{ ln.a }}) translateY(-50%);pointer-events:none;opacity:{{ ln.op }};transition:opacity .25s"></div>
@@ -352,12 +364,15 @@
             <sc-for list="{{ skMap.hot }}" as="ht" hint-placeholder-count="0">
               <div style="position:absolute;left:{{ ht.l }};top:{{ ht.t }};width:{{ ht.w }};height:{{ ht.h }};transform-origin:0 0;transform:rotate({{ ht.a }}) translateY(-50%);pointer-events:none;z-index:1"><div style="width:100%;height:100%;background:var(--signal);box-shadow:0 0 6px var(--signal);transform-origin:0 50%;animation:{{ ht.anim }} {{ ht.dur }} linear {{ ht.delay }} both"></div></div>
             </sc-for>
+            <!-- Centre node: a double octagonal frame (thick outer ring, thin inner ring) around the logo. The logo is 素材/壁報logo_小.svg with its black outlines removed, drawn in the same colour as the frame; the title sits under it. -->
             <div style="position:absolute;left:{{ skMap.root.l }};top:{{ skMap.root.t }};width:{{ skMap.root.w }};aspect-ratio:1 / 1;z-index:1">
               <span class="sk-oct" style="position:absolute;inset:0;background:var(--signal)"></span>
-              <span class="sk-oct" style="position:absolute;inset:2px;background:var(--surface-plate)"></span>
-              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25em;line-height:1.2">
-                <span style="font-size:{{ skMap.fs.rootName }};font-weight:300;letter-spacing:.06em;max-width:84%;text-align:center;line-height:1.15">{{ skillTitle }}</span>
-                <span style="font-size:{{ skMap.fs.rootSub }};letter-spacing:.1em;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ skTotal }}</span>
+              <span class="sk-oct" style="position:absolute;inset:3.5%;background:var(--surface-plate)"></span>
+              <span class="sk-oct" style="position:absolute;inset:8%;background:var(--signal)"></span>
+              <span class="sk-oct" style="position:absolute;inset:9.6%;background:var(--surface-plate)"></span>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%">
+                <svg viewBox="0 0 32.62 32.84" aria-hidden="true" style="display:block;width:47%;height:auto;fill:var(--signal)"><path d="M16.81,31.91l7.17-7.18,6-6.02,1.63-1.63c.3-.3.42-.82.09-1.16l-5-5.01L18.26,2.46l-1.52-1.52c-.24-.24-.63-.25-.87-.01l-1.47,1.48-4.47,4.48L.92,15.92c-.35.35-.2.89.11,1.21l4.74,4.73,2.94,2.94,7.14,7.14c.25.25.71.22.96-.03M17.3,32.48c-.6.49-1.51.46-2.02-.05l-8.57-8.58L.35,17.5c-.47-.65-.47-1.5.03-2.12l6.06-6.07L14.5,1.22l.82-.83c.28-.29.72-.44,1.14-.39s.69.26.96.53l8.06,8.08,6.72,6.74c.56.56.53,1.51.06,2.12l-4.47,4.49-2.99,2.98-5.52,5.53-2,2Z"/><path d="M16.49,22.92l1.95-1.96c.06-.06.11-.15.1-.23s-.07-.14-.13-.2l-1.97-1.98c-.11-.11-.23-.07-.32.03l-2.01,2.03c-.13.13-.04.3.07.41l1.93,1.91c.06.06.12.1.19.1.07,0,.14-.04.2-.11M18.29,26.19c.55.31.86.87.88,1.5,0,.2-.1.38-.3.41-.16.02-.39-.09-.4-.3-.01-.48-.27-.89-.74-1.07-.34-.13-.68-.26-.96-.49l-.09.49c-.07.41-.16.8-.07,1.21.06.23-.07.46-.29.49-.24.03-.41-.14-.43-.39l-.02-.31c-.03-.36.01-.7.09-1.05.12-.53.18-1.05.09-1.59-.38.42-.86.67-1.4.84l-.83.26c-.23.07-.43.24-.55.44-.07.12-.13.22-.24.26-.15.05-.29.04-.4-.07-.13-.13-.13-.33-.04-.49.22-.4.57-.68,1-.85l.88-.27c.38-.12.72-.29.98-.59s.43-.65.28-1.02l-2.26-2.27c-.07-.07-.11-.18-.2-.23-.48-.29-.97-.53-1.52-.67-.9-.24-1.64-.11-2.4.41-.85.58-2.03.61-2.67-.17-.09-.12-.09-.28-.02-.4.06-.12.21-.2.36-.17.14.03.23.11.32.2.2.19.5.25.78.23.34-.02.62-.17.89-.35.86-.58,1.88-.76,2.9-.47-.21-.49-.69-.81-1.19-1.02l-1-.41c-.43-.18-.82-.4-1.17-.69-.76-.63-1.13-1.63-1.08-2.6.01-.21.19-.35.37-.34s.35.15.35.36c0,.59.13,1.18.49,1.65.26.34.6.61,1,.78l1,.43c.36.15.7.29,1.02.5.53.35.9.87,1.03,1.5.02.1.05.13.14.17.22.09.44.16.67.11l2.08-2.1c.33-.36.81-.42,1.23-.14l2.23,2.24c.13.03.27.01.39-.04l.49-.21.1-.38c.23-.84.82-1.52,1.59-1.92.34-.18.68-.29,1.05-.42,1.04-.36,1.56-.67,1.9-1.76.07-.21.3-.29.48-.21.19.08.26.3.19.5-.27.78-.6,1.33-1.33,1.75-.32.18-.66.3-1.01.43l-.79.3c-.69.3-1.19.86-1.4,1.59.41-.02.81.08,1.22.22l1.08.38c.48.14.95.17,1.44.08.21-.04.37.16.38.33.02.23-.14.37-.36.41-.89.14-1.59-.04-2.42-.37-1.05-.41-1.72-.5-2.69.2-.12.08-.16.2-.26.29l-2.28,2.28c-.33.9-.16,1.96.79,2.31l.64.28Z"/><path d="M16.67,9.35v6.78c-.05.18-.18.29-.33.3-.18,0-.33-.1-.37-.29v-6.79s-1.83,0-1.83,0v5.65c0,.21-.16.35-.34.36s-.35-.12-.37-.33v-5.67s-1.83,0-1.83,0v4.27c-.05.19-.19.29-.38.28-.14,0-.33-.12-.33-.31v-4.24s-1.29,0-1.29,0c-.2,0-.33-.19-.33-.36,0-.19.13-.37.36-.37h13.39c.22,0,.35.17.36.35s-.12.38-.33.38h-1.28s0,4.24,0,4.24c0,.18-.18.3-.31.31-.19.02-.34-.07-.4-.26v-4.29s-1.85,0-1.85,0v3.01s0,2.69,0,2.69c0,.18-.21.3-.36.3-.19,0-.33-.15-.34-.36v-5.65s-1.82,0-1.82,0Z"/><path d="M16.59,3.7c-.1-.09-.21-.17-.31-.16s-.21.08-.29.17l-1.71,1.7c-.11.11-.34.05-.43-.02-.11-.09-.17-.34-.05-.47l1.75-1.78c.45-.45,1.05-.45,1.5,0l1.76,1.74c.13.13.13.36,0,.49s-.36.15-.5.01l-1.72-1.67Z"/><path d="M17.31,6.6h-1.97c-.14,0-.28-.12-.31-.23-.04-.15.01-.29.13-.4l.77-.73c.21-.2.6-.17.79.02l.75.72c.1.1.18.21.15.35-.03.13-.14.22-.3.27Z"/><rect x="15.7" y="20.17" width="1.17" height="1.17" rx=".21" ry=".21" transform="translate(-9.91 17.59) rotate(-45)"/></svg>
+                <span style="font-size:{{ skMap.fs.rootName }};font-weight:400;letter-spacing:.08em;line-height:1.1;white-space:nowrap;color:var(--text-primary)">{{ skillTitle }}</span>
               </div>
             </div>
             <sc-for list="{{ skMap.nodes }}" as="n" hint-placeholder-count="12">
@@ -479,23 +494,39 @@
       <section data-screen-label="05 其他" data-pagebreak="" style="padding-top:32px">
         <h2 id="sec-photo" data-toc-target="" style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0 0 8px">{{ photoTitle }}</h2>
         <p style="margin:0 0 36px;color:var(--text-secondary);max-width:62ch;text-wrap:pretty">{{ photoIntro }}</p>
-        <!-- First row: the portfolio by colour. Pick a colour; its photos show below. -->
-        <div class="pc-row" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px">
-          <sc-for list="{{ palettes }}" as="c" hint-placeholder-count="4">
-            <div role="button" onClick="{{ c.go }}" style="cursor:pointer;display:flex;flex-direction:column;gap:10px;min-width:0">
-              <div style="position:relative;aspect-ratio:4 / 5;overflow:hidden;border:1px solid {{ c.ring }};box-shadow:0 0 0 {{ c.ringW }} {{ c.ring }}"><img src="{{ c.cover }}" alt="{{ c.name }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover"><span style="position:absolute;left:0;right:0;bottom:0;height:5px;background:{{ c.sw }}"></span></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase"><span style="display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap"><i style="flex:none;display:inline-block;width:10px;height:10px;background:{{ c.sw }}"></i>{{ c.name }}</span><span style="color:var(--text-faint)">{{ c.count }}</span></div>
+        <!-- The portfolio by colour, as a carousel. Left alone it drifts to the left, all seven covers alike, with every photo on the wall below.
+             Click a cover and it stops: that colour sits sharp in the middle, the others fall away to the sides, smaller and out of focus, and the wall shows just that colour.
+             Click the middle cover again (or ALL) to let it drift again. Arrows and sideways dragging work in both states. -->
+        <div data-pcar="" class="pc-car" style="position:relative;isolation:isolate;height:calc(var(--cw) * 1.25);overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none;--tr:{{ pcTr }}">
+          <sc-for list="{{ palettes }}" as="c" hint-placeholder-count="7">
+            <div role="button" class="pc-card" onClick="{{ c.go }}" style="position:absolute;left:50%;top:0;width:var(--cw);aspect-ratio:4 / 5;--d:{{ c.d }};transform:translateX(calc(-50% + var(--sp) * var(--d) + var(--dx,0px)));z-index:{{ c.z }};pointer-events:{{ c.pe }};cursor:pointer">
+              <div class="pc-in" style="position:absolute;inset:0;box-sizing:border-box;overflow:hidden;border:1px solid {{ c.ring }};transform:scale({{ c.s }});filter:blur({{ c.blur }});opacity:{{ c.op }}">
+                <img src="{{ c.cover }}" alt="{{ c.name }}" draggable="false" style="display:block;width:100%;height:100%;object-fit:cover;pointer-events:none">
+                <div style="position:absolute;left:0;right:0;bottom:0;padding:9px 10px 8px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:color-mix(in srgb,var(--surface-plate) 52%,transparent);-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2)">
+                  <span style="position:absolute;left:0;right:0;top:0;height:3px;background:{{ c.sw }}"></span>
+                  <span style="display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap"><i style="flex:none;display:inline-block;width:10px;height:10px;background:{{ c.sw }}"></i>{{ c.name }}</span><span style="color:var(--text-secondary)">{{ c.count }}</span>
+                </div>
+              </div>
             </div>
           </sc-for>
+          <div role="button" class="ph-arrow" aria-label="Previous colour" onClick="{{ pcPrev }}" style="left:0;z-index:9"><svg viewBox="0 0 12 18" width="13" height="20" aria-hidden="true"><polygon points="12,0 0,9 12,18"></polygon></svg></div>
+          <div role="button" class="ph-arrow" aria-label="Next colour" onClick="{{ pcNext }}" style="right:0;z-index:9"><svg viewBox="0 0 12 18" width="13" height="20" aria-hidden="true"><polygon points="0,0 12,9 0,18"></polygon></svg></div>
         </div>
         <!-- A line in the chosen colour between the colour row and its photos. -->
         <div aria-hidden="true" style="margin-top:20px;display:flex;gap:0;height:3px;padding-right:1px">
           <sc-for list="{{ pcSegs }}" as="sg" hint-placeholder-count="40"><i class="pc-seg" style="flex:1 1 0;min-width:0;height:3px;margin-right:-1px;background:{{ sg.bg }};transform-origin:50% 100%;animation:{{ sg.anim }} .72s cubic-bezier(.3,.7,.2,1) {{ sg.delay }} both"></i></sc-for>
         </div>
-        <div style="margin-top:18px;columns:6 70px;column-gap:8px;--pc:{{ pcSolid }}">
+        <!-- Photo size: S / M / L changes the row height of the wall below. -->
+        <div data-noprint="" style="margin-top:14px;display:flex;justify-content:flex-end;gap:4px">
+          <div role="button" onClick="{{ pcAll.go }}" style="margin-right:auto;padding:0 10px;height:22px;display:flex;align-items:center;font-size:10px;letter-spacing:.14em;border:1px solid {{ pcAll.ring }};color:{{ pcAll.ink }};cursor:pointer;transition:color .2s,border-color .2s" style-hover="color:var(--text-signal)">{{ pcAll.label }}</div>
+          <sc-for list="{{ pcSizes }}" as="z" hint-placeholder-count="3"><div role="button" onClick="{{ z.go }}" style="width:28px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.08em;border:1px solid {{ z.ring }};color:{{ z.ink }};cursor:pointer;transition:color .2s,border-color .2s" style-hover="color:var(--text-signal)">{{ z.label }}</div></sc-for>
+        </div>
+        <!-- Photo wall: every row is the same height and runs edge to edge, whatever mix of upright and wide frames it holds. -->
+        <div class="pc-wall" style="margin-top:10px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;--pc:{{ pcSolid }};--k:{{ pcK }}">
           <sc-for list="{{ colorPics }}" as="cp" hint-placeholder-count="6">
-            <div class="pc-pic" role="button" onClick="{{ cp.open }}" style="display:block;margin:0 0 8px;break-inside:avoid;cursor:zoom-in;animation:{{ cp.anim }} .72s cubic-bezier(.3,.7,.2,1) {{ cp.delay }} both"><img src="{{ cp.src }}" alt="" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid var(--border-hair)"></div>
+            <div class="pc-pic" role="button" onClick="{{ cp.open }}" style="flex:{{ cp.ar }} 1 calc(var(--rh) * {{ cp.ar }});aspect-ratio:{{ cp.ar }};min-width:0;cursor:zoom-in;animation:{{ cp.anim }} .72s cubic-bezier(.3,.7,.2,1) {{ cp.delay }} both"><img src="{{ cp.src }}" alt="" loading="lazy" style="display:block;box-sizing:border-box;width:100%;height:100%;object-fit:cover;border:1px solid var(--border-hair)"></div>
           </sc-for>
+          <i aria-hidden="true" style="flex:1000 1 0;height:0"></i>
         </div>
         <!-- MINDFREAK: its own set, outside the colour groups. -->
         <div style="margin-top:44px;padding-top:24px;border-top:1px solid var(--border-strong)">
@@ -505,18 +536,6 @@
               <div role="button" onClick="{{ cp.open }}" style="display:block;margin:0 0 12px;break-inside:avoid;cursor:zoom-in"><img src="{{ cp.src }}" alt="MINDFREAK" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid var(--border-hair)"></div>
             </sc-for>
           </div>
-        </div>
-        <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px 20px">
-          <sc-for list="{{ photos }}" as="p" hint-placeholder-count="6">
-            <figure class="slotwrap" style="margin:0;display:flex;flex-direction:column;gap:10px;min-width:0">
-              <div style="position:relative;aspect-ratio:3 / 2;border:1px solid var(--border-strong)">
-                <image-slot id="{{ p.slotId }}" shape="rect" placeholder="[ PHOTO — DROP IMAGE HERE ]"></image-slot>
-              </div>
-              <figcaption style="display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase">
-                <span>{{ p.title }}</span><span style="color:var(--text-faint)">{{ p.meta }}</span>
-              </figcaption>
-            </figure>
-          </sc-for>
         </div>
         <div id="sec-clubs" data-toc-target="" style="margin-top:64px">
           <x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="SEC 02" title="{{ clubTitle }}" hint-size="100%,16px"></x-import>
@@ -703,6 +722,9 @@ const D = {
   ]
 };
 D.works.push(...D.works.splice(D.works.findIndex(w => w._move), 1));
+// Width ÷ height of the portfolio photos (photos/photo/pNN.jpg), for the photo wall. Anything not listed is 1.5 (a 3:2 landscape frame).
+const PHOTO_AR = { 4: 0.67, 5: 0.67, 6: 0.67, 7: 0.67, 8: 0.67, 10: 0.67, 12: 0.67, 13: 0.67, 14: 0.67, 15: 0.67, 26: 0.67, 29: 0.67, 30: 0.67, 31: 0.67, 33: 0.67, 36: 0.67, 38: 0.67, 41: 0.67, 42: 0.67, 46: 1.35, 47: 0.67, 50: 1.33, 51: 1, 52: 0.67, 54: 0.67, 56: 0.67, 57: 0.67, 58: 0.67, 61: 0.67, 64: 0.67, 67: 0.67, 69: 0.67, 72: 0.67, 77: 0.67, 78: 0.67, 80: 0.67, 85: 0.67, 87: 1.42, 91: 0.67, 92: 0.67, 98: 0.67, 99: 0.67 };
+const PHOTO_N = D.palettes.reduce((n, c) => n + c.pics.length, 0) + D.mindfreak.length;
 // Skill-tree text in other languages, looked up by the Chinese text — [English, 日本語, Deutsch].
 const SK_TR = {
   "基礎": ["Foundations", "基礎", "Grundlagen"],
@@ -964,7 +986,7 @@ class Component extends DCLogic {
     this.onSwStart = e => {
       this._sw = null;
       if (e.touches.length !== 1 || this.state.lb || this.state.intro === "on") return;
-      if (e.target.closest && e.target.closest("[data-skview]")) return;   // the skill tree handles its own dragging
+      if (e.target.closest && e.target.closest("[data-skview], [data-pcar]")) return;   // the skill tree and the colour carousel handle their own dragging
       // A sideways-scrolling box under the finger: the swipe scrolls it, unless it is already at that end.
       let canL = false, canR = false;
       for (let n = e.target; n && n !== document.body; n = n.parentElement) {
@@ -1036,6 +1058,32 @@ class Component extends DCLogic {
       // A different width means a different window onto the skill tree: drop any zoom / pan and start from the default view.
       if (fw !== this._skLastW) { this._skLastW = fw; this._skCam = null; this._skCamPrev = null; if (this.state.skFocus || this.state.skClip) this.setState({ skFocus: null, skClip: false }); }
       if (nar !== !!this.state.skNarrow) this.setState({ skNarrow: nar }); };
+    // ---- Colour carousel (Other page): drift when idle, step, and drag sideways ----
+    const pcN = D.palettes.length, pcWrap = d => { d = ((d % pcN) + pcN) % pcN; return d >= pcN / 2 ? d - pcN : d; };
+    const pcPlace = c => c.querySelectorAll(".pc-card").forEach((el, i) => el.style.setProperty("--d", pcWrap(i - (this._pcPhase || 0)).toFixed(4)));
+    const pcIdle = () => this.state.photoColor == null;
+    this.pcStep = (k, done) => this.setState(s => { const from = s.photoColor == null ? Math.round(this._pcPhase || 0) : s.photoColor;
+      return { photoColor: (((from + k) % pcN) + pcN) % pcN, pcN: (s.pcN || 0) + 1 }; }, done);
+    let pc = null, pcLast = performance.now();
+    const pcStill = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const pcTick = now => { this._pcRaf = requestAnimationFrame(pcTick); const dt = Math.min(0.05, (now - pcLast) / 1000); pcLast = now;
+      const c = document.querySelector("[data-pcar]"); if (!c || !pcIdle() || document.hidden || pcStill || (pc && pc.on)) return;
+      this._pcPhase = (this._pcPhase || 0) + dt * 0.16; pcPlace(c); };   // 0.16 covers a second ≈ one cover every six seconds, moving left
+    this._pcRaf = requestAnimationFrame(pcTick);
+    this.onPcDown = e => { const c = e.target.closest && e.target.closest("[data-pcar]"); if (!c || (e.pointerType === "mouse" && e.button !== 0)) return; pc = { c, x: e.clientX, y: e.clientY, dx: 0, on: false, id: e.pointerId, ph: this._pcPhase || 0 }; };
+    this.onPcMove = e => { if (!pc || e.pointerId !== pc.id) return; const dx = e.clientX - pc.x, dy = e.clientY - pc.y;
+      if (!pc.on) { if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy)) return; pc.on = true; pc.c.style.setProperty("--tr", "0s"); }
+      const r = pc.c.getBoundingClientRect(), z = r.width / (pc.c.offsetWidth || r.width) || 1; pc.dx = dx / z;
+      if (pcIdle()) { const sp = parseFloat(getComputedStyle(pc.c).getPropertyValue("--sp")) || 190; this._pcPhase = pc.ph - pc.dx / sp; pcPlace(pc.c); }   // drifting: the drag just pushes it along
+      else pc.c.style.setProperty("--dx", pc.dx + "px"); };
+    this.onPcUp = e => { if (!pc || e.pointerId !== pc.id) return; const { c, dx, on } = pc; pc = null; if (!on) return;
+      this._pcDragT = Date.now(); if (pcIdle()) return;
+      const sp = parseFloat(getComputedStyle(c).getPropertyValue("--sp")) || 190, steps = Math.round(-dx / sp) || (Math.abs(dx) > 36 ? -Math.sign(dx) : 0);
+      // hand the drag offset over to the new positions without a jump, then let the remainder glide into place
+      const settle = () => { c.style.setProperty("--dx", (dx + steps * sp) + "px"); void c.offsetWidth; c.style.setProperty("--tr", ".5s"); c.style.setProperty("--dx", "0px"); };
+      if (steps) this.pcStep(steps, settle); else settle(); };
+    document.addEventListener("pointerdown", this.onPcDown); document.addEventListener("pointermove", this.onPcMove);
+    document.addEventListener("pointerup", this.onPcUp); document.addEventListener("pointercancel", this.onPcUp);
     // ---- Skill tree camera ----
     const camEl = () => document.querySelector("[data-skmap]"), viewEl = () => document.querySelector("[data-skview]");
     const camSet = c => { this._skCam = c; const el = camEl(); if (el) { el.style.transition = "none"; el.style.transform = `translate(${c.x}px,${c.y}px) scale(${c.s})`; } };
@@ -1376,6 +1424,9 @@ class Component extends DCLogic {
     document.removeEventListener("pointerdown", this.onSkDown); document.removeEventListener("pointermove", this.onSkMove);
     document.removeEventListener("pointerup", this.onSkUp); document.removeEventListener("pointercancel", this.onSkUp); document.removeEventListener("contextmenu", this.onSkMenu);
     clearTimeout(this._skLT); clearTimeout(this._skClipT);
+    cancelAnimationFrame(this._pcRaf);
+    document.removeEventListener("pointerdown", this.onPcDown); document.removeEventListener("pointermove", this.onPcMove);
+    document.removeEventListener("pointerup", this.onPcUp); document.removeEventListener("pointercancel", this.onPcUp);
     document.removeEventListener("scroll", this.onTocScroll, true);
     cancelAnimationFrame(this._bgRaf);
     window.removeEventListener("resize", this._bgResize);
@@ -1509,7 +1560,7 @@ class Component extends DCLogic {
       frameStyle: this.props.device === "mobile" ? "min-height:0;width:390px;max-width:100%;height:min(844px,calc(100vh - 40px));margin:20px auto;overflow-y:auto;overflow-x:hidden;border:1px solid var(--border-strong);transform:translateZ(0)" : "",
       brand: t(D.name),
       tabs: UI.tabs.filter(([id]) => !HIDE.includes(id)).map(([id, zh, e]) => ({
-        id, label: L(zh, e), go: () => this.go(id), wip: id === "home" || pub ? "" : L("待建置", "WIP"),
+        id, label: L(zh, e), go: () => this.go(id), wip: ["work", "skills"].includes(id) && !pub ? L("待建置", "WIP") : "",   // editor-only tag on the tabs still being written
         enter: () => { if (this.state.tabHover !== id) this.setState({ tabHover: id }); },
         lift: this.state.tabHover === id && id !== tab ? "-2px" : "0px",
         color: id === tab ? "var(--text-primary)" : this.state.tabHover === id ? "var(--text-primary)" : "var(--text-secondary)",
@@ -1613,7 +1664,7 @@ class Component extends DCLogic {
             const pos = {}, kidsOf = id => { const n = id === "root" ? { c: SK } : all.find(r => r.id === id).n; return n.c.map((_, i) => id === "root" ? String(i) : id + "." + i); };
             // A wide, low layout so the whole tree fits on a laptop screen without scrolling:
             // Foundations fans out above, Neuro to the left, Mechatronics (the deepest branch) steps down the right, Fabrication and Microfabrication below.
-            const H = 674, rootSz = 108, catSz = 66, itSz = 42, C = 14;
+            const H = 674, rootSz = 116, catSz = 66, itSz = 42, C = 14;
             const T = {
               root: [620, 320],
               "0": [620, 186, "r", "v"], "0.0": [290, 104, "r", "v"], "0.0.0": [210, 30, "r", "v"], "0.0.1": [370, 30, "r", "v"], "0.1": [620, 104, "r", "v"], "0.1.0": [540, 30, "r", "v"], "0.1.1": [700, 30, "r", "v"], "0.2": [950, 104, "r", "v"],
@@ -1689,7 +1740,7 @@ class Component extends DCLogic {
             return {
               skMap: { ar: `${W} / ${H}`, lines: L1, hot: HOT, nodes: P,
                 root: { l: pct(pos.root.x - rootSz / 2, W), t: pct(pos.root.y - rootSz / 2, H), w: pct(rootSz, W) },
-                fs: { rootName: fs(20 * (L("技能樹", "Skill tree").length > 5 ? 0.66 : 1)), rootSub: fs(11), catSub: fs(10) } },
+                fs: { rootName: fs(L("技能樹", "Skill tree").length > 4 ? 10 : 12.5), rootSub: fs(11), catSub: fs(10) } },
               // Computer: the whole tree fits the window. Phone: the window opens on the root and its five branches (the tree is ~2× the window; drag / pinch to see the rest).
               skView: phone ? { box: "height:min(64vh,560px);height:min(64svh,560px)", clip: "hidden", touch: "none", w: "206.7%", l: "-53.35%", t: `calc(50% - ${(pos.root.y / W * 206.7).toFixed(2)}cqi)`,
                   cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none",
@@ -1743,7 +1794,7 @@ class Component extends DCLogic {
         { label: L("學歷", "Education"), more: L("學術", "Academic"), go: () => this.go("acad"), items: rows(D.education) },
         { label: L("作品", "Work"), more: L("作品集", "Work"), go: () => this.go("work"), items: D.works.map(w => ({ year: w.year, main: t(w.title), sub: t(w.summary) })) },
         { label: L("發表", "Publications"), more: L("學術", "Academic"), go: () => this.go("acad"), items: rows(D.publications) },
-        { label: L("攝影", "Photography"), more: L("其他", "Other"), go: () => this.go("other"), items: [{ year: "—", main: L(D.photos.length + " 張作品", D.photos.length + " frames"), sub: "" }] }
+        { label: L("攝影", "Photography"), more: L("其他", "Other"), go: () => this.go("other"), items: [{ year: "—", main: L(PHOTO_N + " 張作品", PHOTO_N + " frames"), sub: "" }] }
       ],
       ...(() => {
         const lay = this.state.layout || this.props.homeLayout || "C";
@@ -1831,7 +1882,7 @@ class Component extends DCLogic {
       cards: [
         { no: "02", en: "ACADEMIC", title: L("學術", "Academic"), desc: L("學歷、論文與海報發表、獲獎、學會與研討會。", "Education, papers and posters, awards, societies and conferences."), meta: `${D.education.length} ${L("學歷", "DEGREES")} · ${D.publications.length} ${L("發表", "PUBS")}`, cta: L("進入", "Open"), go: () => this.go("acad") },
         { no: "03", en: "WORK", title: L("作品集成果", "Selected work"), desc: t(D.works[0].summary), meta: `${D.works.length} ${L("件作品", "PROJECTS")}`, cta: L("進入", "Open"), go: () => this.go("work") },
-        { no: "04", en: "PHOTOGRAPHY", title: L("攝影", "Photography"), desc: L("工作之外用相機記錄的東西。", "What gets recorded with a camera outside the lab."), meta: `${D.photos.length} ${L("張", "FRAMES")}`, cta: L("進入", "Open"), go: () => this.go("other") }
+        { no: "04", en: "PHOTOGRAPHY", title: L("攝影", "Photography"), desc: L("工作之外用相機記錄的東西。", "What gets recorded with a camera outside the lab."), meta: `${PHOTO_N} ${L("張", "FRAMES")}`, cta: L("進入", "Open"), go: () => this.go("other") }
       ],
       acadTitle: L("學術", "Academic"),
       acadGroups: [
@@ -1882,19 +1933,31 @@ class Component extends DCLogic {
       portraits: D.portraits.map((p, i, a) => ({ zoom: zoom(a.map(q => ({ src: q.src, alt: t(q.title) })), i), src: p.src, title: t(p.title), meta: p.meta })),
       photos: D.photos.map(p => ({ slotId: `photo-${D._all.photos.indexOf(p) + 1}`, title: dr(p) + t(p.title), meta: p.meta })),
       ...(() => {
-        const sel = Math.max(0, Math.min(this.state.photoColor || 0, D.palettes.length - 1));
+        // No colour chosen (the default): the carousel drifts and the wall shows everything. A chosen colour: the carousel stops on it and the wall shows that colour.
+        const idle = this.state.photoColor == null, sel = idle ? 0 : Math.max(0, Math.min(this.state.photoColor, D.palettes.length - 1)), N = D.palettes.length;
         const f = n => `p${String(n).padStart(2, "0")}.jpg`;
+        const wrap = d => { d = ((d % N) + N) % N; return d >= N / 2 ? d - N : d; };
+        const pics = idle ? D.palettes.flatMap(c => c.pics) : D.palettes[sel].pics, solid = c => c.solid || c.sw;
+        const toIdle = () => { this._pcPhase = sel; this.setState(s => ({ photoColor: null, pcN: (s.pcN || 0) + 1 })); };
         return {
-          palettes: D.palettes.map((c, i) => ({ name: lang === "zh" ? `${c.zh} · ${c.en.toUpperCase()}` : c.en.toUpperCase(), sw: c.sw, count: `${c.pics.length}`,
-            cover: "photos/photo/t/" + f(c.pics[0]), ring: i === sel ? (c.solid || c.sw) : "var(--border-hair)", ringW: i === sel ? "1px" : "0px",
-            go: () => this.setState(s => ({ photoColor: i, pcN: (s.pcN || 0) + 1 })) })),
-          // Ripple: segments start from under the chosen card and spread both ways; then the photos pop in one by one.
-          pcSolid: D.palettes[sel].solid || D.palettes[sel].sw,
-          pcSegs: Array.from({ length: 40 }, (_, k) => ({ bg: D.palettes[sel].solid || D.palettes[sel].sw, anim: (this.state.pcN || 0) % 2 ? "pcSegB" : "pcSegA",
-            delay: `${Math.round(Math.abs(k + 0.5 - (sel + 0.5) / D.palettes.length * 40) * 16)}ms` })),
-          colorPics: D.palettes[sel].pics.map((n, k) => ({ src: "photos/photo/t/" + f(n), full: "photos/photo/" + f(n),
-            open: zoom(D.palettes[sel].pics.map(m => ({ src: "photos/photo/" + f(m), alt: "" })), k),
-            anim: (this.state.pcN || 0) % 2 ? "pcPicB" : "pcPicA", delay: `${260 + k * 70}ms` })),
+          palettes: D.palettes.map((c, i) => { const d = idle ? wrap(i - (this._pcPhase || 0)) : wrap(i - sel), a = idle ? 1 : Math.abs(d);
+            return { name: lang === "zh" ? `${c.zh} · ${c.en.toUpperCase()}` : c.en.toUpperCase(), sw: c.sw, count: `${c.pics.length}`, cover: "photos/photo/t/" + f(c.pics[0]),
+              // position in the carousel: 0 = the middle; when a colour is chosen, further out = smaller, softer, fainter (the far ends are hidden so wrapping round is not seen)
+              d: idle ? d.toFixed(4) : d, s: idle ? 0.8 : [1, 0.8, 0.64, 0.5][a], blur: idle ? "0px" : ["0px", "1.6px", "3px", "4px"][a], op: idle ? 1 : [1, 0.9, 0.55, 0][a], z: idle ? 5 : 8 - a, pe: !idle && a > 2 ? "none" : "auto",
+              ring: !idle && !a ? solid(c) : "var(--border-hair)",
+              go: () => { if (Date.now() - (this._pcDragT || 0) < 350) return; if (!idle && !a) return toIdle(); this.setState(s => ({ photoColor: i, pcN: (s.pcN || 0) + 1 })); } }; }),
+          pcTr: idle ? "0s" : ".5s",
+          pcPrev: e => { if (e && e.stopPropagation) e.stopPropagation(); this.pcStep(-1); }, pcNext: e => { if (e && e.stopPropagation) e.stopPropagation(); this.pcStep(1); },
+          pcAll: { label: L("全部", "ALL"), go: () => { if (!idle) toIdle(); }, ring: idle ? "var(--signal)" : "var(--border-hair)", ink: idle ? "var(--text-signal)" : "var(--text-faint)" },
+          pcK: { S: 0.6, M: 1, L: 1.65 }[this.state.photoSize || "M"],
+          pcSizes: ["S", "M", "L"].map(z => ({ label: z, go: () => this.setState({ photoSize: z }), ring: (this.state.photoSize || "M") === z ? "var(--signal)" : "var(--border-hair)", ink: (this.state.photoSize || "M") === z ? "var(--text-signal)" : "var(--text-faint)" })),
+          // Ripple: segments start from under the middle card and spread both ways; then the photos pop in one by one. With no colour chosen the line is the whole spectrum.
+          pcSolid: idle ? "var(--border-strong)" : solid(D.palettes[sel]),
+          pcSegs: Array.from({ length: 40 }, (_, k) => ({ bg: solid(D.palettes[idle ? Math.min(N - 1, Math.floor(k / 40 * N)) : sel]), anim: (this.state.pcN || 0) % 2 ? "pcSegB" : "pcSegA",
+            delay: `${Math.round(Math.abs(k + 0.5 - 20) * 16)}ms` })),
+          colorPics: pics.map((n, k) => ({ src: "photos/photo/t/" + f(n), full: "photos/photo/" + f(n), ar: PHOTO_AR[n] || 1.5,
+            open: zoom(pics.map(m => ({ src: "photos/photo/" + f(m), alt: "" })), k),
+            anim: (this.state.pcN || 0) % 2 ? "pcPicB" : "pcPicA", delay: `${260 + Math.min(k, 18) * 60}ms` })),
           mfPics: D.mindfreak.map((n, k) => ({ src: "photos/photo/t/" + f(n), full: "photos/photo/" + f(n),
             open: zoom(D.mindfreak.map(m => ({ src: "photos/photo/" + f(m), alt: "MINDFREAK" })), k) })),
           mfMeta: `${L("現場演出", "LIVE")} · ${D.mindfreak.length}`,
