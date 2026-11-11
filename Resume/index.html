@@ -4,6 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>黃嵩文 Songwen Huang</title>
+<!-- Link previews (LINE, Messenger, LinkedIn, Slack…): title, one line and the card image og.jpg (1200×630). og:image must be the full public address. -->
+<meta name="description" content="Neuroengineering | NTU | Academia Sinica">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Songwen Huang">
+<meta property="og:title" content="黃嵩文 Songwen Huang">
+<meta property="og:description" content="Neuroengineering | NTU | Academia Sinica">
+<meta property="og:url" content="https://kyle0414.github.io/Resume/">
+<meta property="og:image" content="https://kyle0414.github.io/Resume/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Songwen Huang — Neuroengineering | NTU | Academia Sinica">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#08090A">
 <!-- Browser-tab icon: the logo (素材/壁報logo_小.svg, black outlines removed) in the site's green; amber when the browser is in dark mode. -->
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -79,6 +92,10 @@
     @media (prefers-reduced-motion: reduce){.pc-card,.pc-in{transition:none}}
     @media (prefers-reduced-motion: reduce){.pc-seg,.pc-pic{animation:none !important}}
     @keyframes lbVeil{from{opacity:0}to{opacity:1}}
+    @keyframes lbR0{from{opacity:.2;transform:translateX(18%)}to{opacity:1;transform:none}}
+    @keyframes lbR1{from{opacity:.2;transform:translateX(18%)}to{opacity:1;transform:none}}
+    @keyframes lbL0{from{opacity:.2;transform:translateX(-18%)}to{opacity:1;transform:none}}
+    @keyframes lbL1{from{opacity:.2;transform:translateX(-18%)}to{opacity:1;transform:none}}
     @keyframes lbIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
     @container page (max-width:700px){.work-grid{grid-template-columns:minmax(0,1fr) !important}}
     @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big,.pub-grid > .pub-txt{grid-column:1 / -1 !important}}
@@ -528,9 +545,10 @@
   </sc-if>
   <!-- Photo viewer: click any photo to see it large; the page behind is blurred (same veil as the robot console's SETTINGS). -->
   <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
-    <div data-noprint="" role="dialog" aria-modal="true" aria-label="{{ lbAlt }}" onClick="{{ lbClose }}" style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;background:color-mix(in srgb,var(--surface-page) 50%,transparent);backdrop-filter:blur(8px) saturate(.7);-webkit-backdrop-filter:blur(8px) saturate(.7);animation:lbVeil .25s ease both">
-      <figure onClick="{{ lbStop }}" style="margin:0;display:flex;flex-direction:column;gap:10px;max-width:100%;cursor:default;animation:lbIn .38s cubic-bezier(.2,.8,.2,1) both">
-        <img src="{{ lbSrc }}" alt="{{ lbAlt }}" loading="lazy" style="display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;object-fit:contain;border:1px solid var(--border-strong);background:var(--surface-plate);box-shadow:0 24px 60px rgba(0,0,0,.28)">
+    <!-- Phones: swipe left / right for the next / previous photo, swipe down to close (pinch-zoom still works). -->
+    <div data-noprint="" data-lb="" role="dialog" aria-modal="true" aria-label="{{ lbAlt }}" onClick="{{ lbClose }}" style="touch-action:pinch-zoom;position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;background:color-mix(in srgb,var(--surface-page) 50%,transparent);backdrop-filter:blur(8px) saturate(.7);-webkit-backdrop-filter:blur(8px) saturate(.7);animation:lbVeil .25s ease both">
+      <figure data-lbfig="" onClick="{{ lbStop }}" style="margin:0;display:flex;flex-direction:column;gap:10px;max-width:100%;cursor:default;animation:lbIn .38s cubic-bezier(.2,.8,.2,1) both">
+        <img src="{{ lbSrc }}" alt="{{ lbAlt }}" loading="lazy" draggable="false" style="animation:{{ lbAnim }} .34s cubic-bezier(.2,.8,.2,1) both;display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;object-fit:contain;border:1px solid var(--border-strong);background:var(--surface-plate);box-shadow:0 24px 60px rgba(0,0,0,.28)">
         <figcaption style="display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-secondary)">
           <span>{{ lbCount }}</span>
           <span style="display:flex;gap:6px">
@@ -910,7 +928,7 @@ class Component extends DCLogic {
     this.onKey = e => {
       if (this.state.intro === "on" && ["Enter", " ", "Escape"].includes(e.key)) { e.preventDefault(); this.enterSite(); }
       else if (this.state.lb && e.key === "Escape") this.setState({ lb: null });
-      else if (this.state.lb && (e.key === "ArrowLeft" || e.key === "ArrowRight")) { const d = e.key === "ArrowLeft" ? -1 : 1; this.setState(s => ({ lb: { ...s.lb, i: s.lb.i + d } })); }
+      else if (this.state.lb && (e.key === "ArrowLeft" || e.key === "ArrowRight")) this.lbStep(e.key === "ArrowLeft" ? -1 : 1);
       else if (e.key === "Escape" && (this.state.langOpen || this.state.themeOpen)) this.setState({ langOpen: false, themeOpen: false });
       else if (e.key === "Escape" && this.state.skFocus) this.skUnfocus();
       else if (e.key === "Escape" && this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); }
@@ -993,6 +1011,24 @@ class Component extends DCLogic {
       // A different width means a different window onto the skill tree: drop any zoom / pan and start from the default view.
       if (fw !== this._skLastW) { this._skLastW = fw; this._skCam = null; this._skCamPrev = null; if (this.state.skFocus || this.state.skClip) this.setState({ skFocus: null, skClip: false }); }
       if (nar !== !!this.state.skNarrow) this.setState({ skNarrow: nar }); };
+    // ---- Photo viewer: step, and swipe on phones ----
+    this.lbStep = d => this.setState(s => (s.lb ? { lb: { ...s.lb, i: s.lb.i + d }, lbDir: d, lbN: (s.lbN || 0) + 1 } : null));
+    let lbt = null;
+    const lbFig = () => document.querySelector("[data-lbfig]");
+    this.onLbStart = e => { if (!this.state.lb || e.touches.length !== 1 || !(e.target.closest && e.target.closest("[data-lb]"))) { lbt = null; return; }
+      lbt = { x: e.touches[0].clientX, y: e.touches[0].clientY, dx: 0, dy: 0 }; };
+    this.onLbMove = e => { if (!lbt || e.touches.length !== 1) { lbt = null; return; }
+      lbt.dx = e.touches[0].clientX - lbt.x; lbt.dy = e.touches[0].clientY - lbt.y; const f = lbFig(); if (!f) return;
+      // the photo follows the finger: sideways to change photo, downwards to close
+      if (Math.abs(lbt.dx) > Math.abs(lbt.dy)) f.style.transform = `translateX(${lbt.dx}px)`;
+      else if (lbt.dy > 0) { f.style.transform = `translateY(${lbt.dy}px)`; f.style.opacity = String(Math.max(0.3, 1 - lbt.dy / 400)); } };
+    this.onLbEnd = () => { if (!lbt) return; const { dx, dy } = lbt; lbt = null; const f = lbFig();
+      const reset = () => { if (f) { f.style.transition = "transform .25s ease, opacity .25s ease"; f.style.transform = ""; f.style.opacity = ""; setTimeout(() => { if (f) f.style.transition = ""; }, 260); } };
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2 && (this.state.lb.list || []).length > 1) { if (f) { f.style.transform = ""; } this.lbStep(dx < 0 ? 1 : -1); this._lbSwipeT = Date.now(); }
+      else if (dy > 90 && dy > Math.abs(dx) * 1.2) { this._lbSwipeT = Date.now(); this.setState({ lb: null }); }
+      else reset(); };
+    document.addEventListener("touchstart", this.onLbStart, { passive: true }); document.addEventListener("touchmove", this.onLbMove, { passive: true });
+    document.addEventListener("touchend", this.onLbEnd); document.addEventListener("touchcancel", this.onLbEnd);
     // ---- Colour carousel (Other page): drift when idle, step, and drag sideways ----
     const pcN = D.palettes.length, pcWrap = d => { d = ((d % pcN) + pcN) % pcN; return d >= pcN / 2 ? d - pcN : d; };
     const pcPlace = c => c.querySelectorAll(".pc-card").forEach((el, i) => el.style.setProperty("--d", pcWrap(i - (this._pcPhase || 0)).toFixed(4)));
@@ -1360,6 +1396,8 @@ class Component extends DCLogic {
     document.removeEventListener("pointerup", this.onSkUp); document.removeEventListener("pointercancel", this.onSkUp); document.removeEventListener("contextmenu", this.onSkMenu);
     clearTimeout(this._skLT); clearTimeout(this._skClipT);
     cancelAnimationFrame(this._pcRaf);
+    document.removeEventListener("touchstart", this.onLbStart); document.removeEventListener("touchmove", this.onLbMove);
+    document.removeEventListener("touchend", this.onLbEnd); document.removeEventListener("touchcancel", this.onLbEnd);
     document.removeEventListener("pointerdown", this.onPcDown); document.removeEventListener("pointermove", this.onPcMove);
     document.removeEventListener("pointerup", this.onPcUp); document.removeEventListener("pointercancel", this.onPcUp);
     document.removeEventListener("scroll", this.onTocScroll, true);
@@ -1400,7 +1438,7 @@ class Component extends DCLogic {
     const tab = HIDE.includes(this.state.tab) ? "home" : (this.state.tab || "home");
     const pr = this.state.printing;
     // Photo viewer: zoom(list, i) opens list[i] large; list items are { src, alt }.
-    const zoom = (list, i) => () => this.setState({ lb: { list, i } });
+    const zoom = (list, i) => () => this.setState({ lb: { list, i }, lbDir: 0 });
     const li = lang === "ja" ? 0 : 1;
     const tf = (s, e) => (TR[s] && TR[s][li]) || e || s;
     const tv = v => {
@@ -1766,9 +1804,11 @@ class Component extends DCLogic {
           ...(() => {
             const lb = this.state.lb, n = lb ? lb.list.length : 0, k = n ? ((lb.i % n) + n) % n : 0, cur = n ? lb.list[k] : null;
             const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
-            const step = d => e => { stop(e); this.setState(s => (s.lb ? { lb: { ...s.lb, i: s.lb.i + d } } : null)); };
-            return { lbOpen: !!cur, lbSrc: cur ? cur.src : "", lbAlt: cur ? cur.alt : "", lbCount: n ? `${k + 1} / ${n}` : "", lbMulti: n > 1,
-              lbClose: e => { stop(e); this.setState({ lb: null }); }, lbStop: stop, lbPrev: step(-1), lbNext: step(1) };
+            const step = d => e => { stop(e); this.lbStep(d); };
+            // The photo slides in from the side it came from (two copies of each animation so it replays on every step).
+            const lbAnim = !this.state.lbDir ? "none" : (this.state.lbDir > 0 ? "lbR" : "lbL") + ((this.state.lbN || 0) % 2);
+            return { lbAnim, lbOpen: !!cur, lbSrc: cur ? cur.src : "", lbAlt: cur ? cur.alt : "", lbCount: n ? `${k + 1} / ${n}` : "", lbMulti: n > 1,
+              lbClose: e => { stop(e); if (Date.now() - (this._lbSwipeT || 0) < 400) return; this.setState({ lb: null }); }, lbStop: stop, lbPrev: step(-1), lbNext: step(1) };
           })()
         };
       })()
