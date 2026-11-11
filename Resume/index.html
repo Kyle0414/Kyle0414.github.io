@@ -51,7 +51,7 @@
       .toc-panel:hover,.toc-panel:focus-within{transform:translateX(0) !important;box-shadow:0 12px 32px rgba(0,0,0,.14)}
       .toc-panel:hover::before,.toc-panel:focus-within::before{opacity:0;pointer-events:none}
     }
-    main{text-align:justify}
+    main{text-align:left}
     /* Home: top row 3 sections (span 2 of 6), bottom row 2 wider sections (span 3 of 6). */
     /* 60 fine tracks, no track gap; each cell's right margin makes the gutter. Spans: top 25/15/20, bottom 27/33 (45% / 55%). */
     @container page (max-width:1560px){.tb-long{display:none !important}}
@@ -112,6 +112,29 @@
     .ph-arrow:hover svg{opacity:1;transform:scale(1.18)}
     .sk-pop .slotwrap:has(image-slot:not([data-filled])){display:none}
     @media (hover:hover) and (pointer:fine){.sk-pop{pointer-events:none}.sk-pop-more{display:none}}
+    /* Skills tab: the whole page (top bar, tree, links at the bottom) fits one screen, so there is nothing to scroll. The gaps are tightened here and the tree is sized from the window height. */
+    [data-cur="skills"] main{padding-bottom:16px !important}
+    [data-cur="skills"] main section[data-screen-label]{padding-top:16px !important}
+    [data-cur="skills"] main footer{margin-top:16px !important}
+    /* Home: hovering a section block selects it — a soft plate behind it and four corner marks closing in. */
+    .home-cell{position:relative;isolation:isolate;align-self:start}
+    .home-cell::before,.home-cell::after{content:"";position:absolute;inset:-6px -14px -4px;pointer-events:none;opacity:0;transition:opacity .25s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+    .home-cell::before{z-index:-1;background:color-mix(in srgb,var(--surface-plate) 72%,transparent)}
+    .home-cell::after{transform:scale(1.025);--c:var(--signal);background:
+      linear-gradient(var(--c),var(--c)) left top / 16px 2px no-repeat, linear-gradient(var(--c),var(--c)) left top / 2px 16px no-repeat,
+      linear-gradient(var(--c),var(--c)) right top / 16px 2px no-repeat, linear-gradient(var(--c),var(--c)) right top / 2px 16px no-repeat,
+      linear-gradient(var(--c),var(--c)) left bottom / 16px 2px no-repeat, linear-gradient(var(--c),var(--c)) left bottom / 2px 16px no-repeat,
+      linear-gradient(var(--c),var(--c)) right bottom / 16px 2px no-repeat, linear-gradient(var(--c),var(--c)) right bottom / 2px 16px no-repeat}
+    .home-cell-hd span:last-child{transition:transform .3s cubic-bezier(.2,.8,.2,1),color .25s}
+    @media (hover:hover){
+      .home-cell:hover::before,.home-cell:hover::after{opacity:1;transform:none}
+      .home-cell:hover .home-cell-hd{color:var(--text-signal)}
+      .home-cell:hover .home-cell-hd span:last-child{transform:translateX(4px);color:var(--text-signal)}
+    }
+    .home-cell:active::before,.home-cell:active::after{opacity:1;transform:none}
+    @media (prefers-reduced-motion:reduce){.home-cell::before,.home-cell::after{transition:none}}
+    [data-pageframe]{overflow-x:clip}
+    @container page (max-width:600px){.pub-txt .pub-ttl{flex-wrap:wrap;row-gap:2px}.pub-txt .pub-ttl > span:last-child{flex-basis:100%;overflow-wrap:anywhere}}
     .sk-cn{position:absolute;width:18px;height:18px;border:0 solid var(--signal);pointer-events:none;z-index:6}
     @keyframes skpanel{from{opacity:0;transform:translate(14px,-50%)}to{opacity:1;transform:translate(0,-50%)}}
     @keyframes skrunA{from{transform:scaleX(0)}to{transform:scaleX(1)}}
@@ -152,7 +175,7 @@
             <p style="margin:0;max-width:30%;font-family:'Noto Sans TC',sans-serif;font-weight:300;text-wrap:pretty">{{ introParaL }}</p>
             <p style="margin:0;max-width:30%;text-align:right;font-weight:300;text-wrap:pretty">{{ introParaR }}</p>
           </div>
-          <img src="{{ introPhoto }}" alt="" style="position:absolute;z-index:2;left:47%;bottom:0;height:116%;width:auto;max-width:56%;object-fit:contain;object-position:bottom;filter:grayscale(1) contrast(1.08) brightness(.95);pointer-events:none;-webkit-mask-image:{{ introMask }};mask-image:{{ introMask }};animation:intro-person 1.2s cubic-bezier(.2,.8,.2,1) .55s both">
+          <img src="{{ introPhoto }}" alt="" loading="lazy" style="position:absolute;z-index:2;left:47%;bottom:0;height:116%;width:auto;max-width:56%;object-fit:contain;object-position:bottom;filter:grayscale(1) contrast(1.08) brightness(.95);pointer-events:none;-webkit-mask-image:{{ introMask }};mask-image:{{ introMask }};animation:intro-person 1.2s cubic-bezier(.2,.8,.2,1) .55s both">
         </div>
 
         <div style="position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:clamp(18px,4vh,44px);animation:intro-fade .8s cubic-bezier(.2,.7,.2,1) 1.35s both">
@@ -197,7 +220,7 @@
       <section data-screen-label="01 主頁" style="padding-top:48px">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 40px;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--border-strong)">
           <div style="display:flex;align-items:flex-end;gap:20px;flex:1 1 300px;min-width:0">
-            <img src="photos/portrait-1.jpg" alt="{{ brand }}" style="flex:none;width:112px;height:112px;object-fit:cover;object-position:50% 40%;border:1px solid var(--border-strong);display:block">
+            <img src="photos/s/portrait-1.jpg" alt="{{ brand }}" style="flex:none;width:112px;height:112px;object-fit:cover;object-position:50% 40%;border:1px solid var(--border-strong);display:block">
             <div style="display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-height:112px;flex:1 1 auto;min-width:0">
               <div data-fit="" data-fit-max="60" data-fit-min="20" style="font-size:60px;font-weight:300;letter-spacing:.04em;line-height:1;margin-top:-.06em;white-space:nowrap;overflow:hidden">{{ brand }}</div>
               <div class="role-row" style="display:flex;align-items:center;gap:0 20px;min-width:0">
@@ -215,22 +238,22 @@
           </div>
           <div style="flex:none;display:flex;flex-direction:column;gap:9px;font-size:12px;border-left:1px solid var(--border-strong);padding-left:28px">
             <sc-for list="{{ contactRows }}" as="c" hint-placeholder-count="3">
-              <a href="{{ c.href }}" title="{{ c.label }}" style="border:0;display:flex;align-items:center;gap:12px"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="flex:none;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;color:var(--text-faint)"><path d="{{ c.d }}"></path></svg><span>{{ c.text }}</span></a>
+              <a href="{{ c.href }}" title="{{ c.label }}" style="border:0;display:flex;align-items:center;gap:12px"><span aria-hidden="true" style="flex:none;width:16px;height:16px;background:var(--text-faint);-webkit-mask:{{ c.mask }} center / contain no-repeat;mask:{{ c.mask }} center / contain no-repeat"></span><span>{{ c.text }}</span></a>
             </sc-for>
-            <div title="{{ locLabel }}" style="display:flex;align-items:center;gap:12px"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="flex:none;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;color:var(--text-faint)"><path d="{{ pinIcon }}"></path></svg><span>{{ location }}</span></div>
+            <div title="{{ locLabel }}" style="display:flex;align-items:center;gap:12px"><span aria-hidden="true" style="flex:none;width:16px;height:16px;background:var(--text-faint);-webkit-mask:{{ pinMask }} center / contain no-repeat;mask:{{ pinMask }} center / contain no-repeat"></span><span>{{ location }}</span></div>
           </div>
         </div>
         <div class="pt-row" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.6vw,16px);margin-bottom:36px">
           <sc-for list="{{ portraits }}" as="pt" hint-placeholder-count="3">
             <figure style="margin:0;display:flex;flex-direction:column;gap:8px;min-width:0">
-              <div role="button" onClick="{{ pt.zoom }}" style="overflow:hidden;border:1px solid var(--border-strong);cursor:zoom-in"><img src="{{ pt.src }}" alt="{{ pt.title }}" style="display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.04)"></div>
+              <div role="button" onClick="{{ pt.zoom }}" style="overflow:hidden;border:1px solid var(--border-strong);cursor:zoom-in"><img src="{{ pt.src }}" alt="{{ pt.title }}" loading="lazy" style="display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.04)"></div>
             </figure>
           </sc-for>
         </div>
         <div class="home-grid" style="display:grid;row-gap:0">
           <sc-for list="{{ listSecs }}" as="s" hint-placeholder-count="5">
-            <div class="home-cell" style="grid-column:span {{ s.span }};margin-right:{{ s.mr }};border-top:2px solid var(--border-ink);padding:16px 0 26px;display:flex;flex-direction:column;gap:14px;min-width:0">
-              <div role="button" onClick="{{ s.go }}" style="display:flex;align-items:baseline;gap:10px;cursor:{{ s.cur }}" style-hover="color:{{ s.hov }}"><span style="font-size:30px;font-weight:300;letter-spacing:.02em;line-height:1;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ s.no }}</span><span data-fit="" data-fit-max="22" data-fit-min="14" style="font-size:22px;font-weight:300;letter-spacing:.02em;line-height:1.2;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden">{{ s.label }}</span><span data-noprint="" style="margin-left:auto;font-size:22px;line-height:1;color:var(--text-faint);visibility:{{ s.arrow }}">→</span></div>
+            <div class="home-cell" role="button" onClick="{{ s.go }}" style="grid-column:span {{ s.span }};margin-right:{{ s.mr }};border-top:2px solid var(--border-ink);padding:16px 0 26px;display:flex;flex-direction:column;gap:14px;min-width:0;cursor:{{ s.cur }}">
+              <div class="home-cell-hd" style="display:flex;align-items:baseline;gap:10px"><span style="font-size:30px;font-weight:300;letter-spacing:.02em;line-height:1;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ s.no }}</span><span data-fit="" data-fit-max="22" data-fit-min="14" style="font-size:22px;font-weight:300;letter-spacing:.02em;line-height:1.2;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden">{{ s.label }}</span><span data-noprint="" style="margin-left:auto;font-size:22px;line-height:1;color:var(--text-faint);visibility:{{ s.arrow }}">→</span></div>
               <div style="display:flex;flex-direction:column;gap:{{ s.gap }}">
                 <sc-for list="{{ s.items }}" as="r" hint-placeholder-count="3">
                   <div style="display:{{ r.disp }};flex-wrap:wrap;grid-template-columns:{{ r.cols }};gap:2px 16px;font-size:{{ r.fs }};line-height:{{ r.lh }};align-items:baseline;margin-top:{{ r.gapTop }}">
@@ -265,7 +288,7 @@
                   </sc-if>
                   <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="position:relative;{{ r.box }};border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div></sc-if>
                   <!-- Title line: date | event (wrapped lines stay right of the date); role/result on the line below. -->
-                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:baseline;gap:0 10px;min-width:0;font-size:{{ r.hdFs }};line-height:1.5">
+                  <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><div class="pub-ttl" style="display:flex;align-items:baseline;gap:0 10px;min-width:0;font-size:{{ r.hdFs }};line-height:1.5">
                     <span style="flex:none;min-width:4.4ch;color:var(--text-signal);font-size:{{ r.yearFs }};letter-spacing:.06em;font-variant-numeric:tabular-nums">{{ r.year }}</span>
                     <span style="flex:none;color:var(--border-strong);font-size:{{ r.yearFs }}">|</span>
                     <sc-if value="{{ r.preHead }}" hint-placeholder-val="{{ false }}"><span style="flex:none;margin-right:14px;color:var(--text-secondary);font-size:.93em">{{ r.preHead }}</span></sc-if><sc-if value="{{ r.plainHead }}" hint-placeholder-val="{{ true }}"><span style="flex:1 1 auto;min-width:0;font-weight:400;text-align:left;text-wrap:pretty;color:{{ r.lhColor }}">{{ r.lineHead }}</span></sc-if>
@@ -349,9 +372,6 @@
 
     <sc-if value="{{ showSkills }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="04 技能" data-pagebreak="" style="padding-top:32px">
-        <sc-if value="{{ skTree }}" hint-placeholder-val="{{ false }}"><div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px;margin:0 0 8px">
-          <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0">{{ skillTitle }}</h2>
-        </div></sc-if>
         <sc-if value="{{ skOverview }}" hint-placeholder-val="{{ true }}">
           <!-- Skill tree, game style: the root in the middle, five branches around it, octagonal icon nodes joined by rails that turn at 45°.
                Hover (or tap on a phone) a node for its details. -->
@@ -404,88 +424,10 @@
                 <span style="font-size:13px;color:{{ skFoc.proofColor }};text-wrap:pretty">{{ skFoc.proof }}</span>
               </div>
             </sc-if>
-            <!-- Corner marks: inside them the tree can be dragged and zoomed; outside them the page scrolls as usual. -->
+            <sc-if value="{{ skView.hint }}" hint-placeholder-val="{{ false }}"><div data-noprint="" style="position:absolute;left:26px;right:26px;bottom:5px;z-index:4;pointer-events:none;text-align:center;font-size:10px;line-height:1.35;letter-spacing:.06em;color:var(--text-faint);text-wrap:balance">{{ skView.hint }}</div></sc-if>
+            <!-- Corner marks: inside them the tree can be dragged and zoomed. -->
             <span class="sk-cn" style="left:0;top:0;border-width:2px 0 0 2px"></span><span class="sk-cn" style="right:0;top:0;border-width:2px 2px 0 0"></span><span class="sk-cn" style="left:0;bottom:0;border-width:0 0 2px 2px"></span><span class="sk-cn" style="right:0;bottom:0;border-width:0 2px 2px 0"></span>
           </div>
-          <sc-if value="{{ skView.hint }}" hint-placeholder-val="{{ false }}"><div data-noprint="" style="margin-top:8px;text-align:center;font-size:10px;letter-spacing:.08em;color:var(--text-faint)">{{ skView.hint }}</div></sc-if>
-        </sc-if>
-        <sc-if value="{{ skTree }}" hint-placeholder-val="{{ false }}">
-        <div data-noprint="" style="margin-top:20px;display:flex;align-items:stretch;border-bottom:1px solid var(--border-hair);overflow-x:auto">
-          <div role="button" onClick="{{ skBack }}" style="padding:12px 14px;font-size:11px;letter-spacing:.14em;color:var(--text-secondary);cursor:pointer;border:1px solid var(--border-hair);border-bottom:0;align-self:center;white-space:nowrap" style-hover="color:var(--text-signal)">⌂ {{ skBackLabel }}</div>
-          <div role="button" onClick="{{ skPrev }}" style="padding:12px 12px;font-size:12px;color:var(--text-secondary);cursor:pointer;border:1px solid var(--border-hair);border-bottom:0;align-self:center" style-hover="color:var(--text-signal)">←</div>
-          <sc-for list="{{ skTabs }}" as="t" hint-placeholder-count="5">
-            <div role="button" onClick="{{ t.go }}" style="padding:14px 10px 12px;display:flex;gap:8px;align-items:baseline;white-space:nowrap;cursor:pointer;border-bottom:2px solid {{ t.rule }};color:{{ t.color }}" style-hover="color:var(--text-primary)">
-              <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ t.no }}</span>
-              <span style="font-size:13px">{{ t.label }}</span>
-              <span style="font-size:10px;letter-spacing:.12em;color:var(--text-faint)">{{ t.lv }}</span>
-            </div>
-          </sc-for>
-          <div role="button" onClick="{{ skNext }}" style="margin-left:auto;padding:12px 12px;font-size:12px;color:var(--text-secondary);cursor:pointer;border:1px solid var(--border-hair);border-bottom:0;align-self:center" style-hover="color:var(--text-signal)">→</div>
-        </div>
-        <div style="margin-top:28px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px">
-          <span style="font-size:11px;letter-spacing:.2em;color:var(--text-faint)">{{ skBr.no }}</span>
-          <span style="font-size:28px;font-weight:200;letter-spacing:.02em">{{ skBr.name }}</span>
-          <sc-if value="{{ skBr.sub }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:var(--text-secondary)">（{{ skBr.sub }}）</span></sc-if>
-          <div style="display:flex;align-items:center;gap:10px;margin-left:auto">
-            <div style="display:flex;gap:3px"><sc-for list="{{ skBr.segs }}" as="sg" hint-placeholder-count="6"><div style="width:12px;height:7px;transform:skewX(-20deg);background:{{ sg }}"></div></sc-for></div>
-            <span style="font-size:11px;letter-spacing:.12em;color:var(--text-secondary)">{{ skBr.lv }}</span>
-          </div>
-        </div>
-        <sc-if value="{{ skBr.link }}" hint-placeholder-val="{{ false }}"><div style="margin-top:6px;font-size:11px;color:var(--text-signal)">{{ skBr.link }}</div></sc-if>
-        <div style="margin-top:20px;border:1px solid var(--border-hair);padding:32px 28px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr));gap:36px 28px;align-items:start">
-          <sc-for list="{{ skHubs }}" as="hb" hint-placeholder-count="3">
-            <div style="display:flex;flex-direction:column;min-width:0">
-              <div style="display:flex;align-items:flex-start;gap:14px">
-                <div role="button" onClick="{{ hb.go }}" style="flex:none;position:relative;width:76px;height:76px;border:1px solid {{ hb.border }};background:{{ hb.bg }};display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="border-color:var(--signal)">
-                  <span style="font-size:26px;font-weight:200;color:{{ hb.ink }};font-variant-numeric:tabular-nums">{{ hb.no }}</span>
-                  <span style="position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);background:var(--surface-page);border:1px solid {{ hb.border }};padding:0 6px;font-size:10px;letter-spacing:.1em;line-height:16px;color:var(--text-secondary);white-space:nowrap">{{ hb.lv }}</span>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:4px;padding-top:6px;min-width:0">
-                  <span style="font-size:13px;font-weight:400;line-height:1.4;color:{{ hb.label }};text-wrap:pretty">{{ hb.name }}</span>
-                  <sc-if value="{{ hb.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;color:var(--text-signal)">{{ hb.link }}</span></sc-if>
-                </div>
-              </div>
-              <div style="padding-left:26px;margin-top:10px">
-                <sc-for list="{{ hb.rows }}" as="r" hint-placeholder-count="2">
-                  <div style="display:flex;align-items:stretch">
-                    <sc-for list="{{ r.guides }}" as="g" hint-placeholder-count="0">
-                      <div style="flex:none;width:22px;position:relative"><div style="position:absolute;left:11px;top:0;bottom:0;width:1px;background:{{ g.bg }}"></div></div>
-                    </sc-for>
-                    <div style="flex:none;width:22px;position:relative">
-                      <div style="position:absolute;left:11px;top:0;height:{{ r.vh }};width:1px;background:var(--border-strong)"></div>
-                      <div style="position:absolute;left:11px;right:0;top:17px;height:1px;background:var(--border-strong)"></div>
-                    </div>
-                    <div role="button" onClick="{{ r.go }}" style="display:flex;align-items:flex-start;gap:10px;padding:4px 0;min-width:0;cursor:pointer">
-                      <div style="flex:none;width:26px;height:26px;border:1px solid {{ r.border }};background:{{ r.bg }};display:flex;align-items:center;justify-content:center;font-size:9px;color:{{ r.ink }};letter-spacing:.04em">{{ r.no }}</div>
-                      <div style="display:flex;flex-direction:column;gap:2px;padding-top:4px;min-width:0">
-                        <span style="font-size:12px;line-height:1.4;color:{{ r.label }};text-wrap:pretty">{{ r.name }}</span>
-                        <sc-if value="{{ r.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;color:var(--text-signal)">{{ r.link }}</span></sc-if>
-                      </div>
-                    </div>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-        <div style="margin-top:16px;border:1px solid var(--border-strong);background:var(--surface-plate);padding:20px;display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-start">
-          <div class="sk-proof" style="flex:0 1 280px;min-width:200px">
-            <sc-for list="{{ skSlots }}" as="sl" hint-placeholder-count="1">
-              <div class="slotwrap {{ sl.on }}" style="display:{{ sl.display }};position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div>
-            </sc-for>
-          </div>
-          <div style="flex:1 1 260px;display:flex;flex-direction:column;gap:10px;min-width:0">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-              <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skSel.cat }} · {{ skSel.no }}</span>
-              <x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.Badge" tone="{{ skSel.tone }}" hint-size="72px,22px">{{ skSel.status }}</x-import>
-            </div>
-            <span style="font-size:20px;font-weight:300;line-height:1.3">{{ skSel.name }}</span>
-            <div style="display:flex;flex-direction:column;gap:2px"><sc-for list="{{ skSel.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div>
-            <sc-if value="{{ skSel.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skSel.link }}</span></sc-if>
-            <span style="margin-top:6px;font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
-            <span style="font-size:13px;color:{{ skSel.proofColor }};text-wrap:pretty">{{ skSel.proof }}</span>
-          </div>
-        </div>
         </sc-if>
       </section>
     </sc-if>
@@ -501,7 +443,7 @@
           <sc-for list="{{ palettes }}" as="c" hint-placeholder-count="7">
             <div role="button" class="pc-card" onClick="{{ c.go }}" style="position:absolute;left:50%;top:0;width:var(--cw);aspect-ratio:4 / 5;--d:{{ c.d }};transform:translateX(calc(-50% + var(--sp) * var(--d) + var(--dx,0px)));z-index:{{ c.z }};pointer-events:{{ c.pe }};cursor:pointer">
               <div class="pc-in" style="position:absolute;inset:0;box-sizing:border-box;overflow:hidden;border:1px solid {{ c.ring }};transform:scale({{ c.s }});filter:blur({{ c.blur }});opacity:{{ c.op }}">
-                <img src="{{ c.cover }}" alt="{{ c.name }}" draggable="false" style="display:block;width:100%;height:100%;object-fit:cover;pointer-events:none">
+                <img src="{{ c.cover }}" alt="{{ c.name }}" loading="lazy" draggable="false" style="display:block;width:100%;height:100%;object-fit:cover;pointer-events:none">
                 <div style="position:absolute;left:0;right:0;bottom:0;padding:9px 10px 8px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:color-mix(in srgb,var(--surface-plate) 52%,transparent);-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2)">
                   <span style="position:absolute;left:0;right:0;top:0;height:3px;background:{{ c.sw }}"></span>
                   <span style="display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap"><i style="flex:none;display:inline-block;width:10px;height:10px;background:{{ c.sw }}"></i>{{ c.name }}</span><span style="color:var(--text-secondary)">{{ c.count }}</span>
@@ -588,7 +530,7 @@
   <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
     <div data-noprint="" role="dialog" aria-modal="true" aria-label="{{ lbAlt }}" onClick="{{ lbClose }}" style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;background:color-mix(in srgb,var(--surface-page) 50%,transparent);backdrop-filter:blur(8px) saturate(.7);-webkit-backdrop-filter:blur(8px) saturate(.7);animation:lbVeil .25s ease both">
       <figure onClick="{{ lbStop }}" style="margin:0;display:flex;flex-direction:column;gap:10px;max-width:100%;cursor:default;animation:lbIn .38s cubic-bezier(.2,.8,.2,1) both">
-        <img src="{{ lbSrc }}" alt="{{ lbAlt }}" style="display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;object-fit:contain;border:1px solid var(--border-strong);background:var(--surface-plate);box-shadow:0 24px 60px rgba(0,0,0,.28)">
+        <img src="{{ lbSrc }}" alt="{{ lbAlt }}" loading="lazy" style="display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;object-fit:contain;border:1px solid var(--border-strong);background:var(--surface-plate);box-shadow:0 24px 60px rgba(0,0,0,.28)">
         <figcaption style="display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-secondary)">
           <span>{{ lbCount }}</span>
           <span style="display:flex;gap:6px">
@@ -612,7 +554,6 @@ const D = {
   location: { zh: "臺北，臺灣", en: "Taipei, Taiwan" },
   links: [
     { label: "Email", text: "kouppie0414@gmail.com", href: "mailto:kouppie0414@gmail.com" },
-    { label: "Phone", text: "+886 909 574 243", href: "tel:+886909574243" },
     { label: "GitHub", text: "Kyle0414", href: "https://github.com/Kyle0414" },
     { label: "LinkedIn", text: "song-wen-huang", href: "https://www.linkedin.com/in/song-wen-huang-a54677379" },
     { label: "Behance", text: "song-wenhuang", href: "https://www.behance.net/song-wenhuang" },
@@ -706,13 +647,7 @@ const D = {
   ],
   // A separate set: the MINDFREAK live show.
   mindfreak: [17, 18, 19, 20, 21, 22],
-  photos: [
-    { title: { zh: "建築", en: "Architecture" }, meta: "TAIPEI" },
-    { title: { zh: "建築", en: "Architecture" }, meta: "—" },
-    { title: { zh: "建築", en: "Architecture" }, meta: "—" },
-    { title: { zh: "表演藝術", en: "Performance" }, meta: "—" },
-    { title: { zh: "活動紀錄", en: "Events" }, meta: "—" }
-  ],
+
   portraits: [
     { src: "photos/portrait-1.jpg", title: { zh: "形象照", en: "Portrait" }, meta: "01" },
     { src: "photos/portrait-2.jpg", title: { zh: "形象照", en: "Portrait" }, meta: "02" },
@@ -1023,12 +958,12 @@ class Component extends DCLogic {
     if (!["paper", "terminal", "nightsea"].includes(palette)) palette = null;
     if (!["auto", "line-trace", "line-net", "ascii-trace", "ascii-net", "dna", "off"].includes(bg)) bg = "auto";
     this.setState({ palette, bg }, () => this.applyMode && this.applyMode());
-    if (!LANGS.some(x => x[0] === lang)) lang = "zh";
+    if (!LANGS.some(x => x[0] === lang)) lang = "en";
     if (!["auto", "dark", "light"].includes(theme)) theme = null;
     this.setState({ lang, tab, theme }, () => this.applyMode && this.applyMode());
     this.mq = window.matchMedia("(prefers-color-scheme: light)");
     this.applyMode = () => {
-      const m = this.state.theme || "light";
+      const m = this.state.theme || "dark";   // first visit: dark
       const light = this.state.printing || m === "light" || (m === "auto" && this.mq.matches);
       if (light) document.documentElement.setAttribute("data-hal-mode", "light");
       else document.documentElement.removeAttribute("data-hal-mode");
@@ -1453,7 +1388,7 @@ class Component extends DCLogic {
     // editor with the "view" tweak set to public, hides drafts (draft: true on an item), WIP tags and empty image slots.
     const ed = !!(window.omelette && window.omelette.writeFile), pub = !ed || this.props.view === "public";
     if (!D._all) D._all = {};
-    for (const k of ["works", "publications", "awards", "clubs", "minis", "photos"]) {
+    for (const k of ["works", "publications", "awards", "clubs", "minis"]) {
       if (!D._all[k]) D._all[k] = D[k];
       D[k] = pub ? D._all[k].filter(x => !x.draft) : D._all[k];
     }
@@ -1548,7 +1483,6 @@ class Component extends DCLogic {
       if (tab === "work") return mk([...D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })),
         { label: L("小專案", "Side projects"), go: jump("work-minis"), on: act === "work-minis", cls: "toc-minis" }]);
       if (tab === "other") return mk([["sec-photo", L("攝影作品", "Photography")], ["sec-clubs", L("社團與活動", "Leadership & activities")]].map(([id, label], i) => ({ label, go: jump(id), on: act ? act === id : i === 0 })));
-      if (tab === "skills") return mk(SK.map((b, i) => ({ label: sk(b.n), go: () => { this.setState({ skView: "tree", skB: i, sk: i + ".0" }); window.scrollTo({ top: 0, behavior: "smooth" }); }, on: !!this.state.skView && +(this.state.skB || 0) === i })));
       return [];
     })();
 
@@ -1571,22 +1505,7 @@ class Component extends DCLogic {
       indHX: (this.state.indH ? this.state.indH.x : (this.state.ind ? this.state.ind.x : 0)) + "px",
       indHW: (this.state.indH ? this.state.indH.w : (this.state.ind ? this.state.ind.w : 0)) + "px",
       indHO: this.state.indH && this.state.tabHover !== tab ? 1 : 0,
-      langLabel: `LANGUAGE · ${(LANGS.find(x => x[0] === lang) || LANGS[0])[2]}`,
       langOpen: !!this.state.langOpen,
-      // Theme menu: colour palettes (override light/dark) and background scenes.
-      themeOpen: !!this.state.themeOpen,
-      toggleThemeMenu: () => this.setState(s => ({ themeOpen: !s.themeOpen, langOpen: false })),
-      themeMenuLabel: L("主題", "THEME"), paletteLabel: L("配色", "Colours"), bgLabel: L("背景", "Background"),
-      palettes: [[null, "HALCYON", "HALCYON", "linear-gradient(135deg,#E7E8E4 50%,#08090A 50%)", "#E3A72C"], ["paper", "舊紙", "Paper", "#EFE7D6", "#9C4A2F"], ["terminal", "終端機", "Terminal", "#050805", "#39FF6A"], ["nightsea", "夜海", "Night Sea", "#0A1424", "#5CC8E0"]].map(([id, zh, e, bgc, acc]) => {
-        const on = (this.state.palette || null) === id;
-        return { name: L(zh, e), bg: bgc, accent: acc, ring: on ? "var(--signal)" : "var(--border-strong)", color: on ? "var(--text-signal)" : "var(--text-secondary)",
-          go: () => { this.setState({ palette: id }, () => { this.applyMode(); this._bgStatic && this._bgStatic(); }); try { if (id) localStorage.setItem("resume-palette", id); else localStorage.removeItem("resume-palette"); } catch (e) {} } };
-      }),
-      bgOpts: [["auto", "自動", "Auto", ""], ["line-trace", "訊號線", "Signal lines", "─"], ["line-net", "神經網絡", "Neural network", "─"], ["ascii-trace", "字元訊號", "ASCII signal", "A"], ["ascii-net", "字元網絡", "ASCII network", "A"], ["dna", "DNA 字元雨", "DNA rain", "A"], ["off", "關閉", "Off", ""]].map(([id, zh, e, tag]) => {
-        const on = (this.state.bg || "auto") === id;
-        return { name: L(zh, e), tag, color: on ? "var(--text-signal)" : "var(--text-secondary)", bg: on ? "var(--surface-plate-2)" : "transparent",
-          go: () => { this.setState({ bg: id }, () => this._bgStatic && this._bgStatic()); try { localStorage.setItem("resume-bg", id); } catch (e) {} } };
-      }),
       langShort: (LANGS.find(x => x[0] === lang) || LANGS[0])[2],
       toggleLangMenu: () => this.setState(s => ({ langOpen: !s.langOpen })),
       langs: LANGS.map(([code, name, short]) => ({
@@ -1596,50 +1515,26 @@ class Component extends DCLogic {
         go: () => { this.setState({ lang: code, langOpen: false }); try { localStorage.setItem("resume-lang", code); } catch (e) {} }
       })),
       ...(() => {
-        const cur = this.state.theme || "light";
+        const cur = this.state.theme || "dark";
         const names = { auto: ["◐ 自動", "◐ AUTO"], dark: ["● 深色", "● DARK"], light: ["○ 淺色", "○ LIGHT"] };
         const next = { auto: "dark", dark: "light", light: "auto" };
         return {
-          themeLabel: L(names[cur][0], names[cur][1]),
           themeIcon: L(names[cur][0], names[cur][1]).slice(0, 1),
           themeWord: L(names[cur][0], names[cur][1]).slice(2),
           cycleTheme: () => { const th = next[cur]; this.setState({ theme: th }, this.applyMode); try { localStorage.setItem("resume-theme", th); } catch (e) {} }
         };
       })(),
-      toggleLang: () => { const l = en ? "zh" : "en"; this.setState({ lang: l }); try { localStorage.setItem("resume-lang", l); } catch (e) {} },
-      doPrint: () => this.setState({ printing: true }, () => { this.applyMode(); setTimeout(() => window.print(), 250); }),
-      openResume: () => { window.open("Resume_songwenhuang.pdf", "_blank", "noopener"); },
-      resumeLabel: L("履歷 PDF", "RESUME"),
       showHome: pr || tab === "home", showAcad: pr || tab === "acad", showWork: pr || tab === "work", showOther: pr || tab === "other", showSkills: (pr && !HIDE.includes("skills")) || tab === "skills",
       ...(() => {
         const rowsOf = (n, path, last) => [{ n, id: path.join("."), last }, ...n.c.flatMap((ch, i) => rowsOf(ch, [...path, i], [...last, i === n.c.length - 1]))];
         const desc = n => n.c.flatMap(ch => [ch, ...desc(ch)]);
         const all = SK.flatMap((b, i) => rowsOf(b, [i], []));
         const nodes = all.filter(r => r.id.includes("."));
-        const B = Math.min(+(this.state.skB || 0), SK.length - 1), br = SK[B];
-        const sel = this.state.sk && this.state.sk.startsWith(B + ".") && all.find(r => r.id === this.state.sk) ? this.state.sk : B + ".0";
-        const sn = all.find(r => r.id === sel).n;
         const hatch = "repeating-linear-gradient(135deg, var(--surface-plate) 0 3px, var(--surface-page) 3px 7px)";
-        const st = (n, id) => ({
-          go: () => this.setState({ sk: id }),
-          border: id === sel ? "var(--signal)" : n.ok ? "var(--state-ok)" : "var(--border-strong)",
-          bg: n.ok ? "var(--state-ok)" : hatch,
-          ink: n.ok ? "var(--text-on-solid)" : id === sel ? "var(--text-signal)" : "var(--text-secondary)",
-          label: id === sel ? "var(--text-signal)" : n.ok ? "var(--text-primary)" : "var(--text-secondary)",
-          link: sk(n.link)
-        });
-        const lvOf = n => { const d = [n, ...desc(n)]; return `${d.filter(x => x.ok).length}/${d.length}`; };
-        const go = i => this.setState({ skB: i, sk: i + ".0" });
-        const bd = desc(br);
         return {
           skillTitle: L("技能樹", "Skill tree"),
-          skillCount: `${nodes.filter(r => r.n.ok).length} / ${nodes.length} ${L("已驗證", "VERIFIED")}`,
           skProofLabel: L("證明", "Evidence"),
-          skTabs: SK.map((b, i) => ({ label: sk(b.n), no: "0" + (i + 1), lv: lvOf(b).replace(/^(\d+)\/(\d+)$/, (m, a, c) => `${a}/${c - 1}`), go: () => go(i),
-            color: i === B ? "var(--text-signal)" : "var(--text-secondary)", rule: i === B ? "var(--signal)" : "transparent" })),
-          skOverview: !this.state.skView, skTree: !!this.state.skView,
-          skBack: () => this.setState({ skView: null }), skBackLabel: L("總覽", "Overview"),
-          skTotal: `${nodes.filter(r => r.n.ok).length} / ${nodes.length}`, skTotalLabel: L("已驗證節點", "NODES VERIFIED"),
+          skOverview: true,
           ...(() => {
             // Skill-tree layout (design units; everything is placed in % so the tree scales with the page).
             const phone = !!this.state.skNarrow, P = [], L1 = [];
@@ -1742,33 +1637,16 @@ class Component extends DCLogic {
                 root: { l: pct(pos.root.x - rootSz / 2, W), t: pct(pos.root.y - rootSz / 2, H), w: pct(rootSz, W) },
                 fs: { rootName: fs(L("技能樹", "Skill tree").length > 4 ? 10 : 12.5), rootSub: fs(11), catSub: fs(10) } },
               // Computer: the whole tree fits the window. Phone: the window opens on the root and its five branches (the tree is ~2× the window; drag / pinch to see the rest).
-              skView: phone ? { box: "height:min(64vh,560px);height:min(64svh,560px)", clip: "hidden", touch: "none", w: "206.7%", l: "-53.35%", t: `calc(50% - ${(pos.root.y / W * 206.7).toFixed(2)}cqi)`,
+              skView: phone ? { box: "height:max(260px,calc((100vh - 172px) / 0.88));height:max(260px,calc((100svh - 172px) / 0.88))", clip: "hidden", touch: "none", w: "206.7%", l: "-53.35%", t: `calc(50% - ${(pos.root.y / W * 206.7).toFixed(2)}cqi)`,
                   cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none",
                   hint: foc ? "" : L("角標內：拖曳移動、雙指縮放 · 點一下看路線 · 長按放大看說明", "Inside the corner marks: drag to move, pinch to zoom · tap for the route · long-press for details") }
-                : { box: `aspect-ratio:${W} / ${H};max-width:min(1400px,calc((100vh - 130px) * ${(W / H).toFixed(3)}))`, clip: foc || this.state.skClip ? "hidden" : "visible", touch: "auto", w: "100%", l: "0", t: "0",
+                : { box: `aspect-ratio:${W} / ${H};max-width:min(1400px,calc((100vh - 170px) * ${(W / H).toFixed(3)}))`, clip: foc || this.state.skClip ? "hidden" : "visible", touch: "auto", w: "100%", l: "0", t: "0",
                   cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none", hint: "" },
               skMapClick: () => { if (recent(this._skDragT, 350) || recent(this._skLong, 900)) return; if (foc) return this.skUnfocus(); if (this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); } },
               skPop: pid ? { on: true, ...ppos, ...info(pid), moreLabel: sk("查看詳細 →"), more: e => { stop(e); this.skFocus(pid); }, stop } : { on: false },
               skFoc: foc ? { on: true, ...info(foc), slots: [{ id: info(foc).slot }], left: phone ? "36%" : "42%", nameFs: phone ? "15px" : "20px", stop, close: e => { stop(e); this.skUnfocus(); } } : { on: false, slots: [] }
             };
           })(),
-          skPrev: () => go((B + SK.length - 1) % SK.length), skNext: () => go((B + 1) % SK.length),
-          skBr: { no: "0" + (B + 1), name: sk(br.n), sub: sk(br.sub), link: sk(br.link), lv: `LV ${bd.filter(x => x.ok).length} / ${bd.length}`,
-            segs: bd.map(x => x.ok ? "var(--state-ok)" : "var(--track-empty)") },
-          skHubs: br.c.map((hb, hi) => {
-            const id = `${B}.${hi}`;
-            return { ...st(hb, id), no: String(hi + 1).padStart(2, "0"), name: sk(hb.n), lv: lvOf(hb),
-              rows: hb.c.flatMap((ch, i) => rowsOf(ch, [B, hi, i], [i === hb.c.length - 1])).map(r => ({
-                ...st(r.n, r.id), name: sk(r.n.n), no: String(+r.id.split(".").pop() + 1).padStart(2, "0"),
-                guides: r.last.slice(0, -1).map(l => ({ bg: l ? "transparent" : "var(--border-strong)" })),
-                vh: r.last[r.last.length - 1] ? "17px" : "100%"
-              })) };
-          }),
-          skSel: { cat: sk(br.n), no: sel.split(".").map(x => +x + 1).join("."), name: sk(sn.n), d: sn.c.map(ch => sk(ch.n)), link: sk(sn.link),
-            status: sn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: sn.ok ? "ok" : "idle",
-            proof: sn.p ? (sn.p[lang] || sn.p.zh) : L("待補證明", "Evidence pending"),
-            proofColor: sn.p ? "var(--text-primary)" : "var(--text-faint)" },
-          skSlots: nodes.map(r => ({ id: `skill-${r.id}`, display: r.id === sel ? "block" : "none", on: r.id === sel ? "on" : "" }))
         };
       })(),
       role: t(D.role), headline: t(D.headline), intro: t(D.intro), location: t(D.location),
@@ -1783,31 +1661,17 @@ class Component extends DCLogic {
           Behance: "M3 3h8v8H3z M13 3h8v8h-8z M3 13h8v8H3z M13 13h8v8h-8z"
         };
         const isContact = l => l.label === "Email" || l.label === "Phone";
+        // A line icon as a CSS mask (url(data:…)), so the template never holds an unfilled SVG path.
+        const lineMask = d => "url(data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`).replace(/[()']/g, ch => "%" + ch.charCodeAt(0).toString(16)) + ")";
         return {
-          pinIcon: "M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z M12 6.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z",
-          contactRows: D.links.filter(isContact).map(l => ({ ...l, d: ICON[l.label] || ICON.Email })),
+          pinMask: lineMask("M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z M12 6.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z"),
+          contactRows: D.links.filter(isContact).map(l => ({ ...l, mask: lineMask(ICON[l.label] || ICON.Email) })),
           socials: D.links.filter(l => !isContact(l)).map(l => ({ ...l, d: ICON[l.label] || "M10 14l4-4 M9 7h8v8 M17 7L7 17", icon: "icons/" + l.label.toLowerCase() + ".png" }))
         };
       })(),
-      locLabel: L("所在地", "Based"), profileLabel: L("簡介", "Profile"),
-      homeSecs: [
-        { label: L("學歷", "Education"), more: L("學術", "Academic"), go: () => this.go("acad"), items: rows(D.education) },
-        { label: L("作品", "Work"), more: L("作品集", "Work"), go: () => this.go("work"), items: D.works.map(w => ({ year: w.year, main: t(w.title), sub: t(w.summary) })) },
-        { label: L("發表", "Publications"), more: L("學術", "Academic"), go: () => this.go("acad"), items: rows(D.publications) },
-        { label: L("攝影", "Photography"), more: L("其他", "Other"), go: () => this.go("other"), items: [{ year: "—", main: L(PHOTO_N + " 張作品", PHOTO_N + " frames"), sub: "" }] }
-      ],
+      locLabel: L("所在地", "Based"),
       ...(() => {
-        const lay = this.state.layout || this.props.homeLayout || "C";
-        const edu = rows(D.education), pub = rows(D.publications);
-        const work = D.works.map(w => ({ year: w.year, main: t(w.title), sub: t(w.summary) }));
         return {
-          isA: lay === "A", isB: lay === "B", isC: lay === "C", isD: lay === "D",
-          layoutOpts: [["A", "列表", "Rows"], ["B", "側欄", "Sidebar"], ["C", "區塊", "Blocks"], ["D", "三欄", "3 columns"]].map(([id, zh, e]) => ({
-            label: `${id} · ${L(zh, e)}`, go: () => this.setState({ layout: id }),
-            color: id === lay ? "var(--text-signal)" : "var(--text-secondary)",
-            rule: id === lay ? "var(--signal)" : "var(--border-hair)"
-          })),
-          homeWork: work,
           listSecs: [
             { no: "01", gap: "10px", span: 25, mr: "48px", label: L("研究與專案經驗", "Research & projects"), go: () => this.go("work"), items: D.research.map(it).map(orgRight) },
             { no: "02", gap: "10px", span: 15, mr: "48px", label: L("榮譽與獎助", "Honors"), go: () => this.go("acad"), items: D.awards.map(it).map(orgRight) },
@@ -1818,72 +1682,9 @@ class Component extends DCLogic {
             // A section whose tab is hidden keeps its summary here, but its header no longer links anywhere.
             const off = s.no === "05" && HIDE.includes("skills");
             return { ...s, go: off ? () => {} : s.go, cur: off ? "default" : "pointer", hov: off ? "inherit" : "var(--text-signal)", arrow: off ? "hidden" : "visible" };
-          }),
-          colSecs: [
-            { no: "01", title: L("學術", "Academic"), go: () => this.go("acad"), photos: false, groups: [{ label: L("學歷", "Education"), items: edu }, { label: L("發表", "Publications"), items: pub }] },
-            { no: "02", title: L("作品", "Work"), go: () => this.go("work"), photos: false, groups: [{ label: "", items: work }] },
-            { no: "03", title: L("攝影", "Photography"), go: () => this.go("other"), photos: true, groups: [] }
-          ],
-          homePhotos: D.photos.slice(0, 4).map((p, i) => ({ slotId: `photo-${i + 1}` })),
-          workLabel: L("作品", "Work"), photoLabel: L("攝影", "Photography"),
-          goWork: () => this.go("work"), goOther: () => this.go("other")
-        };
-      })(),
-      ...(() => {
-        const G = [["research", "研究與專案", "Research"], ["publications", "發表與演講", "Pubs & talks"], ["awards", "獲獎", "Awards"], ["clubs", "課外活動", "Activities"]];
-        const hl = this.state.hl || [];
-        const key = y => { if (/進行中|至今/.test(y || "")) return 999999; const m = (y || "").match(/(20\d\d)(?:\.(\d\d))?/); return m ? +m[1] * 100 + (+m[2] || 0) : -1; };
-        const all = G.flatMap(([k, zh, e]) => D[k].map(r => ({ ...it(r), k, group: L(zh, e), s: key(r.year) }))).sort((a, b) => b.s - a.s);
-        const toggle = k => this.setState(s => { const c = s.hl || []; return { hl: c.includes(k) ? c.filter(x => x !== k) : [...c, k] }; });
-        let prev = null;
-        return {
-          topSecs: [
-            { no: "01", label: L("學歷", "Education"), go: () => this.go("acad"), items: D.education.map(it) },
-            { no: "02", label: L("技能", "Skills"), go: () => this.go("skills"), items: D.skills.map(it) }
-          ],
-          tlTitle: L("經歷時間軸", "Timeline"),
-          tlChips: [
-            { label: L("全部", "All"), n: all.length, go: () => this.setState({ hl: [] }), rule: hl.length ? "var(--border-hair)" : "var(--signal)", color: hl.length ? "var(--text-secondary)" : "var(--text-signal)" },
-            ...G.map(([k, zh, e]) => { const on = hl.includes(k); return { label: L(zh, e), n: D[k].length, go: () => toggle(k), rule: on ? "var(--signal)" : "var(--border-hair)", color: on ? "var(--text-signal)" : "var(--text-secondary)" }; })
-          ],
-          ...(() => {
-            const bk = r => r.s === 999999 ? "NOW" : r.s < 0 ? "—" : String(Math.floor(r.s / 100));
-            const ys = [...new Set(all.map(bk))].sort((a, b) => (a === "—" ? 1e9 : a === "NOW" ? 1e8 : +a) - (b === "—" ? 1e9 : b === "NOW" ? 1e8 : +b));
-            return {
-              tlYears: ys.map(y => y === "NOW" ? L("進行中", "NOW") : y),
-              tlCols: `120px repeat(${ys.length}, minmax(170px, 1fr))`,
-              tlMin: `${120 + ys.length * 170}px`,
-              lanes: G.map(([k, zh, e]) => {
-                const on = !hl.length || hl.includes(k), lit = hl.length && on;
-                return { label: L(zh, e), n: D[k].length, go: () => toggle(k),
-                  bar: lit ? "var(--signal)" : "transparent",
-                  labelColor: lit ? "var(--text-signal)" : on ? "var(--text-primary)" : "var(--text-faint)",
-                  color: on ? "var(--text-primary)" : "var(--text-faint)",
-                  subColor: on ? "var(--text-secondary)" : "var(--text-faint)",
-                  yearColor: lit ? "var(--text-signal)" : on ? "var(--text-secondary)" : "var(--text-faint)",
-                  cells: ys.map(y => ({ items: all.filter(r => r.k === k && bk(r) === y) })) };
-              })
-            };
-          })(),
-          tl: all.map(r => {
-            const on = !hl.length || hl.includes(r.k), lit = hl.length && on;
-            const y = r.year === "—" || !r.year ? "—" : r.year;
-            const yearShow = y === prev ? "" : y; prev = y;
-            return { ...r, yearShow,
-              color: on ? "var(--text-primary)" : "var(--text-faint)",
-              subColor: on ? "var(--text-secondary)" : "var(--text-faint)",
-              yearColor: lit ? "var(--text-signal)" : on ? "var(--text-secondary)" : "var(--text-faint)",
-              mark: lit ? "var(--signal)" : on ? "var(--text-secondary)" : "var(--border-hair)",
-              fill: lit ? "var(--signal)" : "var(--surface-page)" };
           })
         };
       })(),
-      overviewTitle: L("總覽", "Overview"),
-      cards: [
-        { no: "02", en: "ACADEMIC", title: L("學術", "Academic"), desc: L("學歷、論文與海報發表、獲獎、學會與研討會。", "Education, papers and posters, awards, societies and conferences."), meta: `${D.education.length} ${L("學歷", "DEGREES")} · ${D.publications.length} ${L("發表", "PUBS")}`, cta: L("進入", "Open"), go: () => this.go("acad") },
-        { no: "03", en: "WORK", title: L("作品集成果", "Selected work"), desc: t(D.works[0].summary), meta: `${D.works.length} ${L("件作品", "PROJECTS")}`, cta: L("進入", "Open"), go: () => this.go("work") },
-        { no: "04", en: "PHOTOGRAPHY", title: L("攝影", "Photography"), desc: L("工作之外用相機記錄的東西。", "What gets recorded with a camera outside the lab."), meta: `${PHOTO_N} ${L("張", "FRAMES")}`, cta: L("進入", "Open"), go: () => this.go("other") }
-      ],
       acadTitle: L("學術", "Academic"),
       acadGroups: [
         ["publications", "SEC 01", "發表、專利與演講", "Publications, patents & talks", "[ 論文首頁／海報／演講照 ]"],
@@ -1899,7 +1700,7 @@ class Component extends DCLogic {
         // Items with their own photos show them (with thumbnails to switch); others keep the drop-in image slot.
         // Slot ids stay tied to each item (not its position), so a dropped-in image follows its item when the order changes.
         const sid = k === "awards" ? `acad-awards-${AW_SLOT[r.head.zh] || 9}` : `acad-${k}-${D._all[k].indexOf(r) + 1}`, pics = r.photos || [], sel = Math.max(0, Math.min((this.state.acadPic || {})[sid] || 0, pics.length - 1));
-        const pp = r.paper;
+        const pp = r.paper, small = src => src.replace("photos/acad/", "photos/acad/s/");
         const paper = pp ? { hasPaper: true,
           authors: pp.authors.map((n, j, a) => ({ name: n, sep: j < a.length - 1 ? ", " : "", color: n === pp.self ? "var(--text-primary)" : "var(--text-secondary)", fw: n === pp.self ? 600 : 400 })),
           edit: `${L("編輯", "Edited by")} ${pp.editor} · ${L("投稿", "Received")} ${pp.received} · ${L("接受", "Accepted")} ${pp.accepted}`,
@@ -1914,12 +1715,13 @@ class Component extends DCLogic {
           // Papers: "date | journal" on top, then the linked title; everything else: "date | event", then the role below.
           lineHead: dr(r) + (pp || swap ? it(r).org : it(r).head), hdFs: pp ? "14px" : lay.headFs, orgLine: pp || txt || swap ? "" : it(r).org, subHead: swap ? it(r).head : "", lhColor: pp || swap ? "var(--text-faint)" : "var(--text-primary)", preHead: txt ? it(r).org : "", ...(pp ? { year: pp.published } : {}),
           cardCss: txt ? `flex-direction:row;align-items:baseline;gap:20px;border-top:1px solid var(--border-hair);padding-top:12px${firstTxt ? "" : ";margin-top:-16px"}` : "",
-          slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length && !txt, pic: pics[sel] || "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
+          // Cards show a smaller copy (photos/acad/s/); the big PNAS card and the enlarged view use the full file.
+          slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length && !txt, pic: pics[sel] ? (big ? pics[sel] : small(pics[sel])) : "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
           zoom: zoom(pics.map(src => ({ src, alt: it(r).head })), sel),
           thumbRow: pics.length > 1 && !low, arrows: pics.length > 1 && low,
           prev: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: (sel - 1 + pics.length) % pics.length } })); },
           next: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: (sel + 1) % pics.length } })); },
-          thumbs: pics.map((src, j) => ({ src, ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
+          thumbs: pics.map((src, j) => ({ src: small(src), ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
       }) })),
       workTitle: L("專案", "Projects"),
       minisTitle: L("小專案", "Side projects"), minisIntro: L("之前做的 3D 建模。", "Earlier 3D modelling work."),
@@ -1930,8 +1732,8 @@ class Component extends DCLogic {
       photoIntro: L("四年攝影經驗，專注建築攝影；擔任 EMBO 國際研討會官方攝影師、臺大各社團與學系官方攝影師，拍過光舞、火舞、街舞、魔術、樂團、太極拳與擊劍。", "Four years behind the camera, mostly architecture; also club showcases, portraits, and performances — light and fire dance, street dance, magic, bands, tai chi, fencing."),
       clubTitle: L("社團與活動", "Leadership & activities"), clubs: rows(D.clubs),
       portraitTitle: L("形象照", "Portraits"),
-      portraits: D.portraits.map((p, i, a) => ({ zoom: zoom(a.map(q => ({ src: q.src, alt: t(q.title) })), i), src: p.src, title: t(p.title), meta: p.meta })),
-      photos: D.photos.map(p => ({ slotId: `photo-${D._all.photos.indexOf(p) + 1}`, title: dr(p) + t(p.title), meta: p.meta })),
+      // Portraits: a small copy (photos/s/) in the row, the full file when enlarged.
+      portraits: D.portraits.map((p, i, a) => ({ zoom: zoom(a.map(q => ({ src: q.src, alt: t(q.title) })), i), src: p.src.replace("photos/", "photos/s/"), title: t(p.title), meta: p.meta })),
       ...(() => {
         // No colour chosen (the default): the carousel drifts and the wall shows everything. A chosen colour: the carousel stops on it and the wall shows that colour.
         const idle = this.state.photoColor == null, sel = idle ? 0 : Math.max(0, Math.min(this.state.photoColor, D.palettes.length - 1)), N = D.palettes.length;
