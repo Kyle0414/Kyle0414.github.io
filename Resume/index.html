@@ -40,6 +40,12 @@
     /* 60 fine tracks, no track gap; each cell's right margin makes the gutter. Spans: top 25/15/20, bottom 27/33 (45% / 55%). */
     @container page (max-width:1560px){.tb-long{display:none !important}}
     @container page (max-width:1300px){.tb-brand{display:none !important}}
+    /* Public site (and the editor's "public" preview): empty image slots, editor-only bits and drafts are hidden. */
+    [data-view="public"] .slotwrap:has(image-slot:not([data-filled])){display:none !important}
+    [data-view="public"] .pub-hide-empty:not(:has(image-slot[data-filled])){display:none !important}
+    [data-view="public"] .sk-proof:not(:has(.slotwrap.on image-slot[data-filled])){display:none !important}
+    [data-view="public"] .ed-only{display:none !important}
+    [data-view="public"]:not(:has(#work-minis image-slot[data-filled])) .toc-minis{display:none !important}
     @container page (max-width:700px){.pc-row{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}
     /* Colour gallery: the line and the photos ripple out from the chosen colour, like the robot console's CONNECT ripple
        (rise, overshoot down, small bounce, settle). A and B are the same; switching name restarts the animation. */
@@ -82,7 +88,7 @@
     @media (prefers-reduced-motion:reduce){[data-intro],[data-intro] *,main section[data-screen-label]{animation:none !important}[data-tabnav] *{transition:none !important}}
   </style>
 </helmet>
-<div data-pageframe="" style="min-height:100vh;background-color:var(--surface-page);font-weight:300;font-size:14px;line-height:1.85;container-type:inline-size;container-name:page;position:relative;z-index:0;{{ frameStyle }}">
+<div data-pageframe="" data-view="{{ viewMode }}" style="min-height:100vh;background-color:var(--surface-page);font-weight:300;font-size:14px;line-height:1.85;container-type:inline-size;container-name:page;position:relative;z-index:0;{{ frameStyle }}">
   <canvas data-bgfx="" data-noprint="" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 42%,rgba(0,0,0,.35) 0%,rgba(0,0,0,.6) 45%,#000 80%);mask-image:radial-gradient(ellipse 60% 55% at 50% 42%,rgba(0,0,0,.35) 0%,rgba(0,0,0,.6) 45%,#000 80%)"></canvas>
 
   <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ false }}">
@@ -186,7 +192,7 @@
         <div class="home-grid" style="display:grid;row-gap:0">
           <sc-for list="{{ listSecs }}" as="s" hint-placeholder-count="5">
             <div class="home-cell" style="grid-column:span {{ s.span }};margin-right:{{ s.mr }};border-top:2px solid var(--border-ink);padding:16px 0 26px;display:flex;flex-direction:column;gap:14px;min-width:0">
-              <div role="button" onClick="{{ s.go }}" style="display:flex;align-items:baseline;gap:10px;cursor:pointer" style-hover="color:var(--text-signal)"><span style="font-size:30px;font-weight:300;letter-spacing:.02em;line-height:1;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ s.no }}</span><span data-fit="" data-fit-max="22" data-fit-min="14" style="font-size:22px;font-weight:300;letter-spacing:.02em;line-height:1.2;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden">{{ s.label }}</span><span data-noprint="" style="margin-left:auto;font-size:22px;line-height:1;color:var(--text-faint)">→</span></div>
+              <div role="button" onClick="{{ s.go }}" style="display:flex;align-items:baseline;gap:10px;cursor:{{ s.cur }}" style-hover="color:{{ s.hov }}"><span style="font-size:30px;font-weight:300;letter-spacing:.02em;line-height:1;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ s.no }}</span><span data-fit="" data-fit-max="22" data-fit-min="14" style="font-size:22px;font-weight:300;letter-spacing:.02em;line-height:1.2;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden">{{ s.label }}</span><span data-noprint="" style="margin-left:auto;font-size:22px;line-height:1;color:var(--text-faint);visibility:{{ s.arrow }}">→</span></div>
               <div style="display:flex;flex-direction:column;gap:{{ s.gap }}">
                 <sc-for list="{{ s.items }}" as="r" hint-placeholder-count="3">
                   <div style="display:{{ r.disp }};flex-wrap:wrap;grid-template-columns:{{ r.cols }};gap:2px 16px;font-size:{{ r.fs }};line-height:{{ r.lh }};align-items:baseline;margin-top:{{ r.gapTop }}">
@@ -205,9 +211,8 @@
     </sc-if>
 
     <sc-if value="{{ showAcad }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="02 學術" data-pagebreak="" style="padding-top:64px">
-        <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">02 · ACADEMIC</span></div>
-        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 8px">{{ acadTitle }}</h2>
+      <section data-screen-label="02 學術" data-pagebreak="" style="padding-top:32px">
+        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0 0 8px">{{ acadTitle }}</h2>
         <sc-for list="{{ acadGroups }}" as="g" hint-placeholder-count="4">
           <div id="{{ g.anchor }}" data-toc-target="" style="margin-top:44px">
             <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="{{ g.index }}" title="{{ g.title }}" hint-size="100%,16px"></x-import></sc-if>
@@ -220,7 +225,7 @@
                       <sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px"><sc-for list="{{ r.thumbs }}" as="th" hint-placeholder-count="3"><div role="button" onClick="{{ th.go }}" style="flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:1 / 1;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;opacity:{{ th.op }}"></div></sc-for></div></sc-if>
                     </div>
                   </sc-if>
-                  <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><div style="position:relative;{{ r.box }};border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div></sc-if>
+                  <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="position:relative;{{ r.box }};border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div></sc-if>
                   <!-- Title line: date | event (wrapped lines stay right of the date); role/result on the line below. -->
                   <sc-if value="{{ r.multiLine }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:baseline;gap:0 10px;min-width:0;font-size:{{ r.hdFs }};line-height:1.5">
                     <span style="flex:none;min-width:4.4ch;color:var(--text-signal);font-size:{{ r.yearFs }};letter-spacing:.06em;font-variant-numeric:tabular-nums">{{ r.year }}</span>
@@ -244,9 +249,8 @@
     </sc-if>
 
     <sc-if value="{{ showWork }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="03 作品" data-pagebreak="" style="padding-top:64px">
-        <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">03 · PROJECTS</span></div>
-        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 32px">{{ workTitle }}</h2>
+      <section data-screen-label="03 作品" data-pagebreak="" style="padding-top:32px">
+        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0 0 32px">{{ workTitle }}</h2>
         <div class="work-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start">
           <sc-for list="{{ works }}" as="w" hint-placeholder-count="4">
             <div id="{{ w.anchor }}" data-toc-target="" style="border:1px solid {{ w.border }};background:var(--surface-plate);min-width:0">
@@ -256,7 +260,7 @@
                 <span style="font-size:20px;font-weight:300;letter-spacing:-.01em;grid-column:1 / -1">{{ w.title }}</span>
                 <span style="font-size:13px;color:var(--text-secondary);grid-column:1 / -1;max-width:70ch;text-wrap:pretty">{{ w.summary }}</span>
               </div>
-              <sc-if value="{{ w.noShot }}" hint-placeholder-val="{{ true }}"><div style="padding:0 22px 20px"><div style="position:relative;aspect-ratio:16 / 9;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div></sc-if>
+              <sc-if value="{{ w.noShot }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="padding:0 22px 20px"><div style="position:relative;aspect-ratio:16 / 9;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div></sc-if>
               <sc-if value="{{ w.hasShot }}" hint-placeholder-val="{{ false }}"><div style="padding:0 22px 20px;display:flex;flex-direction:column;gap:6px">
                 <div role="button" onClick="{{ w.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;aspect-ratio:16 / 10;background:#0b0b0b;cursor:zoom-in"><img src="{{ w.shot }}" alt="{{ w.shotCap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.6);color:#fff">{{ w.shotCount }}</span></div>
                 <div style="display:flex;gap:4px"><sc-for list="{{ w.thumbs }}" as="th" hint-placeholder-count="5"><div role="button" onClick="{{ th.go }}" title="{{ th.cap }}" style="flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:16 / 10;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="{{ th.cap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:{{ th.op }}"></div></sc-for></div>
@@ -287,15 +291,15 @@
           </sc-for>
         </div>
         <!-- Side projects: earlier 3D modelling work, one drop-in image slot per piece. -->
-        <div id="work-minis" data-toc-target="" style="margin-top:56px;padding-top:28px;border-top:1px solid var(--border-strong)">
+        <div id="work-minis" class="pub-hide-empty" data-toc-target="" style="margin-top:56px;padding-top:28px;border-top:1px solid var(--border-strong)">
           <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px">
             <h3 style="margin:0;font-size:22px;font-weight:300;letter-spacing:-.01em">{{ minisTitle }}</h3>
-            <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ minisCount }}</span>
+            <span class="ed-only" style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ minisCount }}</span>
           </div>
           <p style="margin:8px 0 0;font-size:13px;color:var(--text-secondary)">{{ minisIntro }}</p>
           <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:20px 16px">
             <sc-for list="{{ minis }}" as="m" hint-placeholder-count="8">
-              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <div class="slotwrap" style="display:flex;flex-direction:column;gap:8px;min-width:0">
                 <div style="position:relative;aspect-ratio:1 / 1;border:1px solid var(--border-strong)"><image-slot id="{{ m.slotId }}" shape="rect" placeholder="[ 3D MODEL ]"></image-slot></div>
                 <div style="display:flex;align-items:baseline;gap:0 10px;font-size:13px;line-height:1.5;min-width:0"><span style="flex:none;color:var(--text-signal);font-size:11px;letter-spacing:.06em">{{ m.no }}</span><span style="flex:none;color:var(--border-strong);font-size:11px">|</span><span style="min-width:0">{{ m.title }}</span></div>
               </div>
@@ -306,9 +310,11 @@
     </sc-if>
 
     <sc-if value="{{ showSkills }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="04 技能" data-pagebreak="" style="padding-top:64px">
-        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)"><span>// <span style="color:var(--text-signal)">04 · SKILLS</span></span><span>{{ skillCount }}</span></div>
-        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 8px">{{ skillTitle }}</h2>
+      <section data-screen-label="04 技能" data-pagebreak="" style="padding-top:32px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px;margin:0 0 8px">
+          <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0">{{ skillTitle }}</h2>
+          <span style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">{{ skillCount }}</span>
+        </div>
         <sc-if value="{{ skOverview }}" hint-placeholder-val="{{ true }}">
           <div style="margin-top:28px;overflow-x:auto;padding-bottom:8px">
             <div style="position:relative;width:720px;height:620px;margin:0 auto">
@@ -395,9 +401,9 @@
           </sc-for>
         </div>
         <div style="margin-top:16px;border:1px solid var(--border-strong);background:var(--surface-plate);padding:20px;display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-start">
-          <div style="flex:0 1 280px;min-width:200px">
+          <div class="sk-proof" style="flex:0 1 280px;min-width:200px">
             <sc-for list="{{ skSlots }}" as="sl" hint-placeholder-count="1">
-              <div style="display:{{ sl.display }};position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div>
+              <div class="slotwrap {{ sl.on }}" style="display:{{ sl.display }};position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div>
             </sc-for>
           </div>
           <div style="flex:1 1 260px;display:flex;flex-direction:column;gap:10px;min-width:0">
@@ -417,9 +423,8 @@
     </sc-if>
 
     <sc-if value="{{ showOther }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="05 其他" data-pagebreak="" style="padding-top:64px">
-        <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--text-secondary)">// <span style="color:var(--text-signal)">04 · PHOTOGRAPHY</span></div>
-        <h2 id="sec-photo" data-toc-target="" style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:14px 0 8px">{{ photoTitle }}</h2>
+      <section data-screen-label="05 其他" data-pagebreak="" style="padding-top:32px">
+        <h2 id="sec-photo" data-toc-target="" style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0 0 8px">{{ photoTitle }}</h2>
         <p style="margin:0 0 36px;color:var(--text-secondary);max-width:62ch;text-wrap:pretty">{{ photoIntro }}</p>
         <!-- First row: the portfolio by colour. Pick a colour; its photos show below. -->
         <div class="pc-row" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px">
@@ -450,7 +455,7 @@
         </div>
         <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px 20px">
           <sc-for list="{{ photos }}" as="p" hint-placeholder-count="6">
-            <figure style="margin:0;display:flex;flex-direction:column;gap:10px;min-width:0">
+            <figure class="slotwrap" style="margin:0;display:flex;flex-direction:column;gap:10px;min-width:0">
               <div style="position:relative;aspect-ratio:3 / 2;border:1px solid var(--border-strong)">
                 <image-slot id="{{ p.slotId }}" shape="rect" placeholder="[ PHOTO — DROP IMAGE HERE ]"></image-slot>
               </div>
@@ -487,7 +492,7 @@
     <nav class="toc-panel" data-noprint="" aria-label="{{ tocTitle }}" style="position:fixed;right:max(16px,calc(var(--side) - 238px));top:50%;transform:translateY(-50%);z-index:8;width:210px;max-height:70vh;overflow-y:auto;background:var(--surface-plate);border:1px solid var(--border-strong);padding:14px 0 10px;animation:tab-in .4s cubic-bezier(.2,.7,.2,1) both">
       <div style="padding:0 16px 10px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ tocTitle }}</div>
       <sc-for list="{{ toc }}" as="tc" hint-placeholder-count="4">
-        <div role="button" onClick="{{ tc.go }}" style="display:flex;gap:10px;align-items:baseline;padding:7px 16px 7px 13px;border-left:3px solid {{ tc.bar }};cursor:pointer;font-size:12px;line-height:1.4;color:{{ tc.color }};transition:color .2s ease,border-color .2s ease" style-hover="color:var(--text-primary)"><span style="flex:none;font-size:10px;color:var(--text-faint);font-variant-numeric:tabular-nums">{{ tc.no }}</span><span style="min-width:0">{{ tc.label }}</span></div>
+        <div role="button" class="{{ tc.cls }}" onClick="{{ tc.go }}" style="display:flex;gap:10px;align-items:baseline;padding:7px 16px 7px 13px;border-left:3px solid {{ tc.bar }};cursor:pointer;font-size:12px;line-height:1.4;color:{{ tc.color }};transition:color .2s ease,border-color .2s ease" style-hover="color:var(--text-primary)"><span style="flex:none;font-size:10px;color:var(--text-faint);font-variant-numeric:tabular-nums">{{ tc.no }}</span><span style="min-width:0">{{ tc.label }}</span></div>
       </sc-for>
     </nav>
   </sc-if>
@@ -508,7 +513,7 @@
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;intro&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;off&quot;,&quot;session&quot;,&quot;always&quot;],&quot;default&quot;:&quot;off&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;device&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;desktop&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;intro&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;off&quot;,&quot;session&quot;,&quot;always&quot;],&quot;default&quot;:&quot;off&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;edit&quot;,&quot;public&quot;],&quot;default&quot;:&quot;edit&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 const D = {
   name: { zh: "黃嵩文", en: "SONGWEN HUANG" },
   role: { zh: "跨領域神經工程", en: "Interdisciplinary Neuroengineering" },
@@ -825,7 +830,7 @@ class Component extends DCLogic {
       const t = e.changedTouches[0], dx = t.clientX - s.x, dy = t.clientY - s.y;
       if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.8 || Date.now() - s.t > 700) return;
       if ((dx < 0 && s.canR) || (dx > 0 && s.canL)) return;
-      const ids = UI.tabs.map(x => x[0]), j = ids.indexOf(this.state.tab || "home") + (dx < 0 ? 1 : -1);
+      const ids = UI.tabs.map(x => x[0]).filter(id => !(this._hideTabs || []).includes(id)), j = ids.indexOf(this.state.tab || "home") + (dx < 0 ? 1 : -1);
       if (j < 0 || j >= ids.length) return;
       this.go(ids[j]);
       setTimeout(() => { const b = document.querySelector(`[data-tab="${ids[j]}"]`); if (b && b.scrollIntoView) b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" }); }, 60);
@@ -995,7 +1000,7 @@ class Component extends DCLogic {
     };
     const sceneFor = () => {
       const bg = this.state.bg || "auto", home = (this.state.tab || "home") === "home";
-      if (bg === "auto") { const tb = this.state.tab || "home"; return tb === "skills" ? "net" : tb === "other" ? "spark" : "contour"; }
+      if (bg === "auto") { const tb = (this._hideTabs || []).includes(this.state.tab) ? "home" : (this.state.tab || "home"); return tb === "skills" ? "net" : tb === "other" ? "spark" : "contour"; }
       return { "line-trace": "trace", "line-net": "net", "ascii-trace": "atrace", "ascii-net": "anet", dna: "dna", off: "off" }[bg] || "trace";
     };
     const draw = dt => {
@@ -1160,8 +1165,20 @@ class Component extends DCLogic {
   }
 
   renderVals() {
+    // Edit vs public: in the Claude editor (it can save files) you see everything; the published site, or the
+    // editor with the "view" tweak set to public, hides drafts (draft: true on an item), WIP tags and empty image slots.
+    const ed = !!(window.omelette && window.omelette.writeFile), pub = !ed || this.props.view === "public";
+    if (!D._all) D._all = {};
+    for (const k of ["works", "publications", "awards", "clubs", "minis", "photos"]) {
+      if (!D._all[k]) D._all[k] = D[k];
+      D[k] = pub ? D._all[k].filter(x => !x.draft) : D._all[k];
+    }
+    const dr = x => (!pub && x && x.draft ? "[DRAFT] " : "");
     const lang = this.state.lang || "en", en = lang === "en";
-    const tab = this.state.tab || "home";
+    // Tabs hidden on the public site (still there in the editor while they're being written).
+    const HIDE = pub ? ["skills"] : [];
+    this._hideTabs = HIDE;
+    const tab = HIDE.includes(this.state.tab) ? "home" : (this.state.tab || "home");
     const pr = this.state.printing;
     // Photo viewer: zoom(list, i) opens list[i] large; list items are { src, alt }.
     const zoom = (list, i) => () => this.setState({ lb: { list, i } });
@@ -1201,8 +1218,8 @@ class Component extends DCLogic {
       }).filter(Boolean);
       return {
         no: `NO. ${String(i + 1).padStart(2, "0")} · ${yr(w.year)}`,
-        title: t(w.title), summary: t(w.summary), tags: w.tags, fields,
-        open, slotId: `work-shot-${i + 1}`, anchor: `work-${i + 1}`,
+        title: dr(w) + t(w.title), summary: t(w.summary), tags: w.tags, fields,
+        open, slotId: `work-shot-${D._all.works.indexOf(w) + 1}`, anchor: `work-${i + 1}`,
         ...(() => { const sh = w.shots || [], sel = Math.max(0, Math.min((this.state.workPic || {})[i] || 0, sh.length - 1)), cur = sh[sel];
           return { hasShot: sh.length > 0, noShot: !sh.length, shot: cur ? cur[0] : "", shotCap: cur ? L(cur[1], cur[2]) : "", shotCount: cur ? `${sel + 1} / ${sh.length} · ${L(cur[1], cur[2])}` : "",
             zoom: zoom(sh.map(([src, zh, en]) => ({ src, alt: L(zh, en) })), sel),
@@ -1232,7 +1249,7 @@ class Component extends DCLogic {
         introPhoto: O.photo,
         introMask: O.cutout ? "none" : "linear-gradient(to bottom,#000 62%,transparent 98%)",
         introEnter: L("進入", "ENTER"),
-        introPills: UI.tabs.map(([id, zh, e]) => ({ label: L(zh, e), go: () => { this.go(id); this.enterSite(); } }))
+        introPills: UI.tabs.filter(([id]) => !HIDE.includes(id)).map(([id, zh, e]) => ({ label: L(zh, e), go: () => { this.go(id); this.enterSite(); } }))
       };
     })();
 
@@ -1244,7 +1261,7 @@ class Component extends DCLogic {
       const jump = id => () => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); this.setState({ tocActive: id }); };
       if (tab === "acad") return mk([["publications", "發表、專利與演講", "Publications, patents & talks"], ["awards", "榮譽與獎助", "Honors & grants"]].map(([k, zh, e], i) => ({ label: L(zh, e), go: jump("acad-" + k), on: act ? act === "acad-" + k : i === 0 })));
       if (tab === "work") return mk([...D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })),
-        { label: L("小專案", "Side projects"), go: jump("work-minis"), on: act === "work-minis" }]);
+        { label: L("小專案", "Side projects"), go: jump("work-minis"), on: act === "work-minis", cls: "toc-minis" }]);
       if (tab === "other") return mk([["sec-photo", L("攝影作品", "Photography")], ["sec-clubs", L("社團與活動", "Leadership & activities")]].map(([id, label], i) => ({ label, go: jump(id), on: act ? act === id : i === 0 })));
       if (tab === "skills") return mk(SK.map((b, i) => ({ label: b.n, go: () => { this.setState({ skView: "tree", skB: i, sk: i + ".0" }); window.scrollTo({ top: 0, behavior: "smooth" }); }, on: !!this.state.skView && +(this.state.skB || 0) === i })));
       return [];
@@ -1257,8 +1274,8 @@ class Component extends DCLogic {
       eduHead: D.education.map(p => { const m = (p.year || "").match(/(\d{4})(?:\.\d{2})?\s*$/); return { cat: m ? m[1] : "", head: t(p.head) }; }),
       frameStyle: this.props.device === "mobile" ? "min-height:0;width:390px;max-width:100%;height:min(844px,calc(100vh - 40px));margin:20px auto;overflow-y:auto;overflow-x:hidden;border:1px solid var(--border-strong);transform:translateZ(0)" : "",
       brand: t(D.name),
-      tabs: UI.tabs.map(([id, zh, e]) => ({
-        id, label: L(zh, e), go: () => this.go(id), wip: id === "home" ? "" : L("待建置", "WIP"),
+      tabs: UI.tabs.filter(([id]) => !HIDE.includes(id)).map(([id, zh, e]) => ({
+        id, label: L(zh, e), go: () => this.go(id), wip: id === "home" || pub ? "" : L("待建置", "WIP"),
         enter: () => { if (this.state.tabHover !== id) this.setState({ tabHover: id }); },
         lift: this.state.tabHover === id && id !== tab ? "-2px" : "0px",
         color: id === tab ? "var(--text-primary)" : this.state.tabHover === id ? "var(--text-primary)" : "var(--text-secondary)",
@@ -1308,7 +1325,7 @@ class Component extends DCLogic {
       doPrint: () => this.setState({ printing: true }, () => { this.applyMode(); setTimeout(() => window.print(), 250); }),
       openResume: () => { window.open("Resume_songwenhuang.pdf", "_blank", "noopener"); },
       resumeLabel: L("履歷 PDF", "RESUME"),
-      showHome: pr || tab === "home", showAcad: pr || tab === "acad", showWork: pr || tab === "work", showOther: pr || tab === "other", showSkills: pr || tab === "skills",
+      showHome: pr || tab === "home", showAcad: pr || tab === "acad", showWork: pr || tab === "work", showOther: pr || tab === "other", showSkills: (pr && !HIDE.includes("skills")) || tab === "skills",
       ...(() => {
         const rowsOf = (n, path, last) => [{ n, id: path.join("."), last }, ...n.c.flatMap((ch, i) => rowsOf(ch, [...path, i], [...last, i === n.c.length - 1]))];
         const desc = n => n.c.flatMap(ch => [ch, ...desc(ch)]);
@@ -1370,7 +1387,7 @@ class Component extends DCLogic {
             status: sn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: sn.ok ? "ok" : "idle",
             proof: sn.p ? (sn.p[lang] || sn.p.zh) : L("待補證明", "Evidence pending"),
             proofColor: sn.p ? "var(--text-primary)" : "var(--text-faint)" },
-          skSlots: nodes.map(r => ({ id: `skill-${r.id}`, display: r.id === sel ? "block" : "none" }))
+          skSlots: nodes.map(r => ({ id: `skill-${r.id}`, display: r.id === sel ? "block" : "none", on: r.id === sel ? "on" : "" }))
         };
       })(),
       role: t(D.role), headline: t(D.headline), intro: t(D.intro), location: t(D.location),
@@ -1416,7 +1433,11 @@ class Component extends DCLogic {
             { no: "03", gap: "10px", span: 20, mr: "0px", label: L("課外活動", "Activities"), go: () => this.go("other"), items: D.clubs.map(it).map(orgRight) },
             { no: "04", gap: "10px", span: 27, mr: "48px", label: L("發表、專利與演講", "Publications, patents & talks"), go: () => this.go("acad"), items: pubRows().map(noYear) },
             { no: "05", gap: "10px", span: 33, mr: "0px", label: L("技能", "Skills"), go: () => this.go("skills"), items: skillRows() }
-          ],
+          ].map(s => {
+            // A section whose tab is hidden keeps its summary here, but its header no longer links anywhere.
+            const off = s.no === "05" && HIDE.includes("skills");
+            return { ...s, go: off ? () => {} : s.go, cur: off ? "default" : "pointer", hov: off ? "inherit" : "var(--text-signal)", arrow: off ? "hidden" : "visible" };
+          }),
           colSecs: [
             { no: "01", title: L("學術", "Academic"), go: () => this.go("acad"), photos: false, groups: [{ label: L("學歷", "Education"), items: edu }, { label: L("發表", "Publications"), items: pub }] },
             { no: "02", title: L("作品", "Work"), go: () => this.go("work"), photos: false, groups: [{ label: "", items: work }] },
@@ -1490,13 +1511,13 @@ class Component extends DCLogic {
         // Publications: the PNAS paper large on the left, Suzhou + CYCU stacked on the right, the rest in one row below.
         cls: k === "publications" ? "pub-grid" : "", showHead: k !== "publications",
         cols: k === "publications" ? "repeat(12,minmax(0,1fr))" : "repeat(auto-fill,minmax(min(100%,260px),1fr))",
-        rows: (k === "publications" ? PUB_ORDER.map(n => D.publications[n]) : D[k].filter(r => k !== "awards" || !ACAD_SKIP.includes(r.head.zh))).map((r, pos) => {
+        rows: (k === "publications" ? PUB_ORDER.map(n => D._all.publications[n]).filter(r => r && D.publications.includes(r)) : D[k].filter(r => k !== "awards" || !ACAD_SKIP.includes(r.head.zh))).map((r, pos) => {
         const big = k === "publications" && pos === 0, side = k === "publications" && (pos === 1 || pos === 2);
         const lay = { cls: big ? "pub-big" : "", gc: big ? "span 8" : side ? "span 4" : k === "publications" ? "span 3" : "auto", gr: big ? "span 2" : "auto",
           box: big ? "aspect-ratio:16 / 9" : "aspect-ratio:4 / 3", headFs: big ? "19px" : "13px", yearFs: big ? "13px" : "11px" };
         // Items with their own photos show them (with thumbnails to switch); others keep the drop-in image slot.
         // Slot ids stay tied to each item (not its position), so a dropped-in image follows its item when the order changes.
-        const sid = k === "awards" ? `acad-awards-${AW_SLOT[r.head.zh] || 9}` : `acad-${k}-${D[k].indexOf(r) + 1}`, pics = r.photos || [], sel = Math.max(0, Math.min((this.state.acadPic || {})[sid] || 0, pics.length - 1));
+        const sid = k === "awards" ? `acad-awards-${AW_SLOT[r.head.zh] || 9}` : `acad-${k}-${D._all[k].indexOf(r) + 1}`, pics = r.photos || [], sel = Math.max(0, Math.min((this.state.acadPic || {})[sid] || 0, pics.length - 1));
         const pp = r.paper;
         const paper = pp ? { hasPaper: true,
           authors: pp.authors.map((n, j, a) => ({ name: n, sep: j < a.length - 1 ? ", " : "", color: n === pp.self ? "var(--text-primary)" : "var(--text-secondary)", fw: n === pp.self ? 600 : 400 })),
@@ -1508,7 +1529,7 @@ class Component extends DCLogic {
         const href = pp && pp.url ? pp.url : "";
         return { ...it(r), ...lay, ...paper, oneLine: !!r.oneLine, multiLine: !r.oneLine, plainHead: !r.oneLine, linkHead: false, href,
           // Papers: "date | journal" on top, then the linked title; everything else: "date | event", then the role below.
-          lineHead: pp ? it(r).org : it(r).head, hdFs: pp ? "14px" : lay.headFs, orgLine: pp ? "" : it(r).org, ...(pp ? { year: pp.published } : {}),
+          lineHead: dr(r) + (pp ? it(r).org : it(r).head), hdFs: pp ? "14px" : lay.headFs, orgLine: pp ? "" : it(r).org, ...(pp ? { year: pp.published } : {}),
           cardCss: txt ? `flex-direction:row;align-items:baseline;gap:20px;border-top:1px solid var(--border-hair);padding-top:12px${firstTxt ? "" : ";margin-top:-16px"}` : "",
           slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length && !txt, pic: pics[sel] || "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
           zoom: zoom(pics.map(src => ({ src, alt: it(r).head })), sel),
@@ -1517,14 +1538,14 @@ class Component extends DCLogic {
       workTitle: L("專案", "Projects"),
       minisTitle: L("小專案", "Side projects"), minisIntro: L("之前做的 3D 建模。", "Earlier 3D modelling work."),
       minisCount: `${D.minis.length} ${L("件", "PIECES")}`,
-      minis: D.minis.map((m, i) => ({ slotId: `mini-${i + 1}`, no: String(i + 1).padStart(2, "0"), title: t(m.title) })),
-      works,
+      minis: D.minis.map((m, i) => ({ slotId: `mini-${D._all.minis.indexOf(m) + 1}`, no: String(i + 1).padStart(2, "0"), title: dr(m) + t(m.title) })),
+      works, viewMode: pub ? "public" : "edit",
       photoTitle: L("攝影作品", "Photography"),
       photoIntro: L("四年攝影經驗，專注建築攝影；擔任 EMBO 國際研討會官方攝影師、臺大各社團與學系官方攝影師，拍過光舞、火舞、街舞、魔術、樂團、太極拳與擊劍。", "Four years behind the camera, mostly architecture; also club showcases, portraits, and performances — light and fire dance, street dance, magic, bands, tai chi, fencing."),
       clubTitle: L("社團與活動", "Leadership & activities"), clubs: rows(D.clubs),
       portraitTitle: L("形象照", "Portraits"),
       portraits: D.portraits.map((p, i, a) => ({ zoom: zoom(a.map(q => ({ src: q.src, alt: t(q.title) })), i), src: p.src, title: t(p.title), meta: p.meta })),
-      photos: D.photos.map((p, i) => ({ slotId: `photo-${i + 1}`, title: t(p.title), meta: p.meta })),
+      photos: D.photos.map(p => ({ slotId: `photo-${D._all.photos.indexOf(p) + 1}`, title: dr(p) + t(p.title), meta: p.meta })),
       ...(() => {
         const sel = Math.max(0, Math.min(this.state.photoColor || 0, D.palettes.length - 1));
         const f = n => `p${String(n).padStart(2, "0")}.jpg`;
