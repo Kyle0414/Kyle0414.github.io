@@ -97,7 +97,42 @@
     @keyframes lbL0{from{opacity:.2;transform:translateX(-18%)}to{opacity:1;transform:none}}
     @keyframes lbL1{from{opacity:.2;transform:translateX(-18%)}to{opacity:1;transform:none}}
     @keyframes lbIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
-    @container page (max-width:700px){.work-grid{grid-template-columns:minmax(0,1fr) !important}}
+    /* Projects: mission-file layout. */
+    .wk-dossier{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;align-items:start}
+    .wk-side{position:sticky;top:76px;min-width:0}
+    .wk-h2{font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;line-height:1;margin:-4px 0 30px}
+    .wk-list{display:flex;flex-direction:column;border-top:1px solid var(--border-hair)}
+    .wk-tri{position:absolute;left:0;top:0;width:9px;height:9px;clip-path:polygon(0 0,100% 0,0 100%);transition:background .2s}
+    .wk-item{position:relative;display:flex;flex-direction:column;gap:6px;padding:14px 14px 15px 16px;border-bottom:1px solid var(--border-hair);cursor:pointer;transition:background .2s}
+    .wk-item:hover{background:color-mix(in srgb,var(--surface-plate) 75%,transparent) !important}
+    /* Gallery: big shot on the left, thumbnails stacked down the right at the same height. */
+    .wk-gal{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) 21%;gap:6px}
+    .wk-thumbs{display:flex;flex-direction:column;gap:6px;min-height:0}
+    .wk-thumb{flex:1 1 0;min-height:0;min-width:0;cursor:pointer;overflow:hidden}
+    .wk-year{white-space:nowrap;font-size:11px;letter-spacing:.2em;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+    .wk-panel{position:relative;background:var(--surface-plate);border:1px solid transparent;padding:26px 30px 22px;min-width:0}
+    /* Section labels inside a project: bigger, brighter, with a small signal mark. */
+    .wk-lbl{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-primary);margin-bottom:10px}
+    .wk-lbl::before{content:"";flex:none;width:7px;height:7px;background:var(--signal);clip-path:polygon(30% 0,100% 0,100% 70%,70% 100%,0 100%,0 30%)}
+    .wk-note{margin:8px 0 0;font-size:11.5px;letter-spacing:.04em;color:var(--text-faint)}
+    .wk-ch{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:start}
+    .wk-chm{display:flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:2px;font-size:11px;font-weight:600;color:var(--text-signal);border:1px solid color-mix(in srgb,var(--signal) 55%,transparent)}
+    .wk-txt{margin:0;font-size:13px;line-height:1.75;color:var(--text-secondary);text-wrap:pretty}
+    /* Spec row: date, then tags — no labels, status lives in the pill. */
+    .wk-spec{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:18px;font-size:13px}
+    .wk-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:26px 36px;margin-top:26px}
+    .wk-steps{position:relative;display:flex;flex-direction:column;gap:14px;margin-top:4px}
+    .wk-steps::before{content:"";position:absolute;left:13.5px;top:16px;bottom:16px;width:1px;background:var(--border-strong)}
+    .wk-step{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;align-items:start;font-size:13px;line-height:1.65}
+    .wk-num{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;font-size:10px;letter-spacing:.04em;color:var(--text-signal)}
+    /* Result: HUD corner brackets, no side rule. */
+    .wk-result{padding:14px 18px 16px;background-color:color-mix(in srgb,var(--signal) 6%,transparent);background-image:linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal));background-repeat:no-repeat;background-size:10px 1px,1px 10px,10px 1px,1px 10px,10px 1px,1px 10px,10px 1px,1px 10px;background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%}
+    .wk-nav{display:flex;justify-content:space-between;gap:16px;margin-top:28px;padding-top:14px;border-top:1px solid var(--border-hair)}
+    .wk-navb{display:flex;flex-direction:column;gap:3px;max-width:46%;font-size:11px;letter-spacing:.04em;line-height:1.5;color:var(--text-secondary);cursor:pointer;transition:color .2s}
+    .wk-navb:hover{color:var(--text-signal)}
+    @keyframes wkInA{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    @keyframes wkInB{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    @container page (max-width:820px){.wk-dossier{grid-template-columns:minmax(0,1fr);gap:14px}.wk-side{position:static}.wk-h2{margin:0 0 18px}.wk-list{flex-direction:row;gap:8px;overflow-x:auto;border-top:0;scrollbar-width:none;padding-bottom:2px}.wk-item{flex:0 0 210px;border-top:1px solid var(--border-hair);border-right:1px solid var(--border-hair)}.wk-panel{padding:20px 18px 18px}.wk-gal{grid-template-columns:minmax(0,1fr)}.wk-thumbs{flex-direction:row;gap:4px}.wk-thumb{flex:0 0 calc((100% - 16px) / 5);aspect-ratio:16 / 10}}
     @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big,.pub-grid > .pub-txt{grid-column:1 / -1 !important}}
     @container page (max-width:600px){.pub-grid{column-gap:12px !important}.pub-grid > .pub-side{grid-column:1 / -1 !important}}
     .home-grid{grid-template-columns:repeat(60,minmax(0,1fr));column-gap:0}
@@ -129,12 +164,12 @@
     .ph-arrow:hover svg{opacity:1;transform:scale(1.18)}
     .sk-pop .slotwrap:has(image-slot:not([data-filled])){display:none}
     /* Skill pop-up and zoom panel: top-left corner cut at 45°, the diagonal drawn as a hairline like the border. */
-    .sk-pop,.sk-panel{--cut:16px;clip-path:polygon(var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut))}
-    .sk-panel{--cut:22px}
+    .sk-pop,.sk-panel,.wk-panel{--cut:16px;clip-path:polygon(var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut))}
+    .sk-panel,.wk-panel{--cut:22px}
     /* The frame is one 1px ring (straight edges + diagonal) cut out of a filled layer, so the corners meet cleanly. */
-    .sk-pop,.sk-panel{border-color:transparent !important}
+    .sk-pop,.sk-panel,.wk-panel{border-color:transparent !important}
     .sk-panel{border-width:0 !important}
-    .sk-pop::before,.sk-panel::before{content:"";position:absolute;inset:-1px;background:var(--border-strong);pointer-events:none;z-index:1;
+    .sk-pop::before,.sk-panel::before,.wk-panel::before{content:"";position:absolute;inset:-1px;background:var(--border-strong);pointer-events:none;z-index:1;
       clip-path:polygon(evenodd,var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut),var(--cut) 0,calc(var(--cut) + .414px) 1px,1px calc(var(--cut) + .414px),1px calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) 1px,calc(var(--cut) + .414px) 1px)}
     .sk-panel::before{inset:0}
     @media (hover:hover) and (pointer:fine){.sk-pop{pointer-events:none}.sk-pop-more{display:none}}
@@ -144,7 +179,7 @@
     [data-cur="skills"] main footer{margin-top:16px !important}
     /* Home: hovering a section block selects it — a soft plate behind it and four corner marks closing in. */
     .home-cell{position:relative;isolation:isolate;align-self:start}
-    .home-cell::before,.home-cell::after{content:"";position:absolute;inset:-6px -14px -4px;pointer-events:none;opacity:0;transition:opacity .25s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+    .home-cell::before,.home-cell::after{content:"";position:absolute;inset:-6px -14px 10px;pointer-events:none;opacity:0;transition:opacity .25s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
     .home-cell::before{z-index:-1;background:color-mix(in srgb,var(--surface-plate) 72%,transparent)}
     .home-cell::after{transform:scale(1.025);--c:var(--signal);background:
       linear-gradient(var(--c),var(--c)) left top / 16px 2px no-repeat, linear-gradient(var(--c),var(--c)) left top / 2px 16px no-repeat,
@@ -282,7 +317,7 @@
               <div class="home-cell-hd" style="display:flex;align-items:baseline;gap:10px"><span style="font-size:30px;font-weight:300;letter-spacing:.02em;line-height:1;color:var(--text-signal);font-variant-numeric:tabular-nums">{{ s.no }}</span><span data-fit="" data-fit-max="22" data-fit-min="14" style="font-size:22px;font-weight:300;letter-spacing:.02em;line-height:1.2;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden">{{ s.label }}</span><span data-noprint="" style="margin-left:auto;font-size:22px;line-height:1;color:var(--text-faint);visibility:{{ s.arrow }}">→</span></div>
               <div style="display:flex;flex-direction:column;gap:{{ s.gap }}">
                 <sc-for list="{{ s.items }}" as="r" hint-placeholder-count="3">
-                  <div style="display:{{ r.disp }};flex-wrap:wrap;grid-template-columns:{{ r.cols }};gap:2px 16px;font-size:{{ r.fs }};line-height:{{ r.lh }};align-items:baseline;margin-top:{{ r.gapTop }}">
+                  <div style="display:{{ r.disp }};flex-wrap:wrap;grid-template-columns:{{ r.cols }};gap:2px 16px;font-size:{{ r.fs }};line-height:{{ r.lh }};align-items:baseline;margin-top:{{ r.gapTop }};border-top:{{ r.bt }};padding-top:{{ r.pt }}">
                     <sc-if value="{{ r.hasCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;letter-spacing:.04em;line-height:1.5;color:{{ r.catColor }};white-space:{{ r.catWrap }};font-variant-numeric:tabular-nums">{{ r.cat }}</span></sc-if>
                     <span style="flex:0 1 auto;min-width:0;font-weight:400;text-wrap:pretty">{{ r.head }}</span>
                     <sc-if value="{{ r.showYear }}" hint-placeholder-val="{{ true }}"><span style="align-self:last baseline;margin-left:auto;color:var(--text-signal);font-size:10px;letter-spacing:.12em;font-variant-numeric:tabular-nums;white-space:nowrap">{{ r.year }}</span></sc-if>
@@ -337,45 +372,60 @@
 
     <sc-if value="{{ showWork }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="03 作品" data-pagebreak="" style="padding-top:32px">
-        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0 0 32px">{{ workTitle }}</h2>
-        <div class="work-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start">
-          <sc-for list="{{ works }}" as="w" hint-placeholder-count="4">
-            <div id="{{ w.anchor }}" data-toc-target="" style="border:1px solid {{ w.border }};background:var(--surface-plate);min-width:0">
-              <div role="button" onClick="{{ w.toggle }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 20px;padding:20px 22px;cursor:pointer">
-                <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ w.no }}</span>
-                <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:{{ w.togColor }}">{{ w.tog }}</span>
-                <span style="font-size:20px;font-weight:300;letter-spacing:-.01em;grid-column:1 / -1">{{ w.title }}</span>
-                <span style="font-size:13px;color:var(--text-secondary);grid-column:1 / -1;max-width:70ch;text-wrap:pretty">{{ w.summary }}</span>
+        <!-- Projects as mission files: the list on the left picks one, the panel on the right shows it in full. -->
+        <div id="work-dossier" class="wk-dossier" data-toc-target="">
+          <div class="wk-side">
+          <h2 class="wk-h2">{{ workTitle }}</h2>
+          <div class="wk-list" data-noprint="">
+            <sc-for list="{{ works }}" as="w" hint-placeholder-count="4">
+              <div role="button" id="{{ w.anchor }}" class="wk-item" onClick="{{ w.pick }}" style="background:{{ w.bg }}"><span class="wk-tri" style="background:{{ w.bar }}"></span>
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:11px;letter-spacing:.16em;color:{{ w.noColor }};font-variant-numeric:tabular-nums">{{ w.num }}</span><span style="font-size:10px;letter-spacing:.1em;color:var(--text-faint);white-space:nowrap">{{ w.yearTxt }}</span></div>
+                <span style="font-size:13px;line-height:1.5;color:{{ w.titleColor }};text-wrap:pretty">{{ w.short }}</span>
               </div>
-              <sc-if value="{{ w.noShot }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="padding:0 22px 20px"><div style="position:relative;aspect-ratio:16 / 9;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div></sc-if>
-              <sc-if value="{{ w.hasShot }}" hint-placeholder-val="{{ false }}"><div style="padding:0 22px 20px;display:flex;flex-direction:column;gap:6px">
-                <div role="button" onClick="{{ w.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;aspect-ratio:16 / 10;background:#0b0b0b;cursor:zoom-in"><img src="{{ w.shot }}" alt="{{ w.shotCap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.6);color:#fff">{{ w.shotCount }}</span></div>
-                <div style="display:flex;gap:4px"><sc-for list="{{ w.thumbs }}" as="th" hint-placeholder-count="5"><div role="button" onClick="{{ th.go }}" title="{{ th.cap }}" style="flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:16 / 10;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="{{ th.cap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:{{ th.op }}"></div></sc-for></div>
-              </div></sc-if>
-              <sc-if value="{{ w.open }}" hint-placeholder-val="{{ false }}">
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;padding:20px 22px 24px;border-top:1px solid var(--border-hair)">
-                  <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
-                    <sc-for list="{{ w.fields }}" as="f" hint-placeholder-count="3">
-                      <div style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;font-size:13px">
-                        <span style="color:var(--text-signal);letter-spacing:.2em;font-size:10px;text-transform:uppercase;padding-top:4px">{{ f.label }}</span>
-                        <div>
-                          <sc-if value="{{ f.text }}" hint-placeholder-val="{{ true }}"><span>{{ f.text }}</span></sc-if>
-                          <sc-for list="{{ f.list }}" as="li" hint-placeholder-count="0">
-                            <div style="display:flex;gap:10px"><span style="color:var(--text-faint)">—</span><span>{{ li }}</span></div>
-                          </sc-for>
-                        </div>
-                      </div>
-                    </sc-for>
-                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
-                      <sc-for list="{{ w.tags }}" as="tg" hint-placeholder-count="4">
-                        <x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.Badge" tone="idle" hint-size="80px,22px">{{ tg }}</x-import>
-                      </sc-for>
-                    </div>
-                  </div>
+            </sc-for>
+          </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+            <sc-for list="{{ workPanels }}" as="w" hint-placeholder-count="1">
+              <article class="wk-panel" style="animation:{{ w.anim }} .35s cubic-bezier(.2,.8,.2,1) both">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                  <span class="wk-year">{{ w.yearTxt }}</span>
+                  <span style="font-size:10px;letter-spacing:.16em;padding:3px 9px;border:1px solid {{ w.stColor }};color:{{ w.stColor }};text-transform:uppercase;white-space:nowrap">{{ w.stDot }} {{ w.status }}</span>
                 </div>
-              </sc-if>
-            </div>
-          </sc-for>
+                <h3 style="margin:12px 0 0;font-size:clamp(20px,2.3vw,27px);font-weight:300;letter-spacing:-.01em;line-height:1.35;text-wrap:balance">{{ w.title }}</h3>
+                <p style="margin:10px 0 0;font-size:14px;line-height:1.75;color:var(--text-secondary);text-wrap:pretty">{{ w.summary }}</p>
+                <sc-if value="{{ w.note }}" hint-placeholder-val="{{ false }}"><p class="wk-note">※ {{ w.note }}</p></sc-if>
+                <div class="wk-spec">
+                  <div class="wk-tags"><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ w.tags }}" as="tg" hint-placeholder-count="4"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.Badge" tone="idle" hint-size="80px,22px">{{ tg }}</x-import></sc-for></div></div>
+                </div>
+                <sc-if value="{{ w.hasShot }}" hint-placeholder-val="{{ false }}"><div class="wk-gal">
+                  <div role="button" onClick="{{ w.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;aspect-ratio:16 / 9;background:#0b0b0b;cursor:zoom-in"><img src="{{ w.shot }}" alt="{{ w.shotCap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.6);color:#fff">{{ w.shotCount }}</span></div>
+                  <div class="wk-thumbs"><sc-for list="{{ w.thumbs }}" as="th" hint-placeholder-count="5"><div role="button" onClick="{{ th.go }}" title="{{ th.cap }}" class="wk-thumb" style="border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="{{ th.cap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:{{ th.op }}"></div></sc-for></div>
+                </div></sc-if>
+                <sc-if value="{{ w.noShot }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="margin-top:22px"><div style="position:relative;aspect-ratio:16 / 9;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div></sc-if>
+                <sc-if value="{{ w.hasBody }}" hint-placeholder-val="{{ false }}"><div class="wk-body">
+                  <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+                    <sc-if value="{{ w.problem }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.problem }}</span><p class="wk-txt">{{ w.problem }}</p></div></sc-if>
+                    <sc-if value="{{ w.role }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.role }}</span><p class="wk-txt">{{ w.role }}</p></div></sc-if>
+                    <sc-if value="{{ w.result }}" hint-placeholder-val="{{ false }}"><div class="wk-result"><span class="wk-lbl" style="color:var(--text-signal)">{{ wkLbl.result }}</span><p class="wk-txt" style="color:var(--text-primary)">{{ w.result }}</p></div></sc-if>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:26px;min-width:0">
+                  <sc-if value="{{ w.hasMethod }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><span class="wk-lbl">{{ wkLbl.method }}</span>
+                    <div class="wk-steps"><sc-for list="{{ w.method }}" as="st" hint-placeholder-count="3"><div class="wk-step"><span class="wk-num"><span class="sk-oct" style="position:absolute;inset:0;background:var(--signal)"></span><span class="sk-oct" style="position:absolute;inset:1.5px;background:var(--surface-plate)"></span><span style="position:relative">{{ st.n }}</span></span><span style="padding-top:4px">{{ st.text }}</span></div></sc-for></div>
+                  </div></sc-if>
+                  <sc-if value="{{ w.hasChallenge }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><span class="wk-lbl">{{ wkLbl.challenge }}</span>
+                    <div style="display:flex;flex-direction:column;gap:12px"><sc-for list="{{ w.challenge }}" as="ch" hint-placeholder-count="2"><div class="wk-ch"><span class="wk-chm">!</span><div style="min-width:0"><p class="wk-txt" style="color:var(--text-primary)">{{ ch.a }}</p><sc-if value="{{ ch.hasB }}" hint-placeholder-val="{{ false }}"><p class="wk-txt" style="margin-top:3px">→ {{ ch.b }}</p></sc-if></div></div></sc-for></div>
+                  </div></sc-if>
+                  <sc-if value="{{ w.nextStep }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.nextStep }}</span><p class="wk-txt">{{ w.nextStep }}</p></div></sc-if>
+                  </div>
+                </div></sc-if>
+                <div class="wk-nav" data-noprint="">
+                  <div role="button" onClick="{{ w.prev }}" class="wk-navb"><span style="color:var(--text-faint)">← {{ wkLbl.prev }}</span><span>{{ w.prevTitle }}</span></div>
+                  <div role="button" onClick="{{ w.next }}" class="wk-navb" style="text-align:right;align-items:flex-end"><span style="color:var(--text-faint)">{{ wkLbl.next }} →</span><span>{{ w.nextTitle }}</span></div>
+                </div>
+              </article>
+            </sc-for>
+          </div>
         </div>
         <!-- Side projects: earlier 3D modelling work, one drop-in image slot per piece. -->
         <div id="work-minis" class="pub-hide-empty" data-toc-target="" style="margin-top:56px;padding-top:28px;border-top:1px solid var(--border-strong)">
@@ -599,7 +649,7 @@ const D = {
     { year: "2024.09 – 2026.08", head: { zh: "碩士論文研究：混合式三維微電極陣列（H3D-MEA）", en: "M.S. thesis: Hybrid 3D Microelectrode Array (H3D-MEA)" }, org: { zh: "指導教授 吳玉威", en: "Advisor Prof. Yu-Wei Wu" } },
     { year: "進行中", head: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless BCI" }, org: { zh: "生亦科技 · 宜特科技", en: "BioPro · iST" } },
     { year: "2026", head: { zh: "微尺度探針入腦力學與血管破裂量測", en: "Brain penetration mechanics with microscale probes" }, org: { zh: "PNAS · 共同第一作者", en: "PNAS · co-first author" } },
-    { year: "2025.12", head: { zh: "桌上型四足陪伴機器人", en: "Desktop quadruped companion robot" }, org: { zh: "Raspberry Pi 5 · 個人專案", en: "Raspberry Pi 5 · personal" } }
+    { year: "2026.06 – 至今", head: { zh: "桌上型四足陪伴機器人", en: "Desktop quadruped companion robot" }, org: { zh: "Raspberry Pi 5 · 個人專案", en: "Raspberry Pi 5 · personal" } }
   ],
   publications: [
     { cat: "journal", year: "2026.03", venue: "PNAS", photos: ["photos/acad/pnas.jpg"], head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · 共同第一作者", en: "Journal · Co-first author" },
@@ -622,26 +672,31 @@ const D = {
   ],
   awards: [
     { year: "2026", head: { zh: "青年百億計畫", en: "Taiwan Global Pathfinders Initiative" } },
-    { year: "2026", photos: ["photos/acad/award-dean.jpg"], head: { zh: "臺大生命科學系 院長獎", en: "NTU Life Science Dean's Award" } },
-    { year: "2026", photos: ["photos/acad/award-poster.jpg"], head: { zh: "畢業壁報比賽", en: "Graduation Poster Competition" }, org: { zh: "第一名", en: "1st place" } },
+    { year: "2026", photos: ["photos/acad/award-dean.jpg"], head: { zh: "臺大生命科學系 院長獎", en: "NTU Life Science Dean's Award" },
+      // On the Academic page: "date | acadTop" on top, acadSub below.
+      acadTop: { zh: "院長獎", en: "Dean's Award" }, acadSub: { zh: "畢業獎項", en: "Graduation award" } },
+    { year: "2026", photos: ["photos/acad/award-poster.jpg"], head: { zh: "畢業壁報比賽", en: "Graduation Poster Competition" }, org: { zh: "第一名", en: "1st place" },
+      acadTop: { zh: "第一名", en: "1st place" }, acadSub: { zh: "臺大生命科學系畢業壁報比賽", en: "NTU Life Science Graduation Poster Competition" } },
     { year: "2025", head: { zh: "三校聯盟建築攝影課程", en: "Tri-University Architectural Photography Course" }, org: { zh: "第一名", en: "1st place" } },
     // noPic: no photo for this item, so the Academic page lists it as a text row instead of an image card.
     { year: "2026", noPic: true, head: { zh: "臺大學術研究績效獎勵金", en: "NTU Academic Research Excellence Award" } },
     { year: "2025", noPic: true, head: { zh: "臺大生科院國際學術交流中心獎學金", en: "NTU CLS Intl. Academic Exchange Scholarship" } },
-    { year: "", noPic: true, head: { zh: "國科會大專學生研究計畫", en: "NSTC Student Research Grant" } }
+    { year: "2023", noPic: true, head: { zh: "國科會大專學生研究計畫", en: "NSTC Student Research Grant" } }
   ],
   clubs: [
     { year: "", head: { zh: "臺大轉學生聯會", en: "NTU Transfer Students Association" }, org: { zh: "會長", en: "President" } },
     { year: "", head: { zh: "臺大生命科學系系學會", en: "Life Science Student Association" }, org: { zh: "副會長", en: "Vice President" } },
     { year: "", head: { zh: "臺大椰風搖滾社", en: "NTU Palm Breeze Rock Club" }, org: { zh: "美宣", en: "Art & publicity" } },
     { year: "", head: { zh: "成功高中醫學研究社", en: "Chenggong HS Medical Research Club" }, org: { zh: "指導老師", en: "Advisor" } },
-    { year: "", head: { zh: "EMBO 國際研討會 · 臺大社團與學系", en: "EMBO intl. conference · NTU clubs & departments" }, org: { zh: "自由接案攝影師", en: "Freelance photographer" } }
+    { year: "", sep: true, head: { zh: "自由接案攝影師", en: "Freelance photographer" } }
   ],
+  // Project fields: summary, problem, role, method[], result, challenge[] ("what went wrong → how it was solved"), nextStep, note, tags. Empty fields are not shown.
   works: [
     { year: "2024 – 2026", title: { zh: "碩士論文研究：混合式三維微電極陣列（H3D-MEA）", en: "M.Sc. Thesis: Hybrid 3D Microelectrode Array (H3D-MEA)" },
       summary: { zh: "混合式三維微電極陣列的設計、製作，以及小鼠活體神經記錄驗證。", en: "Design and fabrication of a hybrid 3D microelectrode array, validated by in-vivo neural recording in mice." },
+      note: { zh: "由於有未發表之資料，故只展示部分內容。", en: "Contains unpublished data, so only part of the work is shown." },
       tags: ["3D MEA", "Microfabrication", "Neural recording", "In vivo"] },
-    { _move: 1, year: "2025.12", title: { zh: "桌上型四足陪伴機器人", en: "Desktop Quadruped Companion Robot" },
+    { _move: 1, year: "2026.06 – 至今", title: { zh: "桌上型四足陪伴機器人", en: "Desktop Quadruped Companion Robot" },
       // Console screenshots: home, memory, I/O, architecture, progress.
       shots: [["photos/work/robot-1.jpg", "主控台首頁", "Console home"], ["photos/work/robot-2.jpg", "記憶", "Memory"], ["photos/work/robot-3.jpg", "輸入輸出", "I/O"], ["photos/work/robot-4.jpg", "架構圖", "Architecture"], ["photos/work/robot-5.jpg", "進度表", "Progress"]],
       summary: { zh: "樹莓派上的陪伴機器人：對話即時編碼、白天整理、夜間反思；辨識人臉與聲紋，口頭就能教會新規則。", en: "A Raspberry Pi companion that encodes conversation in real time, consolidates by day, reflects at night; recognises faces and voices and learns rules by being told." },
@@ -653,15 +708,16 @@ const D = {
     { year: "— 至今", title: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless BCI" },
       summary: { zh: "應用於小鼠的 64 通道無線腦機介面，高空間解析度電極排列，用於觀察神經訊號動態。", en: "A 64-channel wireless brain-computer interface for mice, with a high-density electrode layout for tracking neural dynamics." },
       problem: { zh: "神經訊號量測工具需要同時兼顧高穩定性、高生物相容性與高空間解析度。", en: "Neural recording tools must be stable, biocompatible and spatially dense at once." },
-      role: { zh: "負責整體系統架構整合與電極製作；與生亦科技、宜特科技合作開發。", en: "Led the collaboration: system design and validation, with BioPro Scientific and iST." },
+      role: { zh: "負責主導整體系統架構整合與電極製作；與生亦科技、宜特科技合作開發。", en: "Led system integration and electrode fabrication, in collaboration with BioPro Scientific and iST." },
       method: { zh: ["微電極陣列材料與製程設計、雷射消熔加工", "封裝製程、材料分析與可靠度測試優化（IST）", "開顱植入與腦組織切片染色驗證"], en: ["Microelectrode array materials and process design; laser ablation", "Packaging, materials analysis and reliability testing with IST", "Craniotomy implantation and histological validation"] },
-      result: { zh: "系統已完成初步驗證，預計於碩士畢業前完成整體整合。", en: "Initial validation complete; full integration targeted before graduation." },
+      result: { zh: "系統已完成初步驗證，預計於 2026–2027 年完成整體整合。", en: "Initial validation complete; full integration expected in 2026–2027." },
+      note: { zh: "由於有未發表之資料，故只展示部分內容。", en: "Contains unpublished data, so only part of the work is shown." },
       tags: ["BCI", "Microelectrode array", "Laser ablation", "CAD", "In vivo"] },
     { year: "2026", title: { zh: "微尺度探針入腦力學與血管破裂量測", en: "Brain Penetration Mechanics with Microscale Probes" },
       summary: { zh: "超高靈敏度量測微尺度電極進入腦組織時的力學行為與血管破裂機制；以共同第一作者發表於 PNAS。", en: "Ultra-sensitive measurement of the mechanics and vessel rupture as microscale electrodes enter brain tissue; published in PNAS as co-first author." },
       problem: { zh: "神經探針與腦組織的交互作用直接影響神經介面的安全性與設計。", en: "Probe–tissue interaction determines the safety and design of neural interfaces." },
       role: { zh: "共同第一作者；與 Stanford University 團隊合作。", en: "Co-first author, with a Stanford University team." },
-      method: { zh: ["審查期間一個月內重建並優化 Stanford 端量測系統與探針設計", "取得高品質實驗數據以回應審查意見"], en: ["Rebuilt and optimised the Stanford measurement rig and probe design within one month of review", "Produced the data that answered the reviewers"] },
+      method: { zh: ["審查期間一個月內重建並優化 Stanford 端量測系統與探針設計", "整理並取得高品質實驗數據以回應審查意見"], en: ["Rebuilt and optimised the Stanford measurement rig and probe design within one month of review", "Compiled high-quality data to answer the reviewers"] },
       result: { zh: "通過審查，發表於《PNAS》。", en: "Accepted and published in PNAS." },
       tags: ["PNAS", "Biomechanics", "Neural probes", "Stanford"] }
   ],
@@ -852,7 +908,7 @@ const SK_IMG = { "1.0.0": ["photos/skill/1-0-a.jpg", "photos/skill/1-0-b.jpg"], 
   "1.1.1": ["photos/skill/3-1-0.jpg"], "3.1": ["photos/skill/4-1.jpg"], "3.4": ["photos/skill/4-4.jpg"] };
 const UI = {
   tabs: [["home", "主頁", "Home"], ["acad", "學術", "Academic"], ["work", "專案", "Projects"], ["skills", "技能", "Skills"], ["other", "其他", "Other"]],
-  dl: { problem: ["問題", "Problem"], role: ["角色", "Role"], method: ["做法", "Method"], result: ["成果", "Result"] }
+  dl: { problem: ["問題", "Problem"], role: ["負責內容", "Responsibilities"], method: ["做法", "Method"], result: ["成果", "Result"], challenge: ["挑戰", "Challenges"], nextStep: ["下一步", "Next step"] }
 };
 // Languages: zh / en live in D; Japanese and German are looked up here by the Chinese text — [日本語, Deutsch].
 // A string missing here falls back to English.
@@ -925,6 +981,7 @@ const TR = {
   "臺大學術研究績效獎勵金": ["国立台湾大学 学術研究業績奨励金", "NTU-Preis für herausragende Forschungsleistung"],
   "畢業壁報比賽": ["修了ポスターコンテスト", "Abschlussposter-Wettbewerb"],
   "第一名": ["1位", "1. Platz"],
+  "院長獎": ["学部長賞", "Dekanspreis"], "畢業獎項": ["卒業時の表彰", "Abschlusspreis"], "臺大生命科學系畢業壁報比賽": ["国立台湾大学 生命科学系 卒業ポスターコンテスト", "Abschlussposter-Wettbewerb, Biowissenschaften, NTU"],
   "臺大生科院國際學術交流中心獎學金": ["国立台湾大学 生命科学院 国際学術交流奨学金", "Stipendium für internationalen akademischen Austausch, NTU"],
   "三校聯盟建築攝影課程": ["3大学連盟 建築写真講座", "Kurs Architekturfotografie (Drei-Universitäten-Allianz)"],
   "臺大轉學生聯會": ["国立台湾大学 編入生協会", "Verband der Transferstudierenden, NTU"],
@@ -971,12 +1028,13 @@ const TR = {
   "作品集成果": ["主な作品", "Ausgewählte Arbeiten"], "攝影作品": ["写真作品", "Fotografie"],
   "四年攝影經驗，專注建築攝影；擔任 EMBO 國際研討會官方攝影師、臺大各社團與學系官方攝影師，拍過光舞、火舞、街舞、魔術、樂團、太極拳與擊劍。": ["写真歴4年、建築写真が中心。EMBO 国際会議の公式フォトグラファー、国立台湾大学の各部活・学科の公式フォトグラファーを務め、ライトダンス、ファイヤーダンス、ストリートダンス、マジック、バンド、太極拳、フェンシングを撮影。", "Vier Jahre Fotografie mit Schwerpunkt Architektur; offizieller Fotograf der EMBO-Konferenz sowie von Clubs und Fachbereichen der NTU – Licht- und Feuertanz, Streetdance, Zauberei, Bands, Tai-Chi und Fechten."],
   "社團與活動": ["サークル・課外活動", "Engagement & Aktivitäten"], "主頁": ["ホーム", "Start"],
+  "年份": ["年", "Jahr"], "狀態": ["状態", "Status"], "標籤": ["タグ", "Tags"], "已完成": ["完了", "Abgeschlossen"], "上一個": ["前へ", "Zurück"], "下一個": ["次へ", "Weiter"], "挑戰": ["課題", "Herausforderungen"], "負責內容": ["担当", "Verantwortung"], "下一步": ["次のステップ", "Nächster Schritt"],
   "問題": ["課題", "Problem"], "角色": ["役割", "Rolle"], "做法": ["手法", "Vorgehen"], "成果": ["成果", "Ergebnis"],
   "◐ 自動": ["◐ 自動", "◐ AUTO"], "● 深色": ["● ダーク", "● DUNKEL"], "○ 淺色": ["○ ライト", "○ HELL"]
 };
 
 class Component extends DCLogic {
-  state = { tab: null, lang: null, open: { 0: true }, printing: false, intro: this.initIntro(), now: Date.now() };
+  state = { tab: null, lang: null, open: {}, workSel: 0, printing: false, intro: this.initIntro(), now: Date.now() };
 
   initIntro() {
     const m = (this.props && this.props.intro) || "off";
@@ -1072,7 +1130,6 @@ class Component extends DCLogic {
         if (cur && cur !== this.state.tocActive) this.setState({ tocActive: cur });
       });
     };
-    document.addEventListener("scroll", this.onTocScroll, true);
     this.startBg();
     this.before = () => this.setState({ printing: true }, this.applyMode);
     this.after = () => this.setState({ printing: false }, this.applyMode);
@@ -1522,9 +1579,9 @@ class Component extends DCLogic {
     const t = v => v == null ? "" : typeof v === "string" ? v : (tv(v) || "");
     const L = (zh, e) => lang === "zh" ? zh : lang === "en" ? e : tf(zh, e);
     const sk = s => !s || lang === "zh" ? (s || "") : (SK_TR[s] && SK_TR[s][lang === "en" ? 0 : lang === "ja" ? 1 : 2]) || s;
-    const yr = y => (YR[y] && YR[y][lang]) || y;
+    const yr = y => (YR[y] && YR[y][lang]) || (lang !== "zh" && typeof y === "string" ? y.replace("至今", { ja: "現在", de: "heute" }[lang] || "present") : y);
     const rows = arr => arr.map(r => ({ year: yr(r.year), main: t(r.main) || [t(r.head), t(r.org)].filter(Boolean).join(" · "), sub: "" }));
-    const it = r => ({ year: yr(r.year) || "—", head: t(r.head), org: t(r.org), sub: t(r.sub), cols: "minmax(0,1fr) auto", hasCat: false, cat: "", fs: "13px", lh: "inherit", disp: "grid", catColor: "var(--text-secondary)", catWrap: "nowrap", gapTop: "0px", orgCol: "1 / -1" });
+    const it = r => ({ year: yr(r.year) || "—", head: t(r.head), org: t(r.org), sub: t(r.sub), cols: "minmax(0,1fr) auto", hasCat: false, cat: "", fs: "13px", lh: "inherit", disp: "grid", catColor: "var(--text-secondary)", catWrap: "nowrap", gapTop: "0px", orgCol: "1 / -1", bt: r.sep ? "1px solid var(--border-hair)" : "0", pt: r.sep ? "12px" : "0" });
     // Home skills: category on the left (light), details on the right — same form as publications.
     const skillRows = () => D.skills.map(p => ({ ...it(p), hasCat: true, cat: t(p.head), head: t(p.sub), sub: "", org: "", showYear: false, catWrap: "normal", cols: "104px minmax(0,1fr)" }));
     const noYear = r => ({ ...r, showYear: false, cols: r.cols.replace(/ auto$/, "") });
@@ -1540,27 +1597,34 @@ class Component extends DCLogic {
     const PCAT = { journal: L("期刊", "Journal"), patent: L("專利", "Patent"), invited: L("邀請講者", "Invited"), conference: L("研討會發表", "Conference") };
     const pubRows = () => ["journal", "patent", "invited", "conference"].flatMap(c => D.publications.filter(p => p.cat === c).map((p, i) => ({ ...it(p), org: "", cols: "78px minmax(0,1fr) auto", hasCat: true, cat: i === 0 ? PCAT[c] : "", gapTop: i === 0 && c !== "journal" ? "8px" : "0px" })));
 
+    // Projects: one is picked (workSel); the list shows them all, the panel shows the picked one (printing shows every panel).
+    const wN = D.works.length, wSel = Math.max(0, Math.min(this.state.workSel || 0, wN - 1));
+    const pickWork = i => { this.setState(s => ({ workSel: i, wkN: (s.wkN || 0) + 1 }));
+      setTimeout(() => { const el = document.getElementById("work-dossier"); if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (window.innerWidth < 820) { const it = document.getElementById(`work-${i + 1}`), ls = it && it.parentElement; if (ls) ls.scrollTo({ left: it.offsetLeft - 16, behavior: "smooth" }); } }, 60); };
     const works = D.works.map((w, i) => {
-      const open = pr || !!this.state.open[i];
-      const fields = ["problem", "role", "method", "result"].map(k => {
-        const v = w[k] ? tv(w[k]) : null;
-        if (!v || (Array.isArray(v) && !v.length)) return null;
-        return { label: L(UI.dl[k][0], UI.dl[k][1]), text: Array.isArray(v) ? "" : v, list: Array.isArray(v) ? v : [] };
-      }).filter(Boolean);
+      const on = i === wSel, arr = k => { const v = w[k] ? tv(w[k]) : null; return Array.isArray(v) ? v : []; }, txt = k => { const v = w[k] ? tv(w[k]) : ""; return Array.isArray(v) ? "" : v; };
+      const live = /至今|進行中/.test(w.year || ""), method = arr("method").map((text, j) => ({ n: String(j + 1).padStart(2, "0"), text }));
+      const problem = txt("problem"), role = txt("role"), result = txt("result"), nextStep = txt("nextStep"), note = txt("note");
+      const challenge = arr("challenge").map(c => { const [a, ...b] = String(c).split(/\s*→\s*/); return { a, b: b.join(" → "), hasB: b.length > 0 }; });
       return {
-        no: `NO. ${String(i + 1).padStart(2, "0")} · ${yr(w.year)}`,
-        title: dr(w) + t(w.title), summary: t(w.summary), tags: w.tags, fields,
-        open, slotId: `work-shot-${D._all.works.indexOf(w) + 1}`, anchor: `work-${i + 1}`,
+        num: String(i + 1).padStart(2, "0"), yearTxt: yr(w.year), short: dr(w) + t(w.title),
+        title: dr(w) + t(w.title), summary: t(w.summary), tags: w.tags,
+        problem, role, result, method, hasMethod: method.length > 0, challenge, hasChallenge: challenge.length > 0, nextStep, note,
+        hasBody: !!(problem || role || result || method.length || challenge.length || nextStep),
+        status: live ? L("進行中", "Ongoing") : L("已完成", "Completed"), stDot: live ? "●" : "✓", stColor: live ? "var(--text-signal)" : "var(--text-secondary)",
+        slotId: `work-shot-${D._all.works.indexOf(w) + 1}`, anchor: `work-${i + 1}`,
         ...(() => { const sh = w.shots || [], sel = Math.max(0, Math.min((this.state.workPic || {})[i] || 0, sh.length - 1)), cur = sh[sel];
           return { hasShot: sh.length > 0, noShot: !sh.length, shot: cur ? cur[0] : "", shotCap: cur ? L(cur[1], cur[2]) : "", shotCount: cur ? `${sel + 1} / ${sh.length} · ${L(cur[1], cur[2])}` : "",
             zoom: zoom(sh.map(([src, zh, en]) => ({ src, alt: L(zh, en) })), sel),
             thumbs: sh.map(([src, zh, en], j) => ({ src, cap: L(zh, en), ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ workPic: { ...(s.workPic || {}), [i]: j } })) })) }; })(),
-        border: open ? "var(--signal)" : "var(--border-hair)",
-        tog: open ? L("– 收合", "– Close") : L("+ 詳情", "+ Details"),
-        togColor: open ? "var(--text-signal)" : "var(--text-secondary)",
-        toggle: () => this.setState(s => ({ open: { ...s.open, [i]: !s.open[i] } }))
+        bar: on ? "var(--signal)" : "transparent", bg: on ? "var(--surface-plate)" : "transparent", noColor: on ? "var(--text-signal)" : "var(--text-faint)", titleColor: on ? "var(--text-primary)" : "var(--text-secondary)",
+        pick: () => pickWork(i), anim: (this.state.wkN || 0) % 2 ? "wkInB" : "wkInA",
+        prev: () => pickWork((i - 1 + wN) % wN), next: () => pickWork((i + 1) % wN),
+        prevTitle: t(D.works[(i - 1 + wN) % wN].title), nextTitle: t(D.works[(i + 1) % wN].title)
       };
     });
+    const workPanels = pr ? works : [works[wSel]];
 
     const intro = (() => {
       const st = this.state.intro;
@@ -1591,7 +1655,7 @@ class Component extends DCLogic {
         color: x.on ? "var(--text-signal)" : "var(--text-secondary)", bar: x.on ? "var(--signal)" : "transparent" }));
       const jump = id => () => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); this.setState({ tocActive: id }); };
       if (tab === "acad") return mk([["publications", "發表、專利與演講", "Publications, patents & talks"], ["awards", "榮譽與獎助", "Honors & grants"]].map(([k, zh, e], i) => ({ label: L(zh, e), go: jump("acad-" + k), on: act ? act === "acad-" + k : i === 0 })));
-      if (tab === "work") return mk([...D.works.map((w, i) => ({ label: t(w.title), go: jump(`work-${i + 1}`), on: act ? act === `work-${i + 1}` : i === 0 })),
+      if (tab === "work") return mk([...D.works.map((w, i) => ({ label: t(w.title), go: () => works[i].pick(), on: act === "work-minis" ? false : i === wSel })),
         { label: L("小專案", "Side projects"), go: jump("work-minis"), on: act === "work-minis", cls: "toc-minis" }]);
       if (tab === "other") return mk([["sec-photo", L("攝影作品", "Photography")], ["sec-clubs", L("社團與活動", "Leadership & activities")]].map(([id, label], i) => ({ label, go: jump(id), on: act ? act === id : i === 0 })));
       return [];
@@ -1599,13 +1663,14 @@ class Component extends DCLogic {
 
     return {
       ...intro,
-      curTab: tab, toc, showToc: !pr && tab !== "home" && tab !== "skills" && toc.length > 0 && this.state.intro === "off",
+      curTab: tab, toc, showToc: false, // contents drawer retired
+     
       tocTitle: L("本頁目錄", "On this page"),
       eduHead: D.education.map(p => { const m = (p.year || "").match(/(\d{4})(?:\.\d{2})?\s*$/); return { cat: m ? m[1] : "", head: t(p.head) }; }),
       frameStyle: this.props.device === "mobile" ? "min-height:0;width:390px;max-width:100%;height:min(844px,calc(100vh - 40px));margin:20px auto;overflow-y:auto;overflow-x:hidden;border:1px solid var(--border-strong);transform:translateZ(0)" : "",
       brand: t(D.name),
       tabs: UI.tabs.filter(([id]) => !HIDE.includes(id)).map(([id, zh, e]) => ({
-        id, label: L(zh, e), go: () => this.go(id), wip: ["work", "skills"].includes(id) && !pub ? L("待建置", "WIP") : "",   // editor-only tag on the tabs still being written
+        id, label: L(zh, e), go: () => this.go(id), wip: ["work"].includes(id) && !pub ? L("待建置", "WIP") : "",   // editor-only tag on the tabs still being written
         enter: () => { if (this.state.tabHover !== id) this.setState({ tabHover: id }); },
         lift: this.state.tabHover === id && id !== tab ? "-2px" : "0px",
         color: id === tab ? "var(--text-primary)" : this.state.tabHover === id ? "var(--text-primary)" : "var(--text-secondary)",
@@ -1751,8 +1816,8 @@ class Component extends DCLogic {
                 ...(() => { const im = SK_IMG[pid] || []; return { hasImg: im.length > 0, noImg: !im.length, img0: im[0] || "", imgN: Math.max(1, im.length),
                   imgs: im.map((src, i) => ({ src, open: e => { stop(e); zoom(im.map(u => ({ src: u, alt: sk(pn.n) })), i)(); } })) }; })(),
                 ds: sk(pn.ds), hasDs: !!pn.ds,
-                hasGo: !!pn.go, goLabel: sk(pn.go === "photo" ? "看作品 →" : "詳情 →"), goPhoto: e => { stop(e); this._popPos = null; this.setState({ skPop: null, skFocus: null }); this.go(pn.go === "photo" ? "other" : "work");
-                  setTimeout(() => { const el = pn.go === "photo" ? document.getElementById("sec-photo") : [...document.querySelectorAll("[id^='work-']")].filter(x => /^work-\d+$/.test(x.id)).pop(); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 150); } }; };
+                hasGo: !!pn.go, goLabel: sk(pn.go === "photo" ? "看作品 →" : "詳情 →"), goPhoto: e => { stop(e); this._popPos = null; this.setState({ skPop: null, skFocus: null, ...(pn.go === "photo" ? {} : { workSel: D.works.length - 1 }) }); this.go(pn.go === "photo" ? "other" : "work");
+                  setTimeout(() => { const el = document.getElementById(pn.go === "photo" ? "sec-photo" : "work-dossier"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 150); } }; };
             const pid = foc ? null : this.state.skPop, ppos = this._popPos || { l: "-9999px", t: "0px", tf: "none" };
             // Camera: where the tree sits inside its window. Dragging / pinching / zooming in on a node all just change this.
             const cam = this._skCam || { s: 1, x: 0, y: 0 };
@@ -1835,10 +1900,10 @@ class Component extends DCLogic {
         if (txt) Object.assign(lay, { gc: "1 / -1", headFs: "14px", yearFs: "12px", cls: "pub-txt" });
         const href = pp && pp.url ? pp.url : "";
         // Talks & conferences: "date | role" on top, the event name on the line below (same order as the PNAS card).
-        const swap = k === "publications" && !txt && !pp && !!it(r).org;
+        const rr = r.acadTop ? { ...r, head: r.acadSub, org: r.acadTop } : r, swap = (k === "publications" || !!r.acadTop) && !txt && !pp && !!it(rr).org;
         return { ...it(r), ...lay, ...paper, oneLine: !!r.oneLine, multiLine: !r.oneLine, plainHead: !r.oneLine, linkHead: false, href,
           // Papers: "date | journal" on top, then the linked title; everything else: "date | event", then the role below.
-          lineHead: dr(r) + (pp || swap ? it(r).org : it(r).head), hdFs: pp ? "14px" : lay.headFs, orgLine: pp || txt || swap ? "" : it(r).org, subHead: swap ? it(r).head : "", lhColor: pp || swap ? "var(--text-faint)" : "var(--text-primary)", preHead: txt ? it(r).org : "", ...(pp ? { year: pp.published } : {}),
+          lineHead: dr(r) + (pp || swap ? it(rr).org : it(r).head), hdFs: pp ? "14px" : lay.headFs, orgLine: pp || txt || swap ? "" : it(r).org, subHead: swap ? it(rr).head : "", lhColor: pp || swap ? "var(--text-faint)" : "var(--text-primary)", preHead: txt ? it(r).org : "", ...(pp ? { year: pp.published } : {}),
           cardCss: txt ? `flex-direction:row;align-items:baseline;gap:20px;border-top:1px solid var(--border-hair);padding-top:12px${firstTxt ? "" : ";margin-top:-16px"}` : "",
           // Cards show a smaller copy (photos/acad/s/); the big PNAS card and the enlarged view use the full file.
           slotId: sid, ph, hasPhoto: pics.length > 0, noPhoto: !pics.length && !txt, pic: pics[sel] ? (big ? pics[sel] : small(pics[sel])) : "", multi: pics.length > 1, count: `${sel + 1} / ${pics.length}`,
@@ -1848,7 +1913,8 @@ class Component extends DCLogic {
           next: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: (sel + 1) % pics.length } })); },
           thumbs: pics.map((src, j) => ({ src: small(src), ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
       }) })),
-      workTitle: L("專案", "Projects"),
+      workTitle: L("專案", "Projects"), workPanels,
+      wkLbl: { year: L("年份", "Year"), status: L("狀態", "Status"), tags: L("標籤", "Tags"), problem: L(UI.dl.problem[0], UI.dl.problem[1]), role: L(UI.dl.role[0], UI.dl.role[1]), method: L(UI.dl.method[0], UI.dl.method[1]), result: L(UI.dl.result[0], UI.dl.result[1]), challenge: L(UI.dl.challenge[0], UI.dl.challenge[1]), nextStep: L(UI.dl.nextStep[0], UI.dl.nextStep[1]), prev: L("上一個", "Previous"), next: L("下一個", "Next") },
       minisTitle: L("小專案", "Side projects"), minisIntro: L("之前做的 3D 建模。", "Earlier 3D modelling work."),
       minisCount: `${D.minis.length} ${L("件", "PIECES")}`,
       minis: D.minis.map((m, i) => ({ slotId: `mini-${D._all.minis.indexOf(m) + 1}`, no: String(i + 1).padStart(2, "0"), title: dr(m) + t(m.title) })),
