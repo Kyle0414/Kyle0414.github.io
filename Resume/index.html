@@ -128,6 +128,15 @@
     .ph-arrow svg{display:block;fill:#BFE6C9;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));opacity:.85;transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .25s}
     .ph-arrow:hover svg{opacity:1;transform:scale(1.18)}
     .sk-pop .slotwrap:has(image-slot:not([data-filled])){display:none}
+    /* Skill pop-up and zoom panel: top-left corner cut at 45°, the diagonal drawn as a hairline like the border. */
+    .sk-pop,.sk-panel{--cut:16px;clip-path:polygon(var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut))}
+    .sk-panel{--cut:22px}
+    /* The frame is one 1px ring (straight edges + diagonal) cut out of a filled layer, so the corners meet cleanly. */
+    .sk-pop,.sk-panel{border-color:transparent !important}
+    .sk-panel{border-width:0 !important}
+    .sk-pop::before,.sk-panel::before{content:"";position:absolute;inset:-1px;background:var(--border-strong);pointer-events:none;z-index:1;
+      clip-path:polygon(evenodd,var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut),var(--cut) 0,calc(var(--cut) + .414px) 1px,1px calc(var(--cut) + .414px),1px calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) 1px,calc(var(--cut) + .414px) 1px)}
+    .sk-panel::before{inset:0}
     @media (hover:hover) and (pointer:fine){.sk-pop{pointer-events:none}.sk-pop-more{display:none}}
     /* Skills tab: the whole page (top bar, tree, links at the bottom) fits one screen, so there is nothing to scroll. The gaps are tightened here and the tree is sized from the window height. */
     [data-cur="skills"] main{padding-bottom:16px !important}
@@ -237,7 +246,7 @@
       <section data-screen-label="01 主頁" style="padding-top:48px">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 40px;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--border-strong)">
           <div style="display:flex;align-items:flex-end;gap:20px;flex:1 1 300px;min-width:0">
-            <img src="photos/s/portrait-1.jpg" alt="{{ brand }}" style="flex:none;width:112px;height:112px;object-fit:cover;object-position:50% 40%;border:1px solid var(--border-strong);display:block">
+            <img src="photos/s/avatar.jpg" alt="{{ brand }}" style="flex:none;width:112px;height:112px;object-fit:cover;object-position:50% 50%;border:1px solid var(--border-strong);display:block">
             <div style="display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-height:112px;flex:1 1 auto;min-width:0">
               <div data-fit="" data-fit-max="60" data-fit-min="20" style="font-size:60px;font-weight:300;letter-spacing:.04em;line-height:1;margin-top:-.06em;white-space:nowrap;overflow:hidden">{{ brand }}</div>
               <div class="role-row" style="display:flex;align-items:center;gap:0 20px;min-width:0">
@@ -418,7 +427,6 @@
                 <span class="sk-oct" style="position:absolute;inset:{{ n.bw }};background:{{ n.bg }}"></span>
                 <span class="sk-i" style="position:absolute;inset:{{ n.pad }};background:{{ n.ink }};-webkit-mask:{{ n.mask }} center / contain no-repeat;mask:{{ n.mask }} center / contain no-repeat;transition:background .2s"></span>
                 <div class="sk-lbl" style="position:absolute;{{ n.lblPos }};width:{{ n.lblW }};display:flex;flex-direction:column;gap:.1em;text-align:{{ n.align }};line-height:1.3;pointer-events:auto">
-                  <sc-if value="{{ n.isCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:{{ skMap.fs.catSub }};letter-spacing:.14em;color:var(--text-faint);white-space:nowrap">SEC {{ n.no }} · {{ n.lv }}</span></sc-if>
                   <span class="sk-nm" style="font-size:{{ n.fs }};font-weight:{{ n.fw }};color:{{ n.txt }};text-wrap:pretty;transition:color .2s">{{ n.name }}</span>
                 </div>
               </div>
@@ -427,18 +435,21 @@
             <sc-if value="{{ skFoc.on }}" hint-placeholder-val="{{ false }}">
               <div data-skpanel="" class="sk-panel" onClick="{{ skFoc.stop }}" style="position:absolute;left:{{ skFoc.left }};right:4%;top:50%;transform:translateY(-50%);max-width:460px;max-height:92%;overflow-y:auto;box-sizing:border-box;z-index:5;background:color-mix(in srgb,var(--surface-plate) 62%,transparent);-webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15);border:1px solid var(--border-strong);box-shadow:0 14px 36px rgba(0,0,0,.16);padding:16px 18px 18px;display:flex;flex-direction:column;gap:9px;line-height:1.5;text-align:left;-webkit-user-select:text;user-select:text;animation:skpanel .4s cubic-bezier(.2,.8,.2,1) .12s both">
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-                  <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skFoc.cat }} · {{ skFoc.no }}</span>
+                  <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint);display:inline-flex;align-items:center;gap:10px;text-transform:uppercase">{{ skLvLabel }}<span style="display:inline-flex;gap:3px"><sc-for list="{{ skFoc.cells }}" as="c" hint-placeholder-count="5"><i style="display:block;width:13px;height:8px;background:{{ c.bg }};border:1px solid {{ c.bd }};transform:skewX(-20deg);box-sizing:border-box"></i></sc-for></span></span>
                   <div style="display:flex;align-items:center;gap:8px">
-                    <span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skFoc.tone }};color:{{ skFoc.tone }};white-space:nowrap">{{ skFoc.status }}</span>
+                    <sc-if value="{{ skFoc.ok }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skFoc.tone }};color:{{ skFoc.tone }};white-space:nowrap">{{ skFoc.status }}</span></sc-if>
                     <div role="button" aria-label="Close" onClick="{{ skFoc.close }}" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-strong);font-size:12px;line-height:1;cursor:pointer;color:var(--text-secondary)" style-hover="color:var(--text-signal);border-color:var(--signal)">✕</div>
                   </div>
                 </div>
                 <span style="font-size:{{ skFoc.nameFs }};line-height:1.35">{{ skFoc.name }}</span>
+                <sc-if value="{{ skFoc.hasDs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;line-height:1.65;color:var(--text-secondary);white-space:pre-line;text-wrap:pretty">{{ skFoc.ds }}</span></sc-if>
                 <sc-if value="{{ skFoc.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px"><sc-for list="{{ skFoc.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
                 <sc-if value="{{ skFoc.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skFoc.link }}</span></sc-if>
+                <sc-if value="{{ skFoc.hasGo }}" hint-placeholder-val="{{ false }}"><div role="button" onClick="{{ skFoc.goPhoto }}" style="align-self:flex-start;font-size:12px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer" style-hover="text-decoration:underline">{{ skFoc.goLabel }}</div></sc-if>
+                <sc-if value="{{ skFoc.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skFoc.imgN }},minmax(0,1fr));gap:6px"><sc-for list="{{ skFoc.imgs }}" as="im" hint-placeholder-count="0"><div role="button" onClick="{{ im.open }}" style="border:1px solid var(--border-hair);overflow:hidden;cursor:zoom-in"><img src="{{ im.src }}" alt="" loading="lazy" style="display:block;width:100%;height:min(34vh,300px);object-fit:cover"></div></sc-for></div></sc-if>
                 <sc-for list="{{ skFoc.slots }}" as="sl" hint-placeholder-count="1"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div></sc-for>
-                <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
-                <span style="font-size:13px;color:{{ skFoc.proofColor }};text-wrap:pretty">{{ skFoc.proof }}</span>
+                <sc-if value="{{ skFoc.hasP }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
+                <span style="font-size:13px;color:{{ skFoc.proofColor }};text-wrap:pretty">{{ skFoc.proof }}</span></sc-if>
               </div>
             </sc-if>
             <sc-if value="{{ skView.hint }}" hint-placeholder-val="{{ false }}"><div data-noprint="" style="position:absolute;left:26px;right:26px;bottom:5px;z-index:4;pointer-events:none;text-align:center;font-size:10px;line-height:1.35;letter-spacing:.06em;color:var(--text-faint);text-wrap:balance">{{ skView.hint }}</div></sc-if>
@@ -487,12 +498,12 @@
           </sc-for>
           <i aria-hidden="true" style="flex:1000 1 0;height:0"></i>
         </div>
-        <!-- MINDFREAK: its own set, outside the colour groups. -->
+        <!-- Stage: its own set, outside the colour groups. -->
         <div style="margin-top:44px;padding-top:24px;border-top:1px solid var(--border-strong)">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px 20px;flex-wrap:wrap"><h3 style="margin:0;font-size:22px;font-weight:300;letter-spacing:.06em">MINDFREAK</h3><span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ mfMeta }}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px 20px;flex-wrap:wrap"><h3 style="margin:0;font-size:22px;font-weight:300;letter-spacing:.06em">{{ mfTitle }}</h3><span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ mfMeta }}</span></div>
           <div style="margin-top:16px;columns:3 140px;column-gap:12px">
             <sc-for list="{{ mfPics }}" as="cp" hint-placeholder-count="6">
-              <div role="button" onClick="{{ cp.open }}" style="display:block;margin:0 0 12px;break-inside:avoid;cursor:zoom-in"><img src="{{ cp.src }}" alt="MINDFREAK" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid var(--border-hair)"></div>
+              <div role="button" onClick="{{ cp.open }}" style="display:block;margin:0 0 12px;break-inside:avoid;cursor:zoom-in"><img src="{{ cp.src }}" alt="{{ mfTitle }}" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid var(--border-hair)"></div>
             </sc-for>
           </div>
         </div>
@@ -531,15 +542,18 @@
   <sc-if value="{{ skPop.on }}" hint-placeholder-val="{{ false }}">
     <div data-skpop="" class="sk-pop" onClick="{{ skPop.stop }}" style="position:fixed;left:{{ skPop.l }};top:{{ skPop.t }};transform:{{ skPop.tf }};z-index:60;width:300px;max-width:calc(100vw - 24px);box-sizing:border-box;background:color-mix(in srgb,var(--surface-plate) 58%,transparent);-webkit-backdrop-filter:blur(9px) saturate(1.15);backdrop-filter:blur(9px) saturate(1.15);border:1px solid var(--border-strong);box-shadow:0 14px 36px rgba(0,0,0,.16);padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;line-height:1.5;text-align:left;font-weight:300">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skPop.cat }} · {{ skPop.no }}</span>
-        <span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skPop.tone }};color:{{ skPop.tone }}">{{ skPop.status }}</span>
+        <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint);display:inline-flex;align-items:center;gap:10px;text-transform:uppercase">{{ skLvLabel }}<span style="display:inline-flex;gap:3px"><sc-for list="{{ skPop.cells }}" as="c" hint-placeholder-count="5"><i style="display:block;width:13px;height:8px;background:{{ c.bg }};border:1px solid {{ c.bd }};transform:skewX(-20deg);box-sizing:border-box"></i></sc-for></span></span>
+        <sc-if value="{{ skPop.ok }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skPop.tone }};color:{{ skPop.tone }}">{{ skPop.status }}</span></sc-if>
       </div>
       <span style="font-size:17px;line-height:1.35">{{ skPop.name }}</span>
+      <sc-if value="{{ skPop.hasDs }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;line-height:1.6;color:var(--text-secondary);white-space:pre-line;text-wrap:pretty">{{ skPop.ds }}</span></sc-if>
       <sc-if value="{{ skPop.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:1px"><sc-for list="{{ skPop.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
       <sc-if value="{{ skPop.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skPop.link }}</span></sc-if>
-      <div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ skPop.slot }}" shape="rect" placeholder="[ 證明 ]"></image-slot></div>
-      <span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
-      <span style="font-size:12px;color:{{ skPop.proofColor }};text-wrap:pretty">{{ skPop.proof }}</span>
+      <sc-if value="{{ skPop.hasImg }}" hint-placeholder-val="{{ false }}"><div style="aspect-ratio:4 / 3;overflow:hidden;border:1px solid var(--border-hair)"><img src="{{ skPop.img0 }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div></sc-if>
+      <sc-if value="{{ skPop.noImg }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ skPop.slot }}" shape="rect" placeholder="[ 證明 ]"></image-slot></div></sc-if>
+      <sc-if value="{{ skPop.hasGo }}" hint-placeholder-val="{{ false }}"><div role="button" class="sk-pop-more" onClick="{{ skPop.goPhoto }}" style="align-self:flex-start;font-size:11px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer">{{ skPop.goLabel }}</div></sc-if>
+      <sc-if value="{{ skPop.hasP }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
+      <span style="font-size:12px;color:{{ skPop.proofColor }};text-wrap:pretty">{{ skPop.proof }}</span></sc-if>
       <div role="button" class="sk-pop-more" onClick="{{ skPop.more }}" style="align-self:flex-end;margin-top:2px;font-size:11px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer">{{ skPop.moreLabel }}</div>
     </div>
   </sc-if>
@@ -600,11 +614,11 @@ const D = {
     { cat: "conference", year: "2026", photos: ["photos/acad/imb-2.jpg", "photos/acad/imb-1.jpg"], head: { zh: "中研院分生所 IMB Retreat", en: "IMB Retreat, Academia Sinica" }, org: { zh: "口頭與海報發表", en: "Talk & poster" } }
   ],
   skills: [
-    { year: "", head: { zh: "基礎", en: "Foundations" }, sub: { zh: "SolidWorks／Shapr3D · 參數化建模與公差 · Python · HTML／CSS／JS · 英文 TOEIC 835", en: "SolidWorks/Shapr3D · parametric CAD & tolerancing · Python · HTML/CSS/JS · English TOEIC 835" } },
-    { year: "", head: { zh: "機械製造", en: "Fabrication" }, sub: { zh: "FDM／DLP 3D 列印 · 雷射切割 · 銑床 · 鑽孔攻牙", en: "FDM/DLP printing · laser cutting · milling · drilling & tapping" } },
-    { year: "", head: { zh: "機電整合與嵌入式", en: "Mechatronics & embedded" }, sub: { zh: "Arduino · ESP32 · Raspberry Pi · 電路除錯 · PWM 伺服／步進 · IMU／視覺／聲音 · PySide6／網頁主控台", en: "Arduino · ESP32 · Raspberry Pi · hardware debug · PWM servo/stepper · IMU/vision/audio · PySide6/web consoles" } },
-    { year: "", head: { zh: "微製程與電極", en: "Microfabrication" }, sub: { zh: "微電極製造 · 氧氣電漿 · 濕式蝕刻 · 雷射剝除 · SEM · EIS", en: "Microelectrodes · O2 plasma · wet etching · laser ablation · SEM · EIS" } },
-    { year: "", head: { zh: "神經工程", en: "Neuroengineering" }, sub: { zh: "植入式電極 · 立體定位開顱植入 · 電生理 · 雙光子 · 動物行為 · 灌流切片 IHC", en: "Implants · stereotaxic surgery · electrophysiology · two-photon · behavior · perfusion, sectioning, IHC" } }
+    { year: "", head: { zh: "基礎", en: "Foundations" }, sub: { zh: "SolidWorks／Shapr3D · 拓樸最佳化與參數化建模 · Python · HTML／CSS／JS · 英文 TOEIC 835", en: "SolidWorks/Shapr3D · topology optimization & parametric modelling · Python · HTML/CSS/JS · English TOEIC 835" } },
+    { year: "", head: { zh: "製造／製程", en: "Fabrication & processing" }, sub: { zh: "FDM／DLP 3D 列印 · 雷射切割 · 銑床 · 鑽孔攻牙 · 微電極製造 · 氧氣電漿 · 濕式蝕刻 · 雷射剝除 · SEM · EIS", en: "FDM/DLP printing · laser cutting · milling · drilling & tapping · microelectrodes · O2 plasma · wet etching · laser ablation · SEM · EIS" } },
+    { year: "", head: { zh: "機電整合與嵌入式", en: "Mechatronics & embedded" }, sub: { zh: "Arduino · Raspberry Pi · 硬體除錯 · PWM 伺服／步進 · IMU／視覺／聲音 · PySide2／網頁主控台", en: "Arduino · Raspberry Pi · hardware debugging · PWM servo/stepper · IMU/vision/audio · PySide2/web consoles" } },
+    { year: "", head: { zh: "神經工程", en: "Neuroengineering" }, sub: { zh: "植入式電極 · 立體定位開顱植入 · 電生理 · 動物行為 · 灌流切片 IHC", en: "Implants · stereotaxic surgery · electrophysiology · behavior · perfusion, sectioning, IHC" } },
+    { year: "", head: { zh: "設計美學", en: "Design & aesthetics" }, sub: { zh: "攝影 · 平面設計 · UI／UX", en: "Photography · graphic design · UI / UX" } }
   ],
   awards: [
     { year: "2026", head: { zh: "青年百億計畫", en: "Taiwan Global Pathfinders Initiative" } },
@@ -655,16 +669,17 @@ const D = {
   minis: Array.from({ length: 8 }, () => ({ title: { zh: "建模作品", en: "3D model" } })),
   // Photography, first row: the portfolio grouped by colour. pics are file numbers in photos/photo/ (thumbs in photos/photo/t/).
   palettes: [
-    { zh: "紅", en: "Red", sw: "#C8452F", pics: [8, 63, 25, 62, 2, 65, 3, 39, 99, 54] },
-    { zh: "橙", en: "Orange", sw: "#E07B2A", pics: [13, 57, 1, 73, 29, 86, 11, 38, 23, 87, 24, 40] },
-    { zh: "黃", en: "Yellow", sw: "#D9B23A", pics: [16, 67, 27, 80, 89, 28, 59, 14, 94, 66, 81, 90] },
-    { zh: "綠", en: "Green", sw: "#4E9A6A", pics: [32, 61, 5, 37, 72, 36, 70, 78, 64, 43, 82] },
-    { zh: "藍", en: "Blue", sw: "#2F7FB8", pics: [6, 96, 30, 97, 12, 53, 31, 75, 7, 74, 35, 76, 34, 77, 9, 69, 4, 55, 42, 51, 56, 93, 41, 68] },
-    { zh: "紫", en: "Purple", sw: "#8A5CC2", pics: [79] },
-    { zh: "黑白", en: "B&W", sw: "linear-gradient(90deg,#1c1c1c 50%,#d8d8d8 50%)", solid: "#8A8A8A", pics: [33, 47, 26, 46, 15, 52, 10, 48, 44, 45, 49, 50, 58, 60, 71, 83, 84, 85, 88, 91, 92, 95, 98] }
+    { zh: "紅", en: "Red", sw: "#C8452F", pics: [1, 2, 3, 4, 5, 6, 7, 8] },
+    { zh: "橙", en: "Orange", sw: "#E07B2A", pics: [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
+    { zh: "黃", en: "Yellow", sw: "#D9B23A", pics: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34] },
+    { zh: "綠", en: "Green", sw: "#4E9A6A", pics: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48] },
+    { zh: "藍", en: "Blue", sw: "#2F7FB8", pics: [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71] },
+    { zh: "紫", en: "Purple", sw: "#8A5CC2", pics: [72, 73, 74, 75] },
+    { zh: "黑白", en: "B&W", sw: "linear-gradient(90deg,#1c1c1c 50%,#d8d8d8 50%)", solid: "#8A8A8A", pics: [76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99] },
+    { zh: "其他", en: "Other", sw: "conic-gradient(from 45deg,#C8452F,#D9B23A,#4E9A6A,#2F7FB8,#8A5CC2,#C8452F)", solid: "#9A9A9A", pics: [100, 101, 102, 103, 104, 105] }
   ],
-  // A separate set: the MINDFREAK live show.
-  mindfreak: [17, 18, 19, 20, 21, 22],
+  // A separate set: stage photography (fire dance, the MINDFREAK show).
+  mindfreak: [106, 107, 108, 109, 110, 111, 112, 113],
 
   portraits: [
     { src: "photos/portrait-1.jpg", title: { zh: "形象照", en: "Portrait" }, meta: "01" },
@@ -676,7 +691,7 @@ const D = {
 };
 D.works.push(...D.works.splice(D.works.findIndex(w => w._move), 1));
 // Width ÷ height of the portfolio photos (photos/photo/pNN.jpg), for the photo wall. Anything not listed is 1.5 (a 3:2 landscape frame).
-const PHOTO_AR = { 4: 0.67, 5: 0.67, 6: 0.67, 7: 0.67, 8: 0.67, 10: 0.67, 12: 0.67, 13: 0.67, 14: 0.67, 15: 0.67, 26: 0.67, 29: 0.67, 30: 0.67, 31: 0.67, 33: 0.67, 36: 0.67, 38: 0.67, 41: 0.67, 42: 0.67, 46: 1.35, 47: 0.67, 50: 1.33, 51: 1, 52: 0.67, 54: 0.67, 56: 0.67, 57: 0.67, 58: 0.67, 61: 0.67, 64: 0.67, 67: 0.67, 69: 0.67, 72: 0.67, 77: 0.67, 78: 0.67, 80: 0.67, 85: 0.67, 87: 1.42, 91: 0.67, 92: 0.67, 98: 0.67, 99: 0.67 };
+const PHOTO_AR = { 1: 0.67, 7: 1.42, 8: 0.67, 9: 0.67, 10: 0.67, 12: 0.67, 13: 0.67, 14: 0.67, 16: 0.67, 17: 0.67, 21: 0.67, 26: 0.67, 27: 0.67, 28: 0.67, 29: 0.67, 31: 0.67, 38: 1.0, 39: 0.67, 40: 0.67, 45: 0.67, 46: 0.67, 47: 0.67, 49: 0.67, 50: 0.56, 51: 0.8, 54: 0.67, 56: 0.67, 57: 0.67, 58: 0.67, 60: 0.67, 61: 0.67, 66: 0.67, 76: 0.67, 79: 1.35, 80: 0.67, 83: 1.33, 84: 0.67, 86: 0.67, 88: 0.67, 89: 0.67, 90: 0.67, 95: 0.67, 97: 0.67, 99: 0.67, 100: 0.67, 102: 1.44, 105: 0.67 };
 const PHOTO_N = D.palettes.reduce((n, c) => n + c.pics.length, 0) + D.mindfreak.length;
 // Skill-tree text in other languages, looked up by the Chinese text — [English, 日本語, Deutsch].
 const SK_TR = {
@@ -688,7 +703,9 @@ const SK_TR = {
   "Python（含基礎資料處理）": ["Python (incl. basic data processing)", "Python（基礎的なデータ処理を含む）", "Python (inkl. grundlegender Datenverarbeitung)"],
   "Web UI：HTML／CSS／JavaScript": ["Web UI: HTML / CSS / JavaScript", "Web UI：HTML／CSS／JavaScript", "Web-UI: HTML / CSS / JavaScript"],
   "語言：中文（母語）、英文（TOEIC 835）": ["Languages: Mandarin (native), English (TOEIC 835)", "言語：中国語（母語）、英語（TOEIC 835）", "Sprachen: Chinesisch (Muttersprache), Englisch (TOEIC 835)"],
-  "機械製造": ["Fabrication", "機械加工", "Fertigung"],
+  "機械製造": ["Mechanical fabrication", "機械加工", "Mechanische Fertigung"],
+  "製造／製程": ["Fabrication & processing", "製造・プロセス", "Fertigung & Prozesse"],
+  "微製程": ["Microfabrication", "微細加工", "Mikrofertigung"],
   "積層：FDM／DLP 3D 列印": ["Additive: FDM / DLP 3D printing", "積層：FDM／DLP 3D プリント", "Additiv: FDM- / DLP-3D-Druck"],
   "減材：雷射切割、銑床、鑽孔／攻牙": ["Subtractive: laser cutting, milling, drilling / tapping", "除去加工：レーザーカット、フライス、穴あけ／タップ", "Subtraktiv: Laserschneiden, Fräsen, Bohren / Gewindeschneiden"],
   "機電整合與嵌入式": ["Mechatronics & embedded", "メカトロニクスと組込み", "Mechatronik & Embedded"],
@@ -718,10 +735,42 @@ const SK_TR = {
   "← 用到機械＋機電": ["← uses fabrication + mechatronics", "← 機械加工＋メカトロを活用", "← nutzt Fertigung + Mechatronik"],
   "工作方式": ["Workflow", "進め方", "Arbeitsweise"],
   "快速設計 → 製作 → 測試 → 迭代": ["rapid design → build → test → iterate", "素早く設計 → 製作 → テスト → 反復", "schnell entwerfen → bauen → testen → iterieren"],
-  "查看詳細 →": ["Details →", "詳細を見る →", "Details →"]
+  "查看詳細 →": ["Details →", "詳細を見る →", "Details →"],
+  "設計美學": ["Design & aesthetics", "デザインと美学", "Design & Ästhetik"],
+  "攝影": ["Photography", "写真", "Fotografie"],
+  "平面設計": ["Graphic design", "グラフィックデザイン", "Grafikdesign"],
+  "UI／UX": ["UI / UX", "UI／UX", "UI / UX"],
+  "精熟度": ["Proficiency", "習熟度", "Kenntnisstand"],
+  "拓樸最佳化、參數化建模": ["Topology optimization, parametric modelling", "トポロジー最適化、パラメトリックモデリング", "Topologieoptimierung, parametrische Modellierung"],
+  "Python": ["Python", "Python", "Python"],
+  "硬體除錯": ["Hardware debugging", "ハードウェアのデバッグ", "Hardware-Debugging"],
+  "介面：PySide2 桌面主控台、網頁主控台": ["Interfaces: PySide2 desktop console, web console", "インターフェース：PySide2 デスクトップコンソール、Web コンソール", "Oberflächen: PySide2-Desktopkonsole, Webkonsole"],
+  "神經訊號紀錄：電生理": ["Neural recording: electrophysiology", "神経信号記録：電気生理", "Neuronale Ableitung: Elektrophysiologie"],
+  "組織學：心臟灌流、冷凍切片、免疫染色": ["Histology: cardiac perfusion, cryosectioning, IHC", "組織学：心臓灌流、凍結切片、免疫染色", "Histologie: Herzperfusion, Kryoschnitte, IHC"],
+  "詳情 →": ["Details →", "詳細 →", "Details →"],
+  "幾乎每天使用 CAD 軟體進行工業設計與建模。": ["I use CAD software almost every day for engineering models.", "ほぼ毎日 CAD ソフトで工業設計のモデリングをしています。", "Nahezu täglich CAD-Modellierung für technische Bauteile."],
+  "微結構需同時考量多項限制，因此以拓樸最佳化（SIMP、PARDISO、MMA）設計結構，並以 CadQuery 自建參數化建模的簡易介面，加快設計迭代。": ["Micro-structures involve many competing constraints, so I run topology optimization (SIMP, PARDISO, MMA); to make this easier I also built a simple parametric-modelling page (CadQuery-based).", "微細構造は考慮すべき要因が多いため、構造のトポロジー最適化（SIMP、PARDISO、MMA）を行い、効率化のために簡易なパラメトリックモデリング用ページ（CadQuery ベース）も作成しました。", "Mikrostrukturen bringen viele Randbedingungen mit sich, daher führe ich Topologieoptimierung durch (SIMP, PARDISO, MMA); zur Vereinfachung habe ich außerdem eine kleine Seite für parametrische Modellierung gebaut (auf CadQuery-Basis)."],
+  "實驗數據皆以 Python 整理與繪圖；小型專案與工具則透過 AI 的 MCP 串接 Python 開發，例如雙影像對位、阻抗分析等。": ["All lab data is processed and plotted in Python; for small projects and tools I also connect AI through MCP into Python, e.g. two-image registration and impedance analysis.", "研究室のデータはすべて Python で整理・グラフ化しています。小規模なプロジェクトやツールでは AI の MCP を Python につないで開発し、2 枚の画像の位置合わせやインピーダンス解析などを行っています。", "Alle Labordaten werte ich in Python aus und visualisiere sie; für kleinere Projekte und Tools binde ich KI über MCP in Python ein, z. B. für die Registrierung zweier Bilder oder Impedanzanalysen."],
+  "主要以 Claude Design 進行 HTML 架構的介面設計，也用於製作簡報。": ["Mainly HTML-based design with Claude Design; I have also used it to build slide decks.", "主に Claude Design で HTML ベースのデザインを行い、スライド作成にも使ったことがあります。", "Vor allem HTML-basiertes Design mit Claude Design; damit habe ich auch schon Präsentationen erstellt."],
+  "操作 10 μm 級高解析度 DLP 3D 列印機、Phrozen 8K 與拓竹消費級 3D 列印機；熟悉各類樹脂與線材特性，包括生物相容性樹脂、鹼溶性犧牲樹脂、陶瓷樹脂、透明樹脂，以及 PLA、ABS、玻纖強化 ABS 等。": ["I run a 10 µm-class high-resolution DLP printer, a Phrozen 8K printer and Bambu Lab consumer printers, and know a wide range of resins and filaments: biocompatible, alkaline-soluble sacrificial, ceramic and clear resins, PLA, ABS and glass-fibre-reinforced ABS.", "10 µm クラスの高解像度 DLP 3D プリンター、Phrozen 8K、Bambu Lab の民生用 3D プリンターを扱い、生体適合性レジン、アルカリ可溶の犠牲レジン、セラミックレジン、透明レジン、PLA、ABS、ガラス繊維強化 ABS など、さまざまなレジンとフィラメントの特性を把握しています。", "Ich arbeite mit einem hochauflösenden DLP-Drucker der 10-µm-Klasse, einem Phrozen 8K und Bambu-Lab-Druckern und kenne viele Harze und Filamente: biokompatible, alkalilösliche Opfer-, Keramik- und klare Harze, PLA, ABS und glasfaserverstärktes ABS."],
+  "與中研院精工室密切合作，操作過銑床、鑽床、大型切割機與研磨機等設備。\n以桌上型雷射切割機進行鋁件刻號與材料移除，並以雙光子顯微鏡的雷射進行微米級材料燒蝕。": ["Close collaboration with the Academia Sinica machine shop: milling and drilling machines, large cutting saws, grinders and more.\nA desktop laser cutter for marking and removing material on aluminium parts, and the two-photon microscope's laser for micron-scale ablation.", "中央研究院の精密工作室と密に連携し、フライス盤、ボール盤、大型切断機、研削盤などを使用してきました。\n卓上レーザーカッターでアルミ部品の刻印・材料除去を行い、二光子顕微鏡のレーザーでミクロンスケールのアブレーションも行っています。", "Enge Zusammenarbeit mit der Feinmechanik-Werkstatt der Academia Sinica: Fräs- und Bohrmaschinen, große Trennmaschinen, Schleifmaschinen u. a.\nDesktop-Laserschneider zum Beschriften und Abtragen an Aluminiumteilen; Laser des Zwei-Photonen-Mikroskops für Ablation im Mikrometerbereich."],
+  "實驗室設備如 Phrozen 8K 3D 列印機、MR.CARVE M1 PRO 雷射雕刻機故障時，曾自行拆機排除問題並完成維修（斷線、腳位接錯、更換 LCD）。": ["When lab machines such as the Phrozen 8K printer or the MR.CARVE M1 PRO laser broke down, I opened them up and fixed the hardware (burnt wires, mis-wired pins, LCD replacement).", "Phrozen 8K 3D プリンターや MR.CARVE M1 PRO レーザーなど研究室の機器が故障した際、背面パネルを開けてトラブルシューティングし、ハードウェアを修理しました（断線、ピンの誤配線、LCD 交換）。", "Bei Ausfällen von Laborgeräten wie dem Phrozen-8K-Drucker oder dem MR.CARVE-M1-PRO-Laser habe ich sie geöffnet und die Hardware repariert (durchgebrannte Leitungen, falsch belegte Pins, LCD-Tausch)."],
+  "無刷馬達：為控制離心轉速曲線，以 PWM 驅動，自製高轉速離心機。\n步進馬達：以直線滑軌搭配步進馬達，做出可切割並上下往復震盪的穩定機構。\n伺服馬達：以 14 顆伺服馬達驅動四足機器人的四肢與頸部。": ["Brushless motors: PWM control to follow a centrifugation speed profile; I built my own high-speed centrifuge.\nStepper motors: a side project that needed steady motion, a linear rail and stepper motor that can cut and oscillate up and down.\nServo motors: 14 servos drive the legs and neck of a quadruped robot.", "ブラシレスモーター：遠心の速度プロファイルを制御するため PWM で駆動し、高速遠心機を自作しました。\nステッピングモーター：安定した動きが必要な小プロジェクトで、リニアガイドとステッピングモーターにより切断と上下振動ができる機構を作りました。\nサーボモーター：14 個のサーボで四足ロボットの四肢と首を動かしています。", "Bürstenlose Motoren: PWM-Steuerung für ein Zentrifugations-Drehzahlprofil – ich habe eine eigene Hochgeschwindigkeitszentrifuge gebaut.\nSchrittmotoren: für ein Nebenprojekt mit ruhiger Bewegung eine Linearführung mit Schrittmotor, die schneiden und auf und ab oszillieren kann.\nServomotoren: 14 Servos bewegen Beine und Hals eines vierbeinigen Roboters."],
+  "機器人的樹莓派記憶體有限、ROS 負擔過重，因此將各感測器模組化為函式，自建類似 ROS 的感測器整合架構。": ["The robot's Raspberry Pi has limited memory and ROS is heavy, so I wrote each sensor as a function and built a ROS-like sensor-integration layer.", "ロボットの Raspberry Pi はメモリが限られ ROS の負荷が高いため、各センサーを関数として実装し、ROS のようなセンサー統合機能を作りました。", "Der Raspberry Pi des Roboters hat wenig Speicher und ROS ist ressourcenhungrig, daher habe ich jeden Sensor als Funktion umgesetzt und eine ROS-ähnliche Sensorintegration gebaut."],
+  "以 Qt Designer 與 PySide2 改寫雙光子顯微鏡的控制 API，使其符合實驗室成員的操作需求。": ["Used Qt Designer and PySide2 to adapt the two-photon microscope's API to what others in the lab needed.", "Qt Designer と PySide2 で二光子顕微鏡の API を改修し、研究室の他のメンバーのニーズに合わせました。", "Mit Qt Designer und PySide2 habe ich die API des Zwei-Photonen-Mikroskops an die Bedürfnisse der Kolleginnen und Kollegen im Labor angepasst."],
+  "使用 MaxWell 高密度微電極陣列晶片進行平行電生理神經紀錄。": ["Parallel electrophysiological recording of neurons on MaxWell high-density microelectrode-array chips.", "MaxWell チップで電気生理の並列神経記録を行っています。", "Parallele elektrophysiologische Ableitung von Neuronen auf MaxWell-Chips."],
+  "以 Open-field test 評估小鼠的負重與恢復能力，並參與小鼠 VR 系統與自動餵食器的硬體建置。": ["Open-field tests to assess load-bearing and recovery in mice; I also helped build the hardware for a mouse VR system and an automatic feeder.", "オープンフィールド試験でマウスの負荷耐性と回復力を評価し、マウス用 VR システムや自動給餌機のハードウェア構築・開発も手伝いました。", "Open-Field-Tests zur Beurteilung von Belastbarkeit und Erholung bei Mäusen; außerdem Mitarbeit an der Hardware eines Maus-VR-Systems und eines automatischen Futterautomaten."],
+  "評估電極植入的位置及對組織的影響。": ["Verifying where implanted electrodes sit and how they affect the tissue.", "埋め込んだ電極の位置と組織への影響を評価します。", "Überprüfung von Lage und Gewebewirkung implantierter Elektroden."],
+  "以氧氣電漿、濕式蝕刻與雷射剝除等製程製作微電極。": ["Microelectrodes made with oxygen plasma, wet etching and laser ablation.", "酸素プラズマ、ウェットエッチング、レーザーアブレーションなどのプロセスで微小電極を作製します。", "Herstellung von Mikroelektroden mit Sauerstoffplasma, Nassätzen und Laserablation."],
+  "製程完成後，以電子顯微鏡（SEM）與電性阻抗量測進行品質檢驗（QC）。": ["After fabrication, quality control with electron microscopy (SEM) and electrical impedance measurements.", "製造後、電子顕微鏡（SEM）と電気インピーダンス測定で品質検査（QC）を行います。", "Nach der Fertigung Qualitätskontrolle mittels Elektronenmikroskopie (REM) und elektrischer Impedanzmessung."],
+  "另做過拓樸最佳化與參數化建模：專案中的微結構需同時考量多項限制，因此以拓樸最佳化（SIMP、PARDISO、MMA）設計結構，並以 CadQuery 自建參數化建模的簡易介面，加快設計迭代。": ["I have also done topology optimization and parametric modelling: the micro-structures in my projects involve many competing constraints, so I design them with topology optimization (SIMP, PARDISO, MMA) and built a simple CadQuery-based parametric-modelling tool to iterate faster.", "トポロジー最適化とパラメトリックモデリングの経験もあります。プロジェクトの微細構造は多くの制約を同時に考慮する必要があるため、トポロジー最適化（SIMP、PARDISO、MMA）で構造を設計し、CadQuery ベースの簡易パラメトリックモデリングツールを自作して設計の反復を速めました。", "Außerdem Topologieoptimierung und parametrische Modellierung: Die Mikrostrukturen in meinen Projekten unterliegen vielen Randbedingungen, daher entwerfe ich sie per Topologieoptimierung (SIMP, PARDISO, MMA) und habe ein einfaches CadQuery-basiertes Tool für parametrische Modellierung gebaut, um schneller zu iterieren."],
+  "幾乎每天使用 CAD 軟體（SolidWorks、Shapr3D）進行工業設計與建模。\n另做過拓樸最佳化與參數化建模：專案中的微結構需同時考量多項限制，因此以拓樸最佳化（SIMP、PARDISO、MMA）設計結構，並以 CadQuery 自建參數化建模的簡易介面，加快設計迭代。": ["I use CAD software (SolidWorks, Shapr3D) almost every day for engineering design and modelling.\nI have also done topology optimization and parametric modelling: the micro-structures in my projects involve many competing constraints, so I design them with topology optimization (SIMP, PARDISO, MMA) and built a simple CadQuery-based parametric-modelling tool to iterate faster.", "ほぼ毎日 CAD ソフト（SolidWorks、Shapr3D）で工業設計とモデリングを行っています。\nトポロジー最適化とパラメトリックモデリングの経験もあります。プロジェクトの微細構造は多くの制約を同時に考慮する必要があるため、トポロジー最適化（SIMP、PARDISO、MMA）で構造を設計し、CadQuery ベースの簡易パラメトリックモデリングツールを自作して設計の反復を速めました。", "Nahezu täglich CAD-Arbeit (SolidWorks, Shapr3D) für technisches Design und Modellierung.\nAußerdem Topologieoptimierung und parametrische Modellierung: Die Mikrostrukturen in meinen Projekten unterliegen vielen Randbedingungen, daher entwerfe ich sie per Topologieoptimierung (SIMP, PARDISO, MMA) und habe ein einfaches CadQuery-basiertes Tool für parametrische Modellierung gebaut, um schneller zu iterieren."],
+  "Python：實驗數據皆以 Python 整理與繪圖；小型專案與工具則透過 AI 的 MCP 串接 Python 開發，例如雙影像對位、阻抗分析等。\nWeb UI（HTML／CSS／JavaScript）：主要以 Claude Design 進行 HTML 架構的介面設計，也用於製作簡報。": ["Python: all lab data is processed and plotted in Python; for small projects and tools I also connect AI through MCP into Python, e.g. two-image registration and impedance analysis.\nWeb UI (HTML / CSS / JavaScript): mainly HTML-based interface design with Claude Design, also used for slide decks.", "Python：研究室のデータはすべて Python で整理・グラフ化しています。小規模なプロジェクトやツールでは AI の MCP を Python につないで開発し、2 枚の画像の位置合わせやインピーダンス解析などを行っています。\nWeb UI（HTML／CSS／JavaScript）：主に Claude Design で HTML ベースのインターフェースを設計し、スライド作成にも使っています。", "Python: Alle Labordaten werte ich in Python aus und visualisiere sie; für kleinere Projekte und Tools binde ich KI über MCP in Python ein, z. B. für die Registrierung zweier Bilder oder Impedanzanalysen.\nWeb-UI (HTML / CSS / JavaScript): vor allem HTML-basiertes Interface-Design mit Claude Design, auch für Präsentationen."],
+  "看作品 →": ["See the photos →", "作品を見る →", "Fotos ansehen →"]
 };
 // Skill-tree icons: Lucide (lucide.dev, ISC licence), keyed by node id ("branch.item.sub"). Swap one by pasting another icon's inner SVG.
 const SK_IC = {
+  "1": "<path d=\"M12 16h.01\" /><path d=\"M16 16h.01\" /><path d=\"M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z\" /><path d=\"M8 16h.01\" />",
   "0": "<path d=\"M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z\" /><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\" /><circle cx=\"17.5\" cy=\"17.5\" r=\"3.5\" />",
   "0.0": "<path d=\"M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z\" /><path d=\"m3.3 7 8.7 5 8.7-5\" /><path d=\"M12 22V12\" />",
   "0.0.0": "<path d=\"m21.12 6.4-6.05-4.06a2 2 0 0 0-2.17-.05L2.95 8.41a2 2 0 0 0-.95 1.7v5.82a2 2 0 0 0 .88 1.66l6.05 4.07a2 2 0 0 0 2.17.05l9.95-6.12a2 2 0 0 0 .95-1.7V8.06a2 2 0 0 0-.88-1.66Z\" /><path d=\"M10 22v-8L2.25 9.15\" /><path d=\"m10 14 11.77-6.87\" />",
@@ -730,9 +779,9 @@ const SK_IC = {
   "0.1.0": "<path d=\"m7 11 2-2-2-2\" /><path d=\"M11 13h4\" /><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" ry=\"2\" />",
   "0.1.1": "<rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\" /><path d=\"M10 4v4\" /><path d=\"M2 8h20\" /><path d=\"M6 4v4\" />",
   "0.2": "<path d=\"m5 8 6 6\" /><path d=\"m4 14 6-6 2-3\" /><path d=\"M2 5h12\" /><path d=\"M7 2h1\" /><path d=\"m22 22-5-10-5 10\" /><path d=\"M14 18h6\" />",
-  "1": "<path d=\"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z\" /><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z\" /><path d=\"M12 2v2\" /><path d=\"M12 22v-2\" /><path d=\"m17 20.66-1-1.73\" /><path d=\"M11 10.27 7 3.34\" /><path d=\"m20.66 17-1.73-1\" /><path d=\"m3.34 7 1.73 1\" /><path d=\"M14 12h8\" /><path d=\"M2 12h2\" /><path d=\"m20.66 7-1.73 1\" /><path d=\"m3.34 17 1.73-1\" /><path d=\"m17 3.34-1 1.73\" /><path d=\"m11 13.73-4 6.93\" />",
-  "1.0": "<path d=\"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z\" /><path d=\"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65\" /><path d=\"m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65\" />",
-  "1.1": "<path d=\"M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z\" /><path d=\"M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8\" /><path d=\"M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3\" /><path d=\"M18 6h4\" /><path d=\"m5 10-2 8\" /><path d=\"m7 18 2-8\" />",
+  "1.0": "<path d=\"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z\" /><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z\" /><path d=\"M12 2v2\" /><path d=\"M12 22v-2\" /><path d=\"m17 20.66-1-1.73\" /><path d=\"M11 10.27 7 3.34\" /><path d=\"m20.66 17-1.73-1\" /><path d=\"m3.34 7 1.73 1\" /><path d=\"M14 12h8\" /><path d=\"M2 12h2\" /><path d=\"m20.66 7-1.73 1\" /><path d=\"m3.34 17 1.73-1\" /><path d=\"m17 3.34-1 1.73\" /><path d=\"m11 13.73-4 6.93\" />",
+  "1.0.0": "<path d=\"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z\" /><path d=\"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65\" /><path d=\"m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65\" />",
+  "1.0.1": "<path d=\"M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z\" /><path d=\"M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8\" /><path d=\"M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3\" /><path d=\"M18 6h4\" /><path d=\"m5 10-2 8\" /><path d=\"m7 18 2-8\" />",
   "2": "<path d=\"M12 8V4H8\" /><rect width=\"16\" height=\"12\" x=\"4\" y=\"8\" rx=\"2\" /><path d=\"M2 14h2\" /><path d=\"M20 14h2\" /><path d=\"M15 13v2\" /><path d=\"M9 13v2\" />",
   "2.0": "<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" /><path d=\"M11 9h4a2 2 0 0 0 2-2V3\" /><circle cx=\"9\" cy=\"9\" r=\"2\" /><path d=\"M7 21v-4a2 2 0 0 1 2-2h4\" /><circle cx=\"15\" cy=\"15\" r=\"2\" />",
   "2.1": "<path d=\"M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1\" /><path d=\"M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9\" /><path d=\"M21 21v-2h-4\" /><path d=\"M3 5h4V3\" /><path d=\"M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3\" />",
@@ -742,46 +791,65 @@ const SK_IC = {
   "2.2.0.1": "<line x1=\"6\" x2=\"6\" y1=\"4\" y2=\"20\" /><polygon points=\"10,4 20,12 10,20\" />",
   "2.3": "<path d=\"M19.07 4.93A10 10 0 0 0 6.99 3.34\" /><path d=\"M4 6h.01\" /><path d=\"M2.29 9.62A10 10 0 1 0 21.31 8.35\" /><path d=\"M16.24 7.76A6 6 0 1 0 8.23 16.67\" /><path d=\"M12 18h.01\" /><path d=\"M17.99 11.66A6 6 0 0 1 15.77 16.67\" /><circle cx=\"12\" cy=\"12\" r=\"2\" /><path d=\"m13.41 10.59 5.66-5.66\" />",
   "2.4": "<rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\" />",
-  "3": "<path d=\"M18 12h2\" /><path d=\"M18 16h2\" /><path d=\"M18 20h2\" /><path d=\"M18 4h2\" /><path d=\"M18 8h2\" /><path d=\"M4 12h2\" /><path d=\"M4 16h2\" /><path d=\"M4 20h2\" /><path d=\"M4 4h2\" /><path d=\"M4 8h2\" /><path d=\"M8 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-1.5c-.276 0-.494.227-.562.495a2 2 0 0 1-3.876 0C9.994 2.227 9.776 2 9.5 2z\" />",
-  "3.0": "<circle cx=\"12\" cy=\"5\" r=\"1\" /><circle cx=\"19\" cy=\"5\" r=\"1\" /><circle cx=\"5\" cy=\"5\" r=\"1\" /><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /><circle cx=\"5\" cy=\"12\" r=\"1\" /><circle cx=\"12\" cy=\"19\" r=\"1\" /><circle cx=\"19\" cy=\"19\" r=\"1\" /><circle cx=\"5\" cy=\"19\" r=\"1\" />",
-  "3.0.0": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />",
-  "3.1": "<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\" /><path d=\"m9 12 2 2 4-4\" />",
-  "3.1.0": "<path d=\"M3 3v16a2 2 0 0 0 2 2h16\" /><path d=\"M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7\" />",
-  "4": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z\" /><path d=\"M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4\" /><path d=\"M17.599 6.5a3 3 0 0 0 .399-1.375\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M19.938 10.5a4 4 0 0 1 .585.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M19.967 17.484A4 4 0 0 1 18 18\" />",
-  "4.0": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M9 13a4.5 4.5 0 0 0 3-4\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M12 13h4\" /><path d=\"M12 18h6a2 2 0 0 1 2 2v1\" /><path d=\"M12 8h8\" /><path d=\"M16 8V5a2 2 0 0 1 2-2\" /><circle cx=\"16\" cy=\"13\" r=\".5\" /><circle cx=\"18\" cy=\"3\" r=\".5\" /><circle cx=\"20\" cy=\"21\" r=\".5\" /><circle cx=\"20\" cy=\"8\" r=\".5\" />",
-  "4.1": "<path d=\"M11 16.586V19a1 1 0 0 1-1 1H2L18.37 3.63a1 1 0 1 1 3 3l-9.663 9.663a1 1 0 0 1-1.414 0L8 14\" />",
-  "4.2": "<path d=\"M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2\" />",
-  "4.3": "<path d=\"M17 5c0-1.7-1.3-3-3-3s-3 1.3-3 3c0 .8.3 1.5.8 2H11c-3.9 0-7 3.1-7 7c0 2.2 1.8 4 4 4\" /><path d=\"M16.8 3.9c.3-.3.6-.5 1-.7 1.5-.6 3.3.1 3.9 1.6.6 1.5-.1 3.3-1.6 3.9l1.6 2.8c.2.3.2.7.2 1-.2.8-.9 1.2-1.7 1.1 0 0-1.6-.3-2.7-.6H17c-1.7 0-3 1.3-3 3\" /><path d=\"M13.2 18a3 3 0 0 0-2.2-5\" /><path d=\"M13 22H4a2 2 0 0 1 0-4h12\" /><path d=\"M16 9h.01\" />",
-  "4.4": "<path d=\"M6 18h8\" /><path d=\"M3 22h18\" /><path d=\"M14 22a7 7 0 1 0 0-14h-1\" /><path d=\"M9 14h2\" /><path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\" /><path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\" />"
+  "1.1": "<path d=\"M18 12h2\" /><path d=\"M18 16h2\" /><path d=\"M18 20h2\" /><path d=\"M18 4h2\" /><path d=\"M18 8h2\" /><path d=\"M4 12h2\" /><path d=\"M4 16h2\" /><path d=\"M4 20h2\" /><path d=\"M4 4h2\" /><path d=\"M4 8h2\" /><path d=\"M8 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-1.5c-.276 0-.494.227-.562.495a2 2 0 0 1-3.876 0C9.994 2.227 9.776 2 9.5 2z\" />",
+  "1.1.0": "<circle cx=\"12\" cy=\"5\" r=\"1\" /><circle cx=\"19\" cy=\"5\" r=\"1\" /><circle cx=\"5\" cy=\"5\" r=\"1\" /><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /><circle cx=\"5\" cy=\"12\" r=\"1\" /><circle cx=\"12\" cy=\"19\" r=\"1\" /><circle cx=\"19\" cy=\"19\" r=\"1\" /><circle cx=\"5\" cy=\"19\" r=\"1\" />",
+  "1.1.0.0": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />",
+  "1.1.1": "<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\" /><path d=\"m9 12 2 2 4-4\" />",
+  "1.1.1.0": "<path d=\"M3 3v16a2 2 0 0 0 2 2h16\" /><path d=\"M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7\" />",
+  "3": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z\" /><path d=\"M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4\" /><path d=\"M17.599 6.5a3 3 0 0 0 .399-1.375\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M19.938 10.5a4 4 0 0 1 .585.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M19.967 17.484A4 4 0 0 1 18 18\" />",
+  "3.0": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M9 13a4.5 4.5 0 0 0 3-4\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M12 13h4\" /><path d=\"M12 18h6a2 2 0 0 1 2 2v1\" /><path d=\"M12 8h8\" /><path d=\"M16 8V5a2 2 0 0 1 2-2\" /><circle cx=\"16\" cy=\"13\" r=\".5\" /><circle cx=\"18\" cy=\"3\" r=\".5\" /><circle cx=\"20\" cy=\"21\" r=\".5\" /><circle cx=\"20\" cy=\"8\" r=\".5\" />",
+  "3.1": "<path d=\"M11 16.586V19a1 1 0 0 1-1 1H2L18.37 3.63a1 1 0 1 1 3 3l-9.663 9.663a1 1 0 0 1-1.414 0L8 14\" />",
+  "3.2": "<path d=\"M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2\" />",
+  "3.3": "<path d=\"M17 5c0-1.7-1.3-3-3-3s-3 1.3-3 3c0 .8.3 1.5.8 2H11c-3.9 0-7 3.1-7 7c0 2.2 1.8 4 4 4\" /><path d=\"M16.8 3.9c.3-.3.6-.5 1-.7 1.5-.6 3.3.1 3.9 1.6.6 1.5-.1 3.3-1.6 3.9l1.6 2.8c.2.3.2.7.2 1-.2.8-.9 1.2-1.7 1.1 0 0-1.6-.3-2.7-.6H17c-1.7 0-3 1.3-3 3\" /><path d=\"M13.2 18a3 3 0 0 0-2.2-5\" /><path d=\"M13 22H4a2 2 0 0 1 0-4h12\" /><path d=\"M16 9h.01\" />",
+  "3.4": "<path d=\"M6 18h8\" /><path d=\"M3 22h18\" /><path d=\"M14 22a7 7 0 1 0 0-14h-1\" /><path d=\"M9 14h2\" /><path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\" /><path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\" />",
+  "4": "<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"#000\" /><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"#000\" /><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"#000\" /><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"#000\" /><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\" />",
+  "4.0": "<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\" /><circle cx=\"12\" cy=\"13\" r=\"3\" />",
+  "4.1": "<path d=\"M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z\" /><path d=\"m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18\" /><path d=\"m2.3 2.3 7.286 7.286\" /><circle cx=\"11\" cy=\"11\" r=\"2\" />",
+  "4.2": "<rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\" /><line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\" /><line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\" />"
   };
 // Skill evidence: set ok:true and p:{zh,en} once confirmed
 const N = (n, c, x) => ({ n, c: c || [], ...(x || {}) });
 const SK = [
   N("基礎", [
-    N("3D 建模與工程設計", [N("SolidWorks、Shapr3D"), N("參數化建模 → 工程圖 → 公差設計")]),
-    N("程式", [N("Python（含基礎資料處理）"), N("Web UI：HTML／CSS／JavaScript")]),
+    N("3D 建模與工程設計", [], { ds: "幾乎每天使用 CAD 軟體（SolidWorks、Shapr3D）進行工業設計與建模。\n另做過拓樸最佳化與參數化建模：專案中的微結構需同時考量多項限制，因此以拓樸最佳化（SIMP、PARDISO、MMA）設計結構，並以 CadQuery 自建參數化建模的簡易介面，加快設計迭代。" }),
+    N("程式", [], { ds: "Python：實驗數據皆以 Python 整理與繪圖；小型專案與工具則透過 AI 的 MCP 串接 Python 開發，例如雙影像對位、阻抗分析等。\nWeb UI（HTML／CSS／JavaScript）：主要以 Claude Design 進行 HTML 架構的介面設計，也用於製作簡報。" }),
     N("語言：中文（母語）、英文（TOEIC 835）")
   ], { sub: "跨領域共用" }),
-  N("機械製造", [N("積層：FDM／DLP 3D 列印"), N("減材：雷射切割、銑床、鑽孔／攻牙")]),
+  N("製造／製程", [
+    N("機械製造", [N("積層：FDM／DLP 3D 列印", [], { ds: "操作 10 μm 級高解析度 DLP 3D 列印機、Phrozen 8K 與拓竹消費級 3D 列印機；熟悉各類樹脂與線材特性，包括生物相容性樹脂、鹼溶性犧牲樹脂、陶瓷樹脂、透明樹脂，以及 PLA、ABS、玻纖強化 ABS 等。" }), N("減材：雷射切割、銑床、鑽孔／攻牙", [], { ds: "與中研院精工室密切合作，操作過銑床、鑽床、大型切割機與研磨機等設備。\n以桌上型雷射切割機進行鋁件刻號與材料移除，並以雙光子顯微鏡的雷射進行微米級材料燒蝕。" })]),
+    N("微製程", [
+      N("微電極製造", [], { ds: "以氧氣電漿、濕式蝕刻與雷射剝除等製程製作微電極。" }),
+      N("元件驗證", [], { ds: "製程完成後，以電子顯微鏡（SEM）與電性阻抗量測進行品質檢驗（QC）。" })
+    ], { link: "→ 產出供神經工程使用" })
+  ]),
   N("機電整合與嵌入式", [
     N("控制平台：Arduino、ESP32、Raspberry Pi"),
-    N("電路組裝 → 硬體除錯"),
-    N("馬達控制", [N("PWM／馬達驅動", [N("伺服馬達"), N("步進馬達")])]),
-    N("感測器整合：IMU、視覺、聲音"),
-    N("介面：PySide6 桌面主控台、網頁主控台")
+    N("硬體除錯", [], { ds: "實驗室設備如 Phrozen 8K 3D 列印機、MR.CARVE M1 PRO 雷射雕刻機故障時，曾自行拆機排除問題並完成維修（斷線、腳位接錯、更換 LCD）。" }),
+    N("馬達控制", [], { ds: "無刷馬達：為控制離心轉速曲線，以 PWM 驅動，自製高轉速離心機。\n步進馬達：以直線滑軌搭配步進馬達，做出可切割並上下往復震盪的穩定機構。\n伺服馬達：以 14 顆伺服馬達驅動四足機器人的四肢與頸部。", go: "robot" }),
+    N("感測器整合：IMU、視覺、聲音", [], { ds: "機器人的樹莓派記憶體有限、ROS 負擔過重，因此將各感測器模組化為函式，自建類似 ROS 的感測器整合架構。", go: "robot" }),
+    N("介面：PySide2 桌面主控台、網頁主控台", [], { ds: "以 Qt Designer 與 PySide2 改寫雙光子顯微鏡的控制 API，使其符合實驗室成員的操作需求。" })
   ]),
-  N("微製程與電極", [
-    N("微電極製造", [N("氧氣電漿、濕式蝕刻、雷射剝除")]),
-    N("元件驗證", [N("SEM → 阻抗量測／EIS")])
-  ], { link: "→ 產出供神經工程使用" }),
   N("神經工程", [
     N("神經介面：微電極／植入式電極", [], { link: "← 微製程產出" }),
     N("動物手術：立體定位 → 開顱 → 植入"),
-    N("神經訊號紀錄：電生理、雙光子顯微鏡"),
-    N("行為：動物行為實驗、行為設備開發", [], { link: "← 用到機械＋機電" }),
-    N("組織學：心臟灌流 → 冷凍切片 → IHC")
-  ], { sub: "照實驗流程排" })
+    N("神經訊號紀錄：電生理", [], { ds: "使用 MaxWell 高密度微電極陣列晶片進行平行電生理神經紀錄。" }),
+    N("行為：動物行為實驗、行為設備開發", [], { link: "← 用到機械＋機電", ds: "以 Open-field test 評估小鼠的負重與恢復能力，並參與小鼠 VR 系統與自動餵食器的硬體建置。" }),
+    N("組織學：心臟灌流、冷凍切片、免疫染色", [], { ds: "評估電極植入的位置及對組織的影響。" })
+  ], { sub: "照實驗流程排" }),
+  N("設計美學", [N("攝影", [], { go: "photo" }), N("平面設計"), N("UI／UX")])
 ];
+// Proficiency, 1–5 (the energy bar). Keyed by the item's Chinese name; a branch shows the average of everything under it.
+const SK_LV = {
+  "3D 建模與工程設計": 5, "程式": 3, "語言：中文（母語）、英文（TOEIC 835）": 4,
+  "積層：FDM／DLP 3D 列印": 5, "減材：雷射切割、銑床、鑽孔／攻牙": 5,
+  "控制平台：Arduino、ESP32、Raspberry Pi": 4, "硬體除錯": 4, "馬達控制": 5, "感測器整合：IMU、視覺、聲音": 4, "介面：PySide2 桌面主控台、網頁主控台": 3,
+  "微電極製造": 5, "氧氣電漿、濕式蝕刻、雷射剝除": 5, "元件驗證": 4, "SEM → 阻抗量測／EIS": 4,
+  "神經介面：微電極／植入式電極": 5, "動物手術：立體定位 → 開顱 → 植入": 4, "神經訊號紀錄：電生理": 4, "行為：動物行為實驗、行為設備開發": 4, "組織學：心臟灌流、冷凍切片、免疫染色": 4,
+  "攝影": 5, "平面設計": 4, "UI／UX": 4
+};
+// Evidence photos for skill nodes (photos/skill/), keyed by node id. Several photos: the pop-up shows the first, the zoomed panel all.
+const SK_IMG = { "1.0.0": ["photos/skill/1-0-a.jpg", "photos/skill/1-0-b.jpg"], "1.0.1": ["photos/skill/1-1.jpg"], "2.1": ["photos/skill/2-1.jpg"], "1.1.0": ["photos/skill/3-0-0.jpg"],
+  "1.1.1": ["photos/skill/3-1-0.jpg"], "3.1": ["photos/skill/4-1.jpg"], "3.4": ["photos/skill/4-4.jpg"] };
 const UI = {
   tabs: [["home", "主頁", "Home"], ["acad", "學術", "Academic"], ["work", "專案", "Projects"], ["skills", "技能", "Skills"], ["other", "其他", "Other"]],
   dl: { problem: ["問題", "Problem"], role: ["角色", "Role"], method: ["做法", "Method"], result: ["成果", "Result"] }
@@ -838,15 +906,20 @@ const TR = {
   "中研院 NPAS 暑期大專生計畫成果發表": ["中央研究院 NPAS 夏季学部生研究プログラム 成果発表", "Academia Sinica NPAS Sommerforschungsprogramm"],
   "第五名": ["5位", "5. Platz"],
   "基礎": ["基礎", "Grundlagen"],
-  "SolidWorks／Shapr3D · 參數化建模與公差 · Python · HTML／CSS／JS · 英文 TOEIC 835": ["SolidWorks／Shapr3D · パラメトリック設計と公差 · Python · HTML／CSS／JS · 英語 TOEIC 835", "SolidWorks/Shapr3D · parametrisches CAD & Toleranzen · Python · HTML/CSS/JS · Englisch TOEIC 835"],
+  "SolidWorks／Shapr3D · 拓樸最佳化與參數化建模 · Python · HTML／CSS／JS · 英文 TOEIC 835": ["SolidWorks／Shapr3D · トポロジー最適化とパラメトリック設計 · Python · HTML／CSS／JS · 英語 TOEIC 835", "SolidWorks/Shapr3D · Topologieoptimierung & parametrisches CAD · Python · HTML/CSS/JS · Englisch TOEIC 835"],
   "機械製造": ["機械加工", "Fertigung"],
   "FDM／DLP 3D 列印 · 雷射切割 · 銑床 · 鑽孔攻牙": ["FDM／DLP 3Dプリント · レーザー切断 · フライス加工 · 穴あけ・タップ", "FDM/DLP-3D-Druck · Laserschneiden · Fräsen · Bohren & Gewindeschneiden"],
   "機電整合與嵌入式": ["メカトロニクス・組込み", "Mechatronik & Embedded"],
-  "Arduino · ESP32 · Raspberry Pi · 電路除錯 · PWM 伺服／步進 · IMU／視覺／聲音 · PySide6／網頁主控台": ["Arduino · ESP32 · Raspberry Pi · 回路デバッグ · PWM サーボ／ステッピング · IMU／画像／音声 · PySide6／Webコンソール", "Arduino · ESP32 · Raspberry Pi · Hardware-Debugging · PWM-Servo/Schrittmotor · IMU/Vision/Audio · PySide6/Web-Konsolen"],
+  "Arduino · Raspberry Pi · 硬體除錯 · PWM 伺服／步進 · IMU／視覺／聲音 · PySide2／網頁主控台": ["Arduino · Raspberry Pi · ハードウェアデバッグ · PWM サーボ／ステッピング · IMU／画像／音声 · PySide2／Webコンソール", "Arduino · Raspberry Pi · Hardware-Debugging · PWM-Servo/Schrittmotor · IMU/Vision/Audio · PySide2/Web-Konsolen"],
   "微製程與電極": ["微細加工・電極", "Mikrofertigung"],
   "微電極製造 · 氧氣電漿 · 濕式蝕刻 · 雷射剝除 · SEM · EIS": ["微小電極作製 · 酸素プラズマ · ウェットエッチング · レーザーアブレーション · SEM · EIS", "Mikroelektroden · O2-Plasma · Nassätzen · Laserablation · SEM · EIS"],
   "神經工程": ["神経工学", "Neurotechnik"],
-  "植入式電極 · 立體定位開顱植入 · 電生理 · 雙光子 · 動物行為 · 灌流切片 IHC": ["埋込み電極 · 脳定位手術 · 電気生理 · 二光子 · 行動実験 · 灌流・切片・IHC", "Implantate · stereotaktische Chirurgie · Elektrophysiologie · Zwei-Photonen · Verhalten · Perfusion, Schnitte, IHC"],
+  "設計美學": ["デザインと美学", "Design & Ästhetik"],
+  "製造／製程": ["製造・プロセス", "Fertigung & Prozesse"],
+  "FDM／DLP 3D 列印 · 雷射切割 · 銑床 · 鑽孔攻牙 · 微電極製造 · 氧氣電漿 · 濕式蝕刻 · 雷射剝除 · SEM · EIS": ["FDM／DLP 3Dプリント · レーザー切断 · フライス加工 · 穴あけ・タップ · 微小電極作製 · 酸素プラズマ · ウェットエッチング · レーザーアブレーション · SEM · EIS", "FDM/DLP-3D-Druck · Laserschneiden · Fräsen · Bohren & Gewindeschneiden · Mikroelektroden · O2-Plasma · Nassätzen · Laserablation · REM · EIS"],
+  "攝影 · 平面設計 · UI／UX": ["写真 · グラフィックデザイン · UI／UX", "Fotografie · Grafikdesign · UI / UX"],
+  "舞台": ["舞台", "Bühne"],
+  "植入式電極 · 立體定位開顱植入 · 電生理 · 動物行為 · 灌流切片 IHC": ["埋込み電極 · 脳定位手術 · 電気生理 · 行動実験 · 灌流・切片・IHC", "Implantate · stereotaktische Chirurgie · Elektrophysiologie · Verhalten · Perfusion, Schnitte, IHC"],
   "青年百億計畫": ["Taiwan Global Pathfinders Initiative（青年百億計画）", "Taiwan Global Pathfinders Initiative"],
   "臺大生命科學系 院長獎": ["国立台湾大学 生命科学部 学部長賞", "Dekanspreis, Biowissenschaften, NTU"],
   "臺大學術研究績效獎勵金": ["国立台湾大学 学術研究業績奨励金", "NTU-Preis für herausragende Forschungsleistung"],
@@ -1571,7 +1644,7 @@ class Component extends DCLogic {
         const hatch = "repeating-linear-gradient(135deg, var(--surface-plate) 0 3px, var(--surface-page) 3px 7px)";
         return {
           skillTitle: L("技能樹", "Skill tree"),
-          skProofLabel: L("證明", "Evidence"),
+          skProofLabel: L("證明", "Evidence"), skLvLabel: sk("精熟度"),
           skOverview: true,
           ...(() => {
             // Skill-tree layout (design units; everything is placed in % so the tree scales with the page).
@@ -1596,17 +1669,21 @@ class Component extends DCLogic {
             // ("v" = leaves the parent vertically, "h" = horizontally, "e" = drops down then turns in; all corners are 45°).
             const pos = {}, kidsOf = id => { const n = id === "root" ? { c: SK } : all.find(r => r.id === id).n; return n.c.map((_, i) => id === "root" ? String(i) : id + "." + i); };
             // A wide, low layout so the whole tree fits on a laptop screen without scrolling:
-            // Foundations fans out above, Neuro to the left, Mechatronics (the deepest branch) steps down the right, Fabrication and Microfabrication below.
-            const H = 674, rootSz = 116, catSz = 66, itSz = 42, C = 14;
+            // Foundations fans out above, Neuro to the left, Mechatronics (the deepest branch) steps down the right; Fabrication, Design and Microfabrication below.
+            const H = 655, rootSz = 116, catSz = 66, itSz = 42, C = 14;
             const T = {
-              root: [620, 320],
-              "0": [620, 186, "r", "v"], "0.0": [290, 104, "r", "v"], "0.0.0": [210, 30, "r", "v"], "0.0.1": [370, 30, "r", "v"], "0.1": [620, 104, "r", "v"], "0.1.0": [540, 30, "r", "v"], "0.1.1": [700, 30, "r", "v"], "0.2": [950, 104, "r", "v"],
-              "1": [540, 500, "l", "y"], "1.0": [410, 580, "r", "v"], "1.1": [560, 580, "r", "v"],
-              "3": [700, 500, "r", "y"], "3.0": [700, 580, "r", "v"], "3.0.0": [700, 646, "r", "v"], "3.1": [880, 580, "r", "v"], "3.1.0": [880, 646, "r", "v"],
-              "2": [850, 320, "t", "h"], "2.0": [1000, 170, "r", "h"], "2.1": [1000, 230, "r", "h"], "2.3": [1000, 290, "r", "h"], "2.4": [1000, 350, "r", "h"], "2.2": [1000, 410, "r", "h"], "2.2.0": [1055, 470, "r", "e"], "2.2.0.0": [1110, 530, "r", "e"], "2.2.0.1": [1110, 590, "r", "e"],
-              "4": [390, 320, "t", "h"], "4.0": [230, 200, "l", "h"], "4.1": [230, 260, "l", "h"], "4.2": [230, 320, "l", "h"], "4.3": [230, 380, "l", "h"], "4.4": [230, 440, "l", "h"]
+              root: [620, 330],
+              // Foundations straight up, its three items in one row.
+              "0": [620, 195, "r", "v"], "0.0": [410, 80, "r", "v"], "0.1": [620, 80, "r", "v"], "0.2": [810, 80, "r", "v"],
+              // Neuroengineering (left) and Mechatronics (right) mirror each other: out sideways, 45° up, items in a column.
+              "3": [380, 270, "t", "dh", 0, { t: 460 }], "3.0": [220, 150, "l", "h"], "3.1": [220, 210, "l", "h"], "3.2": [220, 270, "l", "h"], "3.3": [220, 330, "l", "h"], "3.4": [220, 390, "l", "h"],
+              "2": [860, 270, "t", "dh", 0, { t: 780 }], "2.0": [1020, 150, "r", "h"], "2.1": [1020, 210, "r", "h"], "2.3": [1020, 270, "r", "h"], "2.4": [1020, 330, "r", "h"], "2.2": [1020, 390, "r", "h"],
+              // Design (bottom left) and Fabrication & processing (bottom right): down first, then 45°.
+              "4": [440, 455, "l", "dv", 0, { o: -16, t: 405 }], "4.0": [330, 600, "b", "v"], "4.1": [440, 600, "b"], "4.2": [550, 600, "b", "v"],
+              "1": [800, 455, "r", "dv", 0, { o: 16, t: 405 }], "1.0": [710, 528, "r", "v"], "1.0.0": [645, 600, "r", "v"], "1.0.1": [765, 600, "r", "v"],
+              "1.1": [960, 528, "r", "v"], "1.1.0": [920, 600, "r", "v"], "1.1.1": [1090, 600, "r", "v"]
             };
-            Object.keys(T).forEach(k => pos[k] = { x: T[k][0], y: T[k][1], side: T[k][2] || "r", via: T[k][3] || "" });
+            Object.keys(T).forEach(k => pos[k] = { x: T[k][0], y: T[k][1], side: T[k][2] || "r", via: T[k][3] || "", lw: T[k][4] || 0, opt: T[k][5] || {} });
             const pct = (v, of) => (v / of * 100).toFixed(3) + "%";
             const fs = px => (px / W * 100).toFixed(3) + "cqi";
             let OWN = ""; const EDGE = {};   // OWN: which node the rail being drawn leads to; EDGE: each node's rail from its parent
@@ -1626,6 +1703,9 @@ class Component extends DCLogic {
                 pts = [[p.x, p.y], [p.x, yb - sy * c], [p.x + sx * c, yb], [q.x - sx * c, yb], [q.x, yb + sy * c], [q.x, q.y]]; }
               else if (q.via === "h") { const xb = (p.x + sx * szOf(pid) / 2 + q.x - sx * szOf(id) / 2) / 2, c = Math.min(C, dy / 2);
                 pts = [[p.x, p.y], [xb - sx * c, p.y], [xb, p.y + sy * c], [xb, q.y - sy * c], [xb + sx * c, q.y], [q.x, q.y]]; }
+              // "dv" / "dh": root → branch rails leave straight (down / sideways) to q.opt.t, turn 45°, then run straight into the node.
+              else if (q.via === "dv") { const ox = p.x + (q.opt.o || 0), ty = q.opt.t, d = Math.abs(q.y - ty); pts = [[ox, p.y], [ox, ty], [ox + sx * d, q.y], [q.x, q.y]]; }
+              else if (q.via === "dh") { const oy = p.y + (q.opt.o || 0), tx = q.opt.t, d = Math.abs(q.y - oy); pts = [[p.x, oy], [tx, oy], [tx + sx * d, q.y], [q.x, q.y]]; }
               else if (q.via === "x") { const d = Math.min(dx, dy); pts = dx === dy ? [[p.x, p.y], [q.x, q.y]] : [[p.x, p.y], [p.x + sx * d, p.y + sy * d], [q.x, q.y]]; }       // leaves at 45°, then runs straight into the node
               else if (q.via === "y") { const ox = p.x + sx * 16, d = Math.abs(q.x - ox); pts = [[ox, p.y], [ox, q.y - sy * d], [q.x, q.y]]; }       // straight out of the node first, then a 45° run
               else { const c = Math.min(C, dx, dy); pts = [[p.x, p.y], [p.x, q.y - sy * c], [p.x + sx * c, q.y], [q.x, q.y]]; }       // "e": down the parent's side, 45° turn, then in
@@ -1646,27 +1726,34 @@ class Component extends DCLogic {
                   dur: Math.max(0.01, len / total * DUR).toFixed(3) + "s", delay: (acc / total * DUR).toFixed(3) + "s", anim: (this._hotN || 0) % 2 ? "skrunA" : "skrunB" }); acc += len; }); }
             const short = s => s.split(/[：（]|: | \(/)[0].trim();
             const svgUri = id => "url(data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${SK_IC[id] || '<circle cx="12" cy="12" r="4"/>'}</svg>`).replace(/[()']/g, ch => "%" + ch.charCodeAt(0).toString(16)) + ")";
+            const lvOf = n => SK_LV[n.n] || (() => { const v = desc(n).map(ch => SK_LV[ch.n]).filter(Boolean); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : 0; })();
+            const cellsOf = n => { const k = lvOf(n); return [1, 2, 3, 4, 5].map(i => ({ bg: i <= k ? "var(--signal)" : "transparent", bd: i <= k ? "var(--signal)" : "var(--border-strong)" })); };
             Object.keys(pos).filter(id => id !== "root").forEach(id => {
               const isCat = !id.includes("."), n = isCat ? SK[+id] : all.find(r => r.id === id).n, q = pos[id], sz = szOf(id), d = isCat ? desc(n) : [];
               const on = chain.includes(id), dim = !keep(id), gapEm = isCat ? ".7em" : ".6em";
-              const lblW = isCat ? 190 : q.side === "l" ? 170 : 126;
+              const lblW = q.lw || (isCat ? 190 : q.side === "l" ? 170 : 126);
               const lblPos = q.side === "r" ? `left:100%;top:50%;transform:translateY(-50%);margin-left:${gapEm}` : q.side === "l" ? `right:100%;top:50%;transform:translateY(-50%);margin-right:${gapEm}`
                 : q.side === "t" ? `bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:.5em` : `top:100%;left:50%;transform:translateX(-50%);margin-top:.5em`;
-              P.push({ ...hand(id), id, isCat, no: "0" + (+id + 1), lv: isCat ? `${d.filter(x => x.ok).length}/${d.length}` : "", name: isCat ? sk(n.n) : short(sk(n.n)),
+              P.push({ ...hand(id), id, isCat, no: "0" + (+id + 1), cells: isCat ? cellsOf(n) : [], lv: isCat ? `${d.filter(x => x.ok).length}/${d.length}` : "", name: isCat ? sk(n.n) : short(sk(n.n)),
                 l: pct(q.x - sz / 2, W), t: pct(q.y - sz / 2, H), w: pct(sz, W),
                 border: on ? "var(--signal)" : n.ok ? "var(--state-ok)" : isCat ? "var(--border-ink)" : "var(--border-strong)", bw: isCat ? "2px" : "1.5px",
                 bg: "var(--surface-plate)", ink: on ? "var(--signal)" : n.ok ? "var(--state-ok)" : isCat ? "var(--text-primary)" : "var(--text-secondary)",
                 pad: isCat ? "24%" : "23%", mask: svgUri(id), fx: dim ? "blur(1.6px)" : n.ok ? "drop-shadow(0 0 5px var(--state-ok))" : "none", op: dim ? 0.42 : 1,
-                lblPos, lblW: (lblW / sz * 100).toFixed(1) + "%", align: q.side === "l" ? "right" : q.side === "r" ? "left" : "center",
+                lblPos, lblW: (lblW / sz * 100).toFixed(1) + "%", align: q.side === "l" ? "right" : q.side === "r" ? "left" : "center", jc: q.side === "l" ? "flex-end" : q.side === "r" ? "flex-start" : "center",
                 fs: fs(isCat ? 16 : 13), fw: isCat ? 400 : 300, txt: on ? "var(--text-signal)" : isCat || n.ok ? "var(--text-primary)" : "var(--text-secondary)" });
             });
             // Details for the pop-up (hover / tap) and for the zoomed-in panel.
-            const info = pid => { const pn = pid.includes(".") ? all.find(r => r.id === pid).n : SK[+pid], pb = SK[+pid.split(".")[0]], pd = pn.c.map(ch => sk(ch.n));
-              return { cat: sk(pb.n), no: pid.split(".").map(x => +x + 1).join("."), name: sk(pn.n), status: pn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: pn.ok ? "var(--state-ok)" : "var(--text-faint)",
-                d: pd, hasD: pd.length > 0, link: sk(pn.link), slot: pid.includes(".") ? `skill-${pid}` : `skill-cat-${pid}`,
-                proof: pn.p ? (pn.p[lang] || pn.p.zh) : L("待補證明", "Evidence pending"), proofColor: pn.p ? "var(--text-primary)" : "var(--text-faint)" }; };
-            const pid = foc ? null : this.state.skPop, ppos = this._popPos || { l: "-9999px", t: "0px", tf: "none" };
             const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
+            const info = pid => { const pn = pid.includes(".") ? all.find(r => r.id === pid).n : SK[+pid], pb = SK[+pid.split(".")[0]], pd = pn.c.map(ch => sk(ch.n));
+              return { cat: sk(pb.n), no: pid.split(".").map(x => +x + 1).join("."), cells: cellsOf(pn), name: sk(pn.n), ok: !!pn.ok, hasP: !!pn.p, status: pn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: pn.ok ? "var(--state-ok)" : "var(--text-faint)",
+                d: pd, hasD: pd.length > 0, link: sk(pn.link), slot: pid.includes(".") ? `skill-${pid}` : `skill-cat-${pid}`,
+                proof: pn.p ? (pn.p[lang] || pn.p.zh) : L("待補證明", "Evidence pending"), proofColor: pn.p ? "var(--text-primary)" : "var(--text-faint)",
+                ...(() => { const im = SK_IMG[pid] || []; return { hasImg: im.length > 0, noImg: !im.length, img0: im[0] || "", imgN: Math.max(1, im.length),
+                  imgs: im.map((src, i) => ({ src, open: e => { stop(e); zoom(im.map(u => ({ src: u, alt: sk(pn.n) })), i)(); } })) }; })(),
+                ds: sk(pn.ds), hasDs: !!pn.ds,
+                hasGo: !!pn.go, goLabel: sk(pn.go === "photo" ? "看作品 →" : "詳情 →"), goPhoto: e => { stop(e); this._popPos = null; this.setState({ skPop: null, skFocus: null }); this.go(pn.go === "photo" ? "other" : "work");
+                  setTimeout(() => { const el = pn.go === "photo" ? document.getElementById("sec-photo") : [...document.querySelectorAll("[id^='work-']")].filter(x => /^work-\d+$/.test(x.id)).pop(); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 150); } }; };
+            const pid = foc ? null : this.state.skPop, ppos = this._popPos || { l: "-9999px", t: "0px", tf: "none" };
             // Camera: where the tree sits inside its window. Dragging / pinching / zooming in on a node all just change this.
             const cam = this._skCam || { s: 1, x: 0, y: 0 };
             this._skGeo = { W, H, pos };
@@ -1682,7 +1769,7 @@ class Component extends DCLogic {
                   cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none", hint: "" },
               skMapClick: () => { if (recent(this._skDragT, 350) || recent(this._skLong, 900)) return; if (foc) return this.skUnfocus(); if (this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); } },
               skPop: pid ? { on: true, ...ppos, ...info(pid), moreLabel: sk("查看詳細 →"), more: e => { stop(e); this.skFocus(pid); }, stop } : { on: false },
-              skFoc: foc ? { on: true, ...info(foc), slots: [{ id: info(foc).slot }], left: phone ? "36%" : "42%", nameFs: phone ? "15px" : "20px", stop, close: e => { stop(e); this.skUnfocus(); } } : { on: false, slots: [] }
+              skFoc: foc ? { on: true, ...info(foc), slots: SK_IMG[foc] ? [] : [{ id: info(foc).slot }], left: phone ? "36%" : "42%", nameFs: phone ? "15px" : "20px", stop, close: e => { stop(e); this.skUnfocus(); } } : { on: false, slots: [] }
             };
           })(),
         };
@@ -1799,7 +1886,8 @@ class Component extends DCLogic {
             open: zoom(pics.map(m => ({ src: "photos/photo/" + f(m), alt: "" })), k),
             anim: (this.state.pcN || 0) % 2 ? "pcPicB" : "pcPicA", delay: `${260 + Math.min(k, 18) * 60}ms` })),
           mfPics: D.mindfreak.map((n, k) => ({ src: "photos/photo/t/" + f(n), full: "photos/photo/" + f(n),
-            open: zoom(D.mindfreak.map(m => ({ src: "photos/photo/" + f(m), alt: "MINDFREAK" })), k) })),
+            open: zoom(D.mindfreak.map(m => ({ src: "photos/photo/" + f(m), alt: L("舞台", "Stage") })), k) })),
+          mfTitle: L("舞台", "STAGE"),
           mfMeta: `${L("現場演出", "LIVE")} · ${D.mindfreak.length}`,
           ...(() => {
             const lb = this.state.lb, n = lb ? lb.list.length : 0, k = n ? ((lb.i % n) + n) % n : 0, cur = n ? lb.list[k] : null;
