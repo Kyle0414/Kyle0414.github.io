@@ -209,6 +209,8 @@
     [data-sech] span:nth-child(2){background:color-mix(in srgb,var(--signal) 55%,transparent) !important}
     [data-sech] span:nth-child(3){color:var(--text-primary);font-size:12px;letter-spacing:.14em}
     .sk-view>.sk-cn{z-index:8}
+    .sk-play{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.7);pointer-events:none;z-index:3}
+    .sk-play::after{content:"";position:absolute;left:10px;top:7px;border-style:solid;border-width:6px 0 6px 9px;border-color:transparent transparent transparent #fff}
     @keyframes skhelp{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
     .sk-qbtn{position:absolute;right:14px;top:10px;z-index:4;width:24px;height:24px;display:grid;place-items:center;font:500 12px/1 var(--font-mono),monospace;color:var(--text-faint);background:transparent;border:1px solid var(--border-strong);cursor:pointer;transform:rotate(45deg) scale(.82);transition:color .2s,border-color .2s}
     .sk-qbtn>span{transform:rotate(-45deg)}
@@ -540,7 +542,7 @@
                 <sc-if value="{{ skFoc.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px"><sc-for list="{{ skFoc.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
                 <sc-if value="{{ skFoc.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skFoc.link }}</span></sc-if>
                 <sc-if value="{{ skFoc.hasGo }}" hint-placeholder-val="{{ false }}"><div role="button" onClick="{{ skFoc.goPhoto }}" style="align-self:flex-start;font-size:12px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer" style-hover="text-decoration:underline">{{ skFoc.goLabel }}</div></sc-if>
-                <sc-if value="{{ skFoc.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skFoc.imgN }},minmax(0,1fr));gap:5px"><sc-for list="{{ skFoc.imgs }}" as="im" hint-placeholder-count="0"><div data-zoom="" role="button" title="{{ im.cap }}" onClick="{{ im.open }}" style="border:1px solid var(--border-hair);overflow:hidden;cursor:zoom-in"><img src="{{ im.src }}" alt="{{ im.cap }}" loading="lazy" style="display:block;width:100%;{{ skFoc.imgH }};object-fit:cover"></div></sc-for></div></sc-if>
+                <sc-if value="{{ skFoc.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skFoc.imgN }},minmax(0,1fr));gap:5px"><sc-for list="{{ skFoc.imgs }}" as="im" hint-placeholder-count="0"><div data-zoom="" role="button" title="{{ im.cap }}" onClick="{{ im.open }}" style="position:relative;border:1px solid var(--border-hair);overflow:hidden;cursor:zoom-in"><img src="{{ im.src }}" alt="{{ im.cap }}" loading="lazy" style="display:block;width:100%;{{ skFoc.imgH }};object-fit:cover"><sc-if value="{{ im.vid }}" hint-placeholder-val="{{ false }}"><span class="sk-play"></span></sc-if></div></sc-for></div></sc-if>
                 <sc-for list="{{ skFoc.slots }}" as="sl" hint-placeholder-count="1"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div></sc-for>
                 <sc-if value="{{ skFoc.hasP }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
                 <span style="font-size:13px;color:{{ skFoc.proofColor }};text-wrap:pretty">{{ skFoc.proof }}</span></sc-if>
@@ -654,7 +656,7 @@
       <sc-if value="{{ skPop.hasKw }}" hint-placeholder-val="{{ false }}"><div class="sk-kw"><sc-for list="{{ skPop.kw }}" as="k" hint-placeholder-count="3"><span class="sk-k">{{ k }}</span></sc-for></div></sc-if>
       <sc-if value="{{ skPop.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:1px"><sc-for list="{{ skPop.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
       <sc-if value="{{ skPop.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skPop.link }}</span></sc-if>
-      <sc-if value="{{ skPop.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skPop.popN }},minmax(0,1fr));gap:4px"><sc-for list="{{ skPop.imgs }}" as="im" hint-placeholder-count="1"><div role="button" title="{{ im.cap }}" onClick="{{ im.open }}" style="aspect-ratio:{{ skPop.popAr }};overflow:hidden;border:1px solid var(--border-hair);cursor:zoom-in"><img src="{{ im.th }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div></sc-for></div></sc-if>
+      <sc-if value="{{ skPop.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skPop.popN }},minmax(0,1fr));gap:4px"><sc-for list="{{ skPop.imgs }}" as="im" hint-placeholder-count="1"><div role="button" title="{{ im.cap }}" onClick="{{ im.open }}" style="position:relative;aspect-ratio:{{ skPop.popAr }};overflow:hidden;border:1px solid var(--border-hair);cursor:zoom-in"><img src="{{ im.th }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"><sc-if value="{{ im.vid }}" hint-placeholder-val="{{ false }}"><span class="sk-play"></span></sc-if></div></sc-for></div></sc-if>
       <sc-if value="{{ skPop.noImg }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ skPop.slot }}" shape="rect" placeholder="[ 證明 ]"></image-slot></div></sc-if>
       <sc-if value="{{ skPop.hasGo }}" hint-placeholder-val="{{ false }}"><div role="button" class="sk-pop-more" onClick="{{ skPop.goPhoto }}" style="align-self:flex-start;font-size:11px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer">{{ skPop.goLabel }}</div></sc-if>
       <sc-if value="{{ skPop.hasP }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
@@ -1046,9 +1048,27 @@ const SK = [
 // Proficiency, 1–5 (the energy bar). Keyed by the item's Chinese name; a branch shows the average of everything under it.
 const SK_LV = {"3D 建模與工程設計": 5, "數值最佳化與參數化建模": 4, "Python 程式開發與資料分析": 3, "積層製造": 5, "機械加工與雷射加工": 5, "微電極製造與製程驗證": 5, "嵌入式系統與控制平台": 4, "控制介面與軟硬體整合": 3, "感測器整合與系統架構": 4, "馬達控制與機構驅動": 5, "硬體除錯與系統維護": 4, "動物手術與電極植入": 4, "神經電生理與訊號紀錄": 4, "動物行為實驗與設備開發": 4, "組織學與免疫染色": 4, "平面設計與視覺編排": 4, "攝影與影像創作": 5};
 // Evidence photos for skill nodes (photos/skill/), keyed by node id. Several photos: the pop-up shows the first, the zoomed panel all.
-const SK_IMG = {"1.0": ["photos/skill/1-0-a.jpg", "photos/skill/1-0-b.jpg"], "1.1": ["photos/skill/1-1.jpg"], "1.2": ["photos/skill/3-0-0.jpg", "photos/skill/3-1-0.jpg"], "2.4": ["photos/skill/2-1.jpg"], "3.0": ["photos/skill/4-1.jpg"], "3.3": ["photos/skill/4-4.jpg"],
+const SK_IMG = {
+  // [file, caption zh, caption en]; .mp4 = video (poster = same name .jpg); thumbnails live in photos/skill/s/
+  // 基礎
+  "0.1": [["photos/skill/0-1-01.jpg", "拓樸最佳化", "Topology optimisation"], ["photos/skill/0-1-02.jpg", "參數化建模", "Parametric modelling"]],
+  // 製造
+  "1.0": [["photos/skill/1-0-01.jpg", "10 μm dlp", "10 μm DLP"], ["photos/skill/1-0-02.jpg", "fdm", "FDM"]],
+  "1.1": [["photos/skill/1-1-01.jpg", "銑床操作", "Milling"], ["photos/skill/1-1-02.jpg", "雷射加工", "Laser machining"], ["photos/skill/1-1-03.jpg", "雷射消熔", "Laser ablation"], ["photos/skill/1-1-04.mp4", "雷射消熔", "Laser ablation"]],
+  "1.2": [["photos/skill/1-2-01.jpg", "氧氣電漿", "Oxygen plasma"], ["photos/skill/1-2-02.jpg", "SEM", "SEM"]],
+  // 機電
+  "2.0": [["photos/skill/2-0-01.mp4", "樹莓派 四足機器人專案", "Raspberry Pi · quadruped robot project"], ["photos/skill/2-0-02.jpg", "Arduino離心小專案", "Arduino centrifuge mini-project"], ["photos/skill/2-0-03.jpg", "Arduino循環切割小專案", "Arduino cyclic-cutting mini-project"], ["photos/skill/2-0-04.jpg", "直接去光華請教別人", "Asking the pros at Guanghua electronics market"]],
+  "2.1": [["photos/skill/2-1-01.jpg", "laser API", "Laser API"]],
+  "2.2": [["photos/skill/2-2-01.jpg", "類ROS系統", "ROS-like system"]],
+  "2.3": [["photos/skill/2-3-01.mp4", "伺服馬達", "Servo motor"], ["photos/skill/2-3-02.jpg", "步進馬達", "Stepper motor"], ["photos/skill/2-3-03.jpg", "無刷馬達", "Brushless motor"]],
+  "2.4": [["photos/skill/2-4-01.jpg", "硬體除錯", "Hardware debugging"]],
+  // 神經
+  "3.0": [["photos/skill/3-0-01.jpg", "", ""], ["photos/skill/3-0-02.jpg", "", ""]],
+  "3.1": [["photos/skill/3-1-01.jpg", "神經訊號紀錄", "Neural signal recording"]],
+  "3.2": [["photos/skill/3-2-01.jpg", "氣浮平台跑盤", "Air-floated running platform"], ["photos/skill/3-2-02.jpg", "Open-field test", "Open-field test"], ["photos/skill/3-2-03.jpg", "VR系統", "VR system"], ["photos/skill/3-2-04.jpg", "兩種大小自動餵食機", "Automatic feeders in two sizes"]],
+  "3.3": [["photos/skill/3-3-01.jpg", "冷凍切片", "Cryosectioning"], ["photos/skill/3-3-02.jpg", "免疫染色", "Immunostaining"]],
   // 美學: [file, caption zh, caption en]; thumbnails live in photos/skill/s/
-  "4.0": [["photos/skill/4-0-01.jpg", "社團 icon", "Club logo"], ["photos/skill/4-0-02.jpg", "活動海報", "Event poster"], ["photos/skill/4-0-03.jpg", "台大杜鵑花節文宣", "NTU Azalea Festival flyer"], ["photos/skill/4-0-04.jpg", "活動社群貼文", "Event social post"], ["photos/skill/4-0-05.jpg", "內文排版", "Body-text layout"], ["photos/skill/4-0-06.jpg", "系報封面", "Department newsletter cover"], ["photos/skill/4-0-07.jpg", "普生實筆記", "General Biology Lab notes"], ["photos/skill/4-0-08.jpg", "普生實筆記", "General Biology Lab notes"], ["photos/skill/4-0-09.jpg", "教學插畫", "Teaching illustration"]],
+  "4.0": [["photos/skill/4-0-01.jpg", "社團icon", "Club logo"], ["photos/skill/4-0-02.jpg", "活動海報", "Event poster"], ["photos/skill/4-0-03.jpg", "台大杜鵑花節文宣", "NTU Azalea Festival flyer"], ["photos/skill/4-0-04.jpg", "活動社群貼文", "Event social post"], ["photos/skill/4-0-05.jpg", "內文排版", "Body-text layout"], ["photos/skill/4-0-06.jpg", "系報封面", "Department newsletter cover"], ["photos/skill/4-0-07.jpg", "普生實筆記", "General Biology Lab notes"], ["photos/skill/4-0-08.jpg", "普生實筆記", "General Biology Lab notes"], ["photos/skill/4-0-09.jpg", "教學插畫", "Teaching illustration"]],
   "4.1": [["photos/skill/4-1-01.jpg", "紅", "Red"], ["photos/skill/4-1-02.jpg", "藍", "Blue"], ["photos/skill/4-1-03.jpg", "綠", "Green"], ["photos/skill/4-1-04.jpg", "打擊樂考核", "Percussion exam"], ["photos/skill/4-1-05.jpg", "學生社團表演", "Student club performance"]]};
 const UI = {
   tabs: [["home", "主頁", "Home"], ["acad", "學術", "Academic"], ["work", "專案", "Projects"], ["skills", "技能", "Skills"], ["other", "其他", "Other"]],
@@ -2010,12 +2030,12 @@ class Component extends DCLogic {
               return { cat: sk(pb.n), no: pid.split(".").map(x => +x + 1).join("."), cells: cellsOf(pn), name: sk(pn.n), ok: !!pn.ok, hasP: !!pn.p, status: pn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: pn.ok ? "var(--state-ok)" : "var(--text-faint)",
                 d: pd, hasD: pd.length > 0, link: sk(pn.link), slot: pid.includes(".") ? `skill-${pid}` : `skill-cat-${pid}`,
                 proof: pn.p ? (pn.p[lang] || pn.p.zh) : L("待補證明", "Evidence pending"), proofColor: pn.p ? "var(--text-primary)" : "var(--text-faint)",
-                ...(() => { const im = (SK_IMG[pid] || []).map(x => Array.isArray(x) ? x : [x, "", ""]), n = im.length, th = u => u.replace("photos/skill/", "photos/skill/s/");
+                ...(() => { const im = (SK_IMG[pid] || []).map(x => Array.isArray(x) ? x : [x, "", ""]), n = im.length, th = u => u.replace("photos/skill/", "photos/skill/s/"), pv = u => u.replace(/\.mp4$/, ".jpg"), isV = u => /\.mp4$/.test(u);
                   // two or fewer photos: shown large; more: a grid of small square thumbnails (pop-up and zoom panel alike)
-                  const big = n <= 2, list = im.map(([u, z, e]) => ({ src: u, alt: z ? L(z, e) : sk(pn.n), cap: z ? L(z, e) : "" }));
+                  const big = n <= 2, list = im.map(([u, z, e]) => ({ src: u, vid: isV(u), poster: isV(u) ? pv(u) : "", alt: z ? L(z, e) : sk(pn.n), cap: z ? L(z, e) : "" }));
                   return { hasImg: n > 0, noImg: !n, imgN: big ? Math.max(1, n) : Math.min(n, 5), imgH: big ? "height:min(34vh,300px)" : "aspect-ratio:1 / 1;height:auto",
                     popN: n <= 1 ? 1 : Math.min(n, 5), popAr: n <= 1 ? "4 / 3" : "1 / 1",
-                    imgs: im.map(([u, z, e], i) => ({ src: big ? u : th(u), th: n <= 1 ? u : th(u), cap: z ? L(z, e) : "", open: e => { stop(e); this._popPos = null; zoom(list, i)(); } })) }; })(),
+                    imgs: im.map(([u, z, e], i) => ({ src: big ? pv(u) : th(pv(u)), th: n <= 1 ? pv(u) : th(pv(u)), vid: isV(u), cap: z ? L(z, e) : "", open: e => { stop(e); this._popPos = null; zoom(list, i)(); } })) }; })(),
                 ds: sk(pn.ds), hasDs: !!pn.ds, ds1: (s => { const ps = s.split("\n"); return ps.length > 1 ? ps[0] + " …" : s; })(sk(pn.ds) || ""), kw: pn.kw || [], hasKw: !!(pn.kw && pn.kw.length),
                 hasGo: !!pn.go, goLabel: sk(pn.go === "photo" ? "看作品 →" : "詳情 →"), goPhoto: e => { stop(e); this._popPos = null; this.setState({ skPop: null, skFocus: null, ...(pn.go === "photo" ? {} : { workSel: D.works.length - 1 }) }); this.go(pn.go === "photo" ? "other" : "work");
                   setTimeout(() => { const el = document.getElementById(pn.go === "photo" ? "sec-photo" : "work-dossier"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 150); } }; };
