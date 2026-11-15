@@ -294,7 +294,7 @@
 
   <div data-noprint="" style="position:sticky;top:0;z-index:5;background:var(--surface-page);border-bottom:1px solid var(--border-hair)">
     <div class="topbar" style="margin:0;padding:0 var(--side);display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;min-height:56px">
-      <div class="tb-brand"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.BrandMark" label="{{ brand }}" hint-size="120px,20px"></x-import></div>
+      <div class="tb-brand"><div style="display:flex;align-items:center;gap:var(--sp-3)"><span aria-hidden="true" style="flex:none;width:22px;height:22px;background:var(--signal);-webkit-mask:url(favicon.svg) center / contain no-repeat;mask:url(favicon.svg) center / contain no-repeat"></span><div style="font-size:var(--t-small);letter-spacing:var(--track-label);color:var(--text-primary);white-space:nowrap">{{ brand }}</div></div></div>
       <nav class="tb-nav" data-tabnav="" onMouseLeave="{{ tabLeave }}" style="position:relative;display:flex;gap:0;margin-right:auto;flex-wrap:nowrap;flex:none">
         <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="4">
           <div role="button" data-tab="{{ tb.id }}" onClick="{{ tb.go }}" onMouseEnter="{{ tb.enter }}" style="position:relative;padding:16px 10px 16px;white-space:nowrap;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:{{ tb.color }};transform:translateY({{ tb.lift }});transition:color .3s ease,transform .35s cubic-bezier(.2,.8,.2,1)">{{ tb.label }}<sc-if value="{{ tb.wip }}" hint-placeholder-val="{{ false }}"><span style="margin-left:6px;padding:1px 4px;border:1px solid var(--border-strong);font-size:9px;letter-spacing:.06em;color:var(--text-faint);vertical-align:1px">{{ tb.wip }}</span></sc-if></div>
