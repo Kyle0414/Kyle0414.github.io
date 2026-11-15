@@ -107,24 +107,55 @@
     .wk-item:hover{background:color-mix(in srgb,var(--surface-plate) 75%,transparent) !important}
     /* Gallery: big shot on the left, thumbnails stacked down the right at the same height. */
     .wk-gal{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) 21%;gap:6px}
+    .wk-gal.one{grid-template-columns:minmax(0,1fr)}.wk-gal.one .wk-thumbs{display:none}
     .wk-thumbs{display:flex;flex-direction:column;gap:6px;min-height:0}
     .wk-thumb{flex:1 1 0;min-height:0;min-width:0;cursor:pointer;overflow:hidden}
+    /* More than six: a two-across grid of squares that scrolls inside the column (the column stays as tall as the big view). */
+    .wk-thumbs.many{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:min-content;align-content:start;gap:5px;height:0;min-height:100%;overflow-y:auto;scrollbar-width:thin;padding-right:2px}
+    .wk-thumbs.many .wk-thumb{aspect-ratio:1 / 1}
     .wk-year{white-space:nowrap;font-size:11px;letter-spacing:.2em;color:var(--text-secondary);font-variant-numeric:tabular-nums}
     .wk-panel{position:relative;background:var(--surface-plate);border:1px solid transparent;padding:26px 30px 22px;min-width:0}
     /* Section labels inside a project: bigger, brighter, with a small signal mark. */
     .wk-lbl{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-primary);margin-bottom:10px}
-    .wk-lbl::before{content:"";flex:none;width:7px;height:7px;background:var(--signal);clip-path:polygon(30% 0,100% 0,100% 70%,70% 100%,0 100%,0 30%)}
-    .wk-note{margin:8px 0 0;font-size:11.5px;letter-spacing:.04em;color:var(--text-faint)}
+    .wk-lbl::before{content:"";flex:none;width:6px;height:6px;margin:0 1px;background:var(--signal);transform:rotate(45deg)}
+    .wk-detail{display:flex;flex-direction:column;gap:10px;margin-top:26px}
+    .wk-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;text-shadow:0 0 6px rgba(0,0,0,.8);pointer-events:none}
+    /* A selected photo (thumbnail, cover): corner marks top-left and bottom-right, in the signal colour (or the item's own colour via --mk). */
+    /* Hovering any photo shows the same marks, closing in from a few pixels away. */
+    [data-zoom]{position:relative}
+    .ph-sel::after,.ph-hov::after,[data-zoom]::after{content:"";position:absolute;inset:6px;opacity:0;pointer-events:none;z-index:2;--k:var(--mk,var(--signal));transition:inset .22s cubic-bezier(.2,.8,.2,1),opacity .18s;
+      background:linear-gradient(var(--k),var(--k)) 0 0 / 14px 2px no-repeat,linear-gradient(var(--k),var(--k)) 0 0 / 2px 14px no-repeat,
+        linear-gradient(var(--k),var(--k)) 100% 100% / 14px 2px no-repeat,linear-gradient(var(--k),var(--k)) 100% 100% / 2px 14px no-repeat}
+    .ph-sel::after{inset:0;opacity:1}
+    @media (hover:hover){.ph-hov:hover::after,[data-zoom]:hover::after{inset:0;opacity:1}}
+    /* Magnifier: over anything that opens a bigger view, the arrow becomes a small HUD lens that follows the mouse. */
+    @media (hover:hover) and (pointer:fine){[data-zoom]{cursor:none !important}}
+    .zcur{position:fixed;left:0;top:0;width:30px;height:30px;margin:-12px 0 0 -12px;pointer-events:none;z-index:70;color:var(--signal);opacity:0;transition:opacity .15s}
+    .zcur.on{opacity:1}
+    .zcur svg{display:block;width:100%;height:100%;overflow:visible}
+    /* Bold lead-ins ("視覺："), and square-bulleted lists in the project body. */
+    .wk-hd{display:block;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+    .wk-ul{display:flex;flex-direction:column;gap:9px;margin-top:10px}
+    .wk-ul2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:9px 36px;margin-top:0}
+    .wk-li{position:relative;padding-left:16px;font-size:13px;line-height:1.7;color:var(--text-secondary);text-wrap:pretty}
+    .wk-li::before{content:"›";position:absolute;left:1px;top:0;color:var(--text-signal);font-weight:600}
+    .wk-stack{display:flex;flex-direction:column;gap:20px}
+    .wk-li .wk-hd{display:inline;margin-right:8px}
+    .wk-result .wk-ul{margin-top:2px}.wk-result .wk-li{color:var(--text-primary)}
+    /* Skill keywords: small outlined chips. */
+    .sk-kw{display:flex;flex-wrap:wrap;gap:4px}.sk-k{font-size:10px;letter-spacing:.06em;line-height:1.5;padding:1px 6px;border:1px solid var(--border-strong);color:var(--text-secondary);white-space:nowrap}
+    .wk-note{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:12px;letter-spacing:.04em;color:var(--text-secondary)}
     .wk-ch{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:start}
     .wk-chm{display:flex;align-items:center;justify-content:center;width:20px;height:20px;margin-top:2px;font-size:11px;font-weight:600;color:var(--text-signal);border:1px solid color-mix(in srgb,var(--signal) 55%,transparent)}
-    .wk-txt{margin:0;font-size:13px;line-height:1.75;color:var(--text-secondary);text-wrap:pretty}
+    .wk-txt{white-space:pre-line;margin:0;font-size:13px;line-height:1.75;color:var(--text-secondary);text-wrap:pretty}
     /* Spec row: date, then tags — no labels, status lives in the pill. */
     .wk-spec{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:18px;font-size:13px}
-    .wk-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:26px 36px;margin-top:26px}
+    .wk-body{display:flex;flex-direction:column;gap:30px;margin-top:28px}
+    .wk-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:22px 36px;align-items:start}
     .wk-steps{position:relative;display:flex;flex-direction:column;gap:14px;margin-top:4px}
-    .wk-steps::before{content:"";position:absolute;left:13.5px;top:16px;bottom:16px;width:1px;background:var(--border-strong)}
-    .wk-step{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr);gap:14px;align-items:start;font-size:13px;line-height:1.65}
-    .wk-num{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;font-size:10px;letter-spacing:.04em;color:var(--text-signal)}
+    
+    .wk-step{position:relative;display:grid;grid-template-columns:22px minmax(0,1fr);gap:6px;align-items:start;font-size:13px;line-height:1.65}
+    .wk-num{font-size:13px;line-height:1.65;font-weight:600;color:var(--text-signal);font-variant-numeric:tabular-nums}
     /* Result: HUD corner brackets, no side rule. */
     .wk-result{padding:14px 18px 16px;background-color:color-mix(in srgb,var(--signal) 6%,transparent);background-image:linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal)),linear-gradient(var(--signal),var(--signal));background-repeat:no-repeat;background-size:10px 1px,1px 10px,10px 1px,1px 10px,10px 1px,1px 10px,10px 1px,1px 10px;background-position:0 0,0 0,100% 0,100% 0,0 100%,0 100%,100% 100%,100% 100%}
     .wk-nav{display:flex;justify-content:space-between;gap:16px;margin-top:28px;padding-top:14px;border-top:1px solid var(--border-hair)}
@@ -132,7 +163,7 @@
     .wk-navb:hover{color:var(--text-signal)}
     @keyframes wkInA{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
     @keyframes wkInB{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    @container page (max-width:820px){.wk-dossier{grid-template-columns:minmax(0,1fr);gap:14px}.wk-side{position:static}.wk-h2{margin:0 0 18px}.wk-list{flex-direction:row;gap:8px;overflow-x:auto;border-top:0;scrollbar-width:none;padding-bottom:2px}.wk-item{flex:0 0 210px;border-top:1px solid var(--border-hair);border-right:1px solid var(--border-hair)}.wk-panel{padding:20px 18px 18px}.wk-gal{grid-template-columns:minmax(0,1fr)}.wk-thumbs{flex-direction:row;gap:4px}.wk-thumb{flex:0 0 calc((100% - 16px) / 5);aspect-ratio:16 / 10}}
+    @container page (max-width:820px){.wk-dossier{grid-template-columns:minmax(0,1fr);gap:14px}.wk-side{position:static}.wk-h2{margin:0 0 18px}.wk-list{flex-direction:row;gap:8px;overflow-x:auto;border-top:0;scrollbar-width:none;padding-bottom:2px}.wk-item{flex:0 0 210px;border-top:1px solid var(--border-hair);border-right:1px solid var(--border-hair)}.wk-panel{padding:20px 18px 18px}.wk-gal{grid-template-columns:minmax(0,1fr)}.wk-thumbs{flex-direction:row;gap:4px}.wk-thumb{flex:0 0 calc((100% - 16px) / 5);aspect-ratio:16 / 10}.wk-thumbs.many{display:flex;height:auto;min-height:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:0}.wk-thumbs.many .wk-thumb{aspect-ratio:16 / 10}}
     @container page (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.pub-grid > *{grid-column:auto !important;grid-row:auto !important}.pub-grid > .pub-big,.pub-grid > .pub-txt{grid-column:1 / -1 !important}}
     @container page (max-width:600px){.pub-grid{column-gap:12px !important}.pub-grid > .pub-side{grid-column:1 / -1 !important}}
     .home-grid{grid-template-columns:repeat(60,minmax(0,1fr));column-gap:0}
@@ -164,14 +195,24 @@
     .ph-arrow:hover svg{opacity:1;transform:scale(1.18)}
     .sk-pop .slotwrap:has(image-slot:not([data-filled])){display:none}
     /* Skill pop-up and zoom panel: top-left corner cut at 45°, the diagonal drawn as a hairline like the border. */
-    .sk-pop,.sk-panel,.wk-panel{--cut:16px;clip-path:polygon(var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut))}
+    .sk-pop,.sk-panel,.wk-panel,.sk-help{--cut:16px;clip-path:polygon(var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut))}
     .sk-panel,.wk-panel{--cut:22px}
     /* The frame is one 1px ring (straight edges + diagonal) cut out of a filled layer, so the corners meet cleanly. */
-    .sk-pop,.sk-panel,.wk-panel{border-color:transparent !important}
+    .sk-pop,.sk-panel,.wk-panel,.sk-help{border-color:transparent !important}
     .sk-panel{border-width:0 !important}
-    .sk-pop::before,.sk-panel::before,.wk-panel::before{content:"";position:absolute;inset:-1px;background:var(--border-strong);pointer-events:none;z-index:1;
+    .sk-pop::before,.sk-panel::before,.wk-panel::before,.sk-help::before{content:"";position:absolute;inset:-1px;background:var(--border-strong);pointer-events:none;z-index:1;
       clip-path:polygon(evenodd,var(--cut) 0,100% 0,100% 100%,0 100%,0 var(--cut),var(--cut) 0,calc(var(--cut) + .414px) 1px,1px calc(var(--cut) + .414px),1px calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) 1px,calc(var(--cut) + .414px) 1px)}
     .sk-panel::before{inset:0}
+    .sk-help::before{inset:0}
+    /* Section headers (SEC 01 — title): brighter than the design system's faint default. */
+    [data-sech] span:nth-child(1){color:var(--text-signal);font-weight:500}
+    [data-sech] span:nth-child(2){background:color-mix(in srgb,var(--signal) 55%,transparent) !important}
+    [data-sech] span:nth-child(3){color:var(--text-primary);font-size:12px;letter-spacing:.14em}
+    .sk-view>.sk-cn{z-index:8}
+    @keyframes skhelp{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+    .sk-qbtn{position:absolute;right:14px;top:10px;z-index:4;width:24px;height:24px;display:grid;place-items:center;font:500 12px/1 var(--font-mono),monospace;color:var(--text-faint);background:transparent;border:1px solid var(--border-strong);cursor:pointer;transform:rotate(45deg) scale(.82);transition:color .2s,border-color .2s}
+    .sk-qbtn>span{transform:rotate(-45deg)}
+    .sk-qbtn:hover{color:var(--text-signal);border-color:var(--signal)}
     @media (hover:hover) and (pointer:fine){.sk-pop{pointer-events:none}.sk-pop-more{display:none}}
     /* Skills tab: the whole page (top bar, tree, links at the bottom) fits one screen, so there is nothing to scroll. The gaps are tightened here and the tree is sized from the window height. */
     [data-cur="skills"] main{padding-bottom:16px !important}
@@ -307,7 +348,7 @@
         <div class="pt-row" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.6vw,16px);margin-bottom:36px">
           <sc-for list="{{ portraits }}" as="pt" hint-placeholder-count="3">
             <figure style="margin:0;display:flex;flex-direction:column;gap:8px;min-width:0">
-              <div role="button" onClick="{{ pt.zoom }}" style="overflow:hidden;border:1px solid var(--border-strong);cursor:zoom-in"><img src="{{ pt.src }}" alt="{{ pt.title }}" loading="lazy" style="display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.04)"></div>
+              <div data-zoom="" role="button" onClick="{{ pt.zoom }}" style="overflow:hidden;border:1px solid var(--border-strong);cursor:zoom-in"><img src="{{ pt.src }}" alt="{{ pt.title }}" loading="lazy" style="display:block;width:100%;aspect-ratio:1 / 1;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.04)"></div>
             </figure>
           </sc-for>
         </div>
@@ -337,14 +378,14 @@
         <h2 style="font-size:clamp(26px,4vw,38px);font-weight:200;letter-spacing:-.02em;margin:0 0 8px">{{ acadTitle }}</h2>
         <sc-for list="{{ acadGroups }}" as="g" hint-placeholder-count="4">
           <div id="{{ g.anchor }}" data-toc-target="" style="margin-top:44px">
-            <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="{{ g.index }}" title="{{ g.title }}" hint-size="100%,16px"></x-import></sc-if>
+            <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ true }}"><div data-sech="" style="display:contents"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="{{ g.index }}" title="{{ g.title }}" hint-size="100%,16px"></x-import></div></sc-if>
             <div class="{{ g.cls }}" style="margin-top:16px;display:grid;grid-template-columns:{{ g.cols }};gap:28px 20px">
               <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
                 <div class="{{ r.cls }}" style="grid-column:{{ r.gc }};grid-row:{{ r.gr }};display:flex;flex-direction:column;gap:8px;min-width:0;{{ r.cardCss }}">
                   <sc-if value="{{ r.hasPhoto }}" hint-placeholder-val="{{ false }}">
                     <div style="display:flex;flex-direction:column;gap:6px">
-                      <div role="button" onClick="{{ r.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;cursor:zoom-in"><img src="{{ r.pic }}" alt="{{ r.head }}" loading="lazy" style="display:block;width:100%;height:auto"><sc-if value="{{ r.arrows }}" hint-placeholder-val="{{ false }}"><div role="button" class="ph-arrow" aria-label="Previous" onClick="{{ r.prev }}" style="left:0"><svg viewBox="0 0 12 18" width="13" height="20" aria-hidden="true"><polygon points="12,0 0,9 12,18"></polygon></svg></div><div role="button" class="ph-arrow" aria-label="Next" onClick="{{ r.next }}" style="right:0"><svg viewBox="0 0 12 18" width="13" height="20" aria-hidden="true"><polygon points="0,0 12,9 0,18"></polygon></svg></div></sc-if><sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.55);color:#fff">{{ r.count }}</span></sc-if></div>
-                      <sc-if value="{{ r.thumbRow }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px"><sc-for list="{{ r.thumbs }}" as="th" hint-placeholder-count="3"><div role="button" onClick="{{ th.go }}" style="flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:1 / 1;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;opacity:{{ th.op }}"></div></sc-for></div></sc-if>
+                      <div data-zoom="" role="button" onClick="{{ r.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;cursor:zoom-in"><img src="{{ r.pic }}" alt="{{ r.head }}" loading="lazy" style="display:block;width:100%;height:auto"><sc-if value="{{ r.arrows }}" hint-placeholder-val="{{ false }}"><div role="button" class="ph-arrow" aria-label="Previous" onClick="{{ r.prev }}" style="left:0"><svg viewBox="0 0 12 18" width="13" height="20" aria-hidden="true"><polygon points="12,0 0,9 12,18"></polygon></svg></div><div role="button" class="ph-arrow" aria-label="Next" onClick="{{ r.next }}" style="right:0"><svg viewBox="0 0 12 18" width="13" height="20" aria-hidden="true"><polygon points="0,0 12,9 0,18"></polygon></svg></div></sc-if><sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.55);color:#fff">{{ r.count }}</span></sc-if></div>
+                      <sc-if value="{{ r.thumbRow }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px"><sc-for list="{{ r.thumbs }}" as="th" hint-placeholder-count="3"><div role="button" onClick="{{ th.go }}" class="ph-hov {{ th.sel }}" style="position:relative;flex:0 0 calc((100% - 16px) / 5);min-width:0;aspect-ratio:1 / 1;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;opacity:{{ th.op }}"></div></sc-for></div></sc-if>
                     </div>
                   </sc-if>
                   <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="position:relative;{{ r.box }};border:1px solid var(--border-strong)"><image-slot id="{{ r.slotId }}" shape="rect" placeholder="{{ r.ph }}"></image-slot></div></sc-if>
@@ -393,31 +434,33 @@
                   <span style="font-size:10px;letter-spacing:.16em;padding:3px 9px;border:1px solid {{ w.stColor }};color:{{ w.stColor }};text-transform:uppercase;white-space:nowrap">{{ w.stDot }} {{ w.status }}</span>
                 </div>
                 <h3 style="margin:12px 0 0;font-size:clamp(20px,2.3vw,27px);font-weight:300;letter-spacing:-.01em;line-height:1.35;text-wrap:balance">{{ w.title }}</h3>
-                <p style="margin:10px 0 0;font-size:14px;line-height:1.75;color:var(--text-secondary);text-wrap:pretty">{{ w.summary }}</p>
-                <sc-if value="{{ w.note }}" hint-placeholder-val="{{ false }}"><p class="wk-note">※ {{ w.note }}</p></sc-if>
+                <p style="margin:10px 0 0;font-size:14px;line-height:1.75;color:var(--text-secondary);text-wrap:pretty"><sc-for list="{{ w.summarySeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p>
+                <sc-if value="{{ w.note }}" hint-placeholder-val="{{ false }}"><p class="wk-note"><span class="wk-chm" style="width:16px;height:16px;margin:0;font-size:10px">!</span>{{ w.note }}</p></sc-if>
                 <div class="wk-spec">
                   <div class="wk-tags"><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ w.tags }}" as="tg" hint-placeholder-count="4"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.Badge" tone="idle" hint-size="80px,22px">{{ tg }}</x-import></sc-for></div></div>
                 </div>
-                <sc-if value="{{ w.hasShot }}" hint-placeholder-val="{{ false }}"><div class="wk-gal">
-                  <div role="button" onClick="{{ w.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;aspect-ratio:16 / 9;background:#0b0b0b;cursor:zoom-in"><img src="{{ w.shot }}" alt="{{ w.shotCap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left"><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.6);color:#fff">{{ w.shotCount }}</span></div>
-                  <div class="wk-thumbs"><sc-for list="{{ w.thumbs }}" as="th" hint-placeholder-count="5"><div role="button" onClick="{{ th.go }}" title="{{ th.cap }}" class="wk-thumb" style="border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="{{ th.cap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top left;opacity:{{ th.op }}"></div></sc-for></div>
+                <sc-if value="{{ w.hasShot }}" hint-placeholder-val="{{ false }}"><div class="wk-gal {{ w.galCls }}">
+                  <div data-zoom="" role="button" onClick="{{ w.zoom }}" style="position:relative;border:1px solid var(--border-strong);overflow:hidden;aspect-ratio:16 / 9;background:#0b0b0b;cursor:zoom-in"><sc-if value="{{ w.shotImg }}" hint-placeholder-val="{{ true }}"><img src="{{ w.shot }}" alt="{{ w.shotCap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:{{ w.fit }};object-position:{{ w.fitPos }}"></sc-if><sc-if value="{{ w.shotVid }}" hint-placeholder-val="{{ false }}"><video data-auto="" src="{{ w.shot }}" autoplay="" muted="" loop="" playsinline="" preload="auto" aria-label="{{ w.shotCap }}" style="display:block;width:100%;height:100%;object-fit:contain;background:#000"></video></sc-if><span style="position:absolute;right:6px;bottom:6px;padding:1px 6px;font-size:10px;letter-spacing:.06em;background:rgba(0,0,0,.6);color:#fff">{{ w.shotCount }}</span></div>
+                  <div class="wk-thumbs {{ w.thumbCls }}"><sc-for list="{{ w.thumbs }}" as="th" hint-placeholder-count="5"><div role="button" onClick="{{ th.go }}" title="{{ th.cap }}" class="wk-thumb ph-hov {{ th.sel }}" style="position:relative;border:1px solid {{ th.ring }};cursor:pointer;overflow:hidden"><img src="{{ th.src }}" alt="{{ th.cap }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:{{ th.pos }};opacity:{{ th.op }}"><sc-if value="{{ th.play }}" hint-placeholder-val="{{ false }}"><span class="wk-play">▶</span></sc-if></div></sc-for></div>
                 </div></sc-if>
                 <sc-if value="{{ w.noShot }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="margin-top:22px"><div style="position:relative;aspect-ratio:16 / 9;border:1px solid var(--border-strong)"><image-slot id="{{ w.slotId }}" shape="rect" placeholder="[ PROJECT IMAGE — DROP HERE ]"></image-slot></div></div></sc-if>
+                <sc-if value="{{ w.hasDetail }}" hint-placeholder-val="{{ false }}"><div class="wk-detail"><span class="wk-lbl">{{ wkLbl.detail }}</span><sc-for list="{{ w.detail }}" as="dp" hint-placeholder-count="2"><p class="wk-txt"><sc-for list="{{ dp.seg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p></sc-for></div></sc-if>
+                <!-- Body, in rows: the problem; what I was responsible for (story left, numbered steps right); challenges beside the result; next step. -->
                 <sc-if value="{{ w.hasBody }}" hint-placeholder-val="{{ false }}"><div class="wk-body">
-                  <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
-                    <sc-if value="{{ w.problem }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.problem }}</span><p class="wk-txt">{{ w.problem }}</p></div></sc-if>
-                    <sc-if value="{{ w.role }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.role }}</span><p class="wk-txt">{{ w.role }}</p></div></sc-if>
-                    <sc-if value="{{ w.result }}" hint-placeholder-val="{{ false }}"><div class="wk-result"><span class="wk-lbl" style="color:var(--text-signal)">{{ wkLbl.result }}</span><p class="wk-txt" style="color:var(--text-primary)">{{ w.result }}</p></div></sc-if>
-                  </div>
-                  <div style="display:flex;flex-direction:column;gap:26px;min-width:0">
-                  <sc-if value="{{ w.hasMethod }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><span class="wk-lbl">{{ wkLbl.method }}</span>
-                    <div class="wk-steps"><sc-for list="{{ w.method }}" as="st" hint-placeholder-count="3"><div class="wk-step"><span class="wk-num"><span class="sk-oct" style="position:absolute;inset:0;background:var(--signal)"></span><span class="sk-oct" style="position:absolute;inset:1.5px;background:var(--surface-plate)"></span><span style="position:relative">{{ st.n }}</span></span><span style="padding-top:4px">{{ st.text }}</span></div></sc-for></div>
+                  <sc-if value="{{ w.problem }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.problem }}</span><p class="wk-txt"><sc-for list="{{ w.problemSeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p></div></sc-if>
+                  <sc-if value="{{ w.hasRoleRow }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.role }}</span>
+                    <div class="wk-stack">
+                      <sc-if value="{{ w.hasRoleCol }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><sc-if value="{{ w.roleTitle }}" hint-placeholder-val="{{ false }}"><span class="wk-hd" style="margin-bottom:4px">{{ w.roleTitle }}</span></sc-if><sc-if value="{{ w.role }}" hint-placeholder-val="{{ false }}"><p class="wk-txt"><sc-for list="{{ w.roleSeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p></sc-if><sc-if value="{{ w.hasRoleList }}" hint-placeholder-val="{{ false }}"><div class="wk-ul"><sc-for list="{{ w.roleList }}" as="rl" hint-placeholder-count="3"><div class="wk-li"><sc-for list="{{ rl.seg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></div></sc-for></div></sc-if></div></sc-if>
+                      <sc-if value="{{ w.hasMethod }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><div class="wk-steps"><sc-for list="{{ w.method }}" as="st" hint-placeholder-count="3"><div class="wk-step"><span class="wk-num">{{ st.n }}</span><span style="min-width:0"><sc-if value="{{ st.hasH }}" hint-placeholder-val="{{ false }}"><span class="wk-hd">{{ st.h }}</span></sc-if><sc-if value="{{ st.single }}" hint-placeholder-val="{{ true }}"><span style="color:{{ st.col }}"><sc-for list="{{ st.seg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></span></sc-if><sc-if value="{{ st.multi }}" hint-placeholder-val="{{ false }}"><div class="wk-ul" style="margin-top:4px;gap:5px"><sc-for list="{{ st.lines }}" as="ln" hint-placeholder-count="2"><div class="wk-li"><sc-for list="{{ ln.seg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></div></sc-for></div></sc-if></span></div></sc-for></div></div></sc-if>
+                    </div>
                   </div></sc-if>
-                  <sc-if value="{{ w.hasChallenge }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><span class="wk-lbl">{{ wkLbl.challenge }}</span>
-                    <div style="display:flex;flex-direction:column;gap:12px"><sc-for list="{{ w.challenge }}" as="ch" hint-placeholder-count="2"><div class="wk-ch"><span class="wk-chm">!</span><div style="min-width:0"><p class="wk-txt" style="color:var(--text-primary)">{{ ch.a }}</p><sc-if value="{{ ch.hasB }}" hint-placeholder-val="{{ false }}"><p class="wk-txt" style="margin-top:3px">→ {{ ch.b }}</p></sc-if></div></div></sc-for></div>
+                  <sc-if value="{{ w.hasEndRow }}" hint-placeholder-val="{{ false }}"><div class="wk-row">
+                    <sc-if value="{{ w.hasChallenge }}" hint-placeholder-val="{{ false }}"><div style="min-width:0"><span class="wk-lbl">{{ wkLbl.challenge }}</span>
+                      <div style="display:flex;flex-direction:column;gap:12px"><sc-for list="{{ w.challenge }}" as="ch" hint-placeholder-count="2"><div class="wk-ch"><span class="wk-chm">!</span><div style="min-width:0"><sc-if value="{{ ch.hasH }}" hint-placeholder-val="{{ false }}"><span class="wk-hd">{{ ch.h }}</span></sc-if><p class="wk-txt" style="color:{{ ch.col }}"><sc-for list="{{ ch.aSeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p><sc-if value="{{ ch.hasB }}" hint-placeholder-val="{{ false }}"><p class="wk-txt" style="margin-top:3px">→ <sc-for list="{{ ch.bSeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p></sc-if></div></div></sc-for></div>
+                    </div></sc-if>
+                    <sc-if value="{{ w.hasResultBox }}" hint-placeholder-val="{{ false }}"><div class="wk-result"><span class="wk-lbl" style="color:var(--text-signal)">{{ wkLbl.result }}</span><sc-if value="{{ w.result }}" hint-placeholder-val="{{ false }}"><p class="wk-txt" style="color:var(--text-primary)"><sc-for list="{{ w.resultSeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p></sc-if><sc-if value="{{ w.hasResultList }}" hint-placeholder-val="{{ false }}"><div class="wk-ul"><sc-for list="{{ w.resultList }}" as="rs" hint-placeholder-count="3"><div class="wk-li"><sc-if value="{{ rs.hasH }}" hint-placeholder-val="{{ false }}"><span class="wk-hd">{{ rs.h }}</span></sc-if><sc-for list="{{ rs.seg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></div></sc-for></div></sc-if></div></sc-if>
                   </div></sc-if>
-                  <sc-if value="{{ w.nextStep }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.nextStep }}</span><p class="wk-txt">{{ w.nextStep }}</p></div></sc-if>
-                  </div>
+                  <sc-if value="{{ w.hasNext }}" hint-placeholder-val="{{ false }}"><div><span class="wk-lbl">{{ wkLbl.nextStep }}</span><sc-if value="{{ w.nextStep }}" hint-placeholder-val="{{ false }}"><p class="wk-txt"><sc-for list="{{ w.nextSeg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></p></sc-if><sc-if value="{{ w.hasNextList }}" hint-placeholder-val="{{ false }}"><div class="wk-ul wk-ul2"><sc-for list="{{ w.nextList }}" as="nx" hint-placeholder-count="3"><div class="wk-li"><sc-for list="{{ nx.seg }}" as="g" hint-placeholder-count="1"><span style="color:{{ g.c }};font-weight:{{ g.w }}">{{ g.t }}</span></sc-for></div></sc-for></div></sc-if></div></sc-if>
                 </div></sc-if>
                 <div class="wk-nav" data-noprint="">
                   <div role="button" onClick="{{ w.prev }}" class="wk-navb"><span style="color:var(--text-faint)">← {{ wkLbl.prev }}</span><span>{{ w.prevTitle }}</span></div>
@@ -492,17 +535,28 @@
                   </div>
                 </div>
                 <span style="font-size:{{ skFoc.nameFs }};line-height:1.35">{{ skFoc.name }}</span>
-                <sc-if value="{{ skFoc.hasDs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;line-height:1.65;color:var(--text-secondary);white-space:pre-line;text-wrap:pretty">{{ skFoc.ds }}</span></sc-if>
+                <sc-if value="{{ skFoc.hasDs }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;line-height:1.7;color:var(--text-secondary);white-space:pre-line;text-wrap:pretty">{{ skFoc.ds }}</span></sc-if>
+                <sc-if value="{{ skFoc.hasKw }}" hint-placeholder-val="{{ false }}"><div class="sk-kw"><sc-for list="{{ skFoc.kw }}" as="k" hint-placeholder-count="3"><span class="sk-k">{{ k }}</span></sc-for></div></sc-if>
                 <sc-if value="{{ skFoc.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:2px"><sc-for list="{{ skFoc.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
                 <sc-if value="{{ skFoc.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skFoc.link }}</span></sc-if>
                 <sc-if value="{{ skFoc.hasGo }}" hint-placeholder-val="{{ false }}"><div role="button" onClick="{{ skFoc.goPhoto }}" style="align-self:flex-start;font-size:12px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer" style-hover="text-decoration:underline">{{ skFoc.goLabel }}</div></sc-if>
-                <sc-if value="{{ skFoc.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skFoc.imgN }},minmax(0,1fr));gap:6px"><sc-for list="{{ skFoc.imgs }}" as="im" hint-placeholder-count="0"><div role="button" onClick="{{ im.open }}" style="border:1px solid var(--border-hair);overflow:hidden;cursor:zoom-in"><img src="{{ im.src }}" alt="" loading="lazy" style="display:block;width:100%;height:min(34vh,300px);object-fit:cover"></div></sc-for></div></sc-if>
+                <sc-if value="{{ skFoc.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skFoc.imgN }},minmax(0,1fr));gap:5px"><sc-for list="{{ skFoc.imgs }}" as="im" hint-placeholder-count="0"><div data-zoom="" role="button" title="{{ im.cap }}" onClick="{{ im.open }}" style="border:1px solid var(--border-hair);overflow:hidden;cursor:zoom-in"><img src="{{ im.src }}" alt="{{ im.cap }}" loading="lazy" style="display:block;width:100%;{{ skFoc.imgH }};object-fit:cover"></div></sc-for></div></sc-if>
                 <sc-for list="{{ skFoc.slots }}" as="sl" hint-placeholder-count="1"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ sl.id }}" shape="rect" placeholder="[ 證明 — DROP IMAGE HERE ]"></image-slot></div></sc-for>
                 <sc-if value="{{ skFoc.hasP }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
                 <span style="font-size:13px;color:{{ skFoc.proofColor }};text-wrap:pretty">{{ skFoc.proof }}</span></sc-if>
               </div>
             </sc-if>
-            <sc-if value="{{ skView.hint }}" hint-placeholder-val="{{ false }}"><div data-noprint="" style="position:absolute;left:26px;right:26px;bottom:5px;z-index:4;pointer-events:none;text-align:center;font-size:10px;line-height:1.35;letter-spacing:.06em;color:var(--text-faint);text-wrap:balance">{{ skView.hint }}</div></sc-if>
+            <!-- How-to card: frosted glass over the tree when you arrive on this page; any click / wheel / touch closes it, the ◇? button brings it back. -->
+            <sc-if value="{{ skHelp.on }}" hint-placeholder-val="{{ false }}"><div data-noprint="" data-skhelp="" onClick="{{ skHelp.close }}" style="position:absolute;inset:0;z-index:7;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;cursor:pointer;background:color-mix(in srgb,var(--surface-page) 22%,transparent);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)">
+              <div class="sk-help" style="position:relative;width:100%;max-width:400px;box-sizing:border-box;padding:18px 22px 16px;background:color-mix(in srgb,var(--surface-plate) 66%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.15);backdrop-filter:blur(12px) saturate(1.15);box-shadow:0 14px 36px rgba(0,0,0,.2);text-align:left;animation:skhelp .4s cubic-bezier(.2,.8,.2,1) both">
+                <div style="display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.16em;color:var(--text-primary);margin:0 0 12px"><span style="width:6px;height:6px;background:var(--signal);transform:rotate(45deg)"></span>{{ skHelp.title }}</div>
+                <div style="display:grid;grid-template-columns:auto auto 1fr;column-gap:12px;row-gap:9px;font-size:12.5px;line-height:1.45;align-items:center">
+                  <sc-for list="{{ skHelp.rows }}" as="hr" hint-placeholder-count="5"><span aria-hidden="true" style="width:17px;height:17px;background:var(--signal);-webkit-mask:{{ hr.ic }} center / contain no-repeat;mask:{{ hr.ic }} center / contain no-repeat"></span><span style="color:var(--text-signal);white-space:nowrap;margin-right:6px">{{ hr.k }}</span><span style="color:var(--text-secondary)">{{ hr.v }}</span></sc-for>
+                </div>
+                <div style="margin:14px 0 0;padding:10px 0 0;border-top:1px solid var(--border);font-size:10.5px;letter-spacing:.1em;color:var(--text-faint);text-align:center">{{ skHelp.foot }}</div>
+              </div>
+            </div></sc-if>
+            <sc-if value="{{ skHelp.btn }}" hint-placeholder-val="{{ false }}"><button data-noprint="" class="sk-qbtn" type="button" aria-label="{{ skHelp.title }}" onClick="{{ skHelp.open }}"><span>?</span></button></sc-if>
             <!-- Corner marks: inside them the tree can be dragged and zoomed. -->
             <span class="sk-cn" style="left:0;top:0;border-width:2px 0 0 2px"></span><span class="sk-cn" style="right:0;top:0;border-width:2px 2px 0 0"></span><span class="sk-cn" style="left:0;bottom:0;border-width:0 0 2px 2px"></span><span class="sk-cn" style="right:0;bottom:0;border-width:0 2px 2px 0"></span>
           </div>
@@ -520,7 +574,7 @@
         <div data-pcar="" class="pc-car" style="position:relative;isolation:isolate;height:calc(var(--cw) * 1.25);overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none;--tr:{{ pcTr }}">
           <sc-for list="{{ palettes }}" as="c" hint-placeholder-count="7">
             <div role="button" class="pc-card" onClick="{{ c.go }}" style="position:absolute;left:50%;top:0;width:var(--cw);aspect-ratio:4 / 5;--d:{{ c.d }};transform:translateX(calc(-50% + var(--sp) * var(--d) + var(--dx,0px)));z-index:{{ c.z }};pointer-events:{{ c.pe }};cursor:pointer">
-              <div class="pc-in" style="position:absolute;inset:0;box-sizing:border-box;overflow:hidden;border:1px solid {{ c.ring }};transform:scale({{ c.s }});filter:blur({{ c.blur }});opacity:{{ c.op }}">
+              <div class="pc-in ph-hov {{ c.sel }}" style="position:absolute;inset:0;box-sizing:border-box;overflow:hidden;border:1px solid {{ c.ring }};transform:scale({{ c.s }});filter:blur({{ c.blur }});opacity:{{ c.op }}">
                 <img src="{{ c.cover }}" alt="{{ c.name }}" loading="lazy" draggable="false" style="display:block;width:100%;height:100%;object-fit:cover;pointer-events:none">
                 <div style="position:absolute;left:0;right:0;bottom:0;padding:9px 10px 8px;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:color-mix(in srgb,var(--surface-plate) 52%,transparent);-webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2)">
                   <span style="position:absolute;left:0;right:0;top:0;height:3px;background:{{ c.sw }}"></span>
@@ -544,7 +598,7 @@
         <!-- Photo wall: every row is the same height and runs edge to edge, whatever mix of upright and wide frames it holds. -->
         <div class="pc-wall" style="margin-top:10px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;--pc:{{ pcSolid }};--k:{{ pcK }}">
           <sc-for list="{{ colorPics }}" as="cp" hint-placeholder-count="6">
-            <div class="pc-pic" role="button" onClick="{{ cp.open }}" style="flex:{{ cp.ar }} 1 calc(var(--rh) * {{ cp.ar }});aspect-ratio:{{ cp.ar }};min-width:0;cursor:zoom-in;animation:{{ cp.anim }} .72s cubic-bezier(.3,.7,.2,1) {{ cp.delay }} both"><img src="{{ cp.src }}" alt="" loading="lazy" style="display:block;box-sizing:border-box;width:100%;height:100%;object-fit:cover;border:1px solid var(--border-hair)"></div>
+            <div data-zoom="" class="pc-pic" role="button" onClick="{{ cp.open }}" style="flex:{{ cp.ar }} 1 calc(var(--rh) * {{ cp.ar }});aspect-ratio:{{ cp.ar }};min-width:0;cursor:zoom-in;animation:{{ cp.anim }} .72s cubic-bezier(.3,.7,.2,1) {{ cp.delay }} both"><img src="{{ cp.src }}" alt="" loading="lazy" style="display:block;box-sizing:border-box;width:100%;height:100%;object-fit:cover;border:1px solid var(--border-hair)"></div>
           </sc-for>
           <i aria-hidden="true" style="flex:1000 1 0;height:0"></i>
         </div>
@@ -553,12 +607,12 @@
           <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px 20px;flex-wrap:wrap"><h3 style="margin:0;font-size:22px;font-weight:300;letter-spacing:.06em">{{ mfTitle }}</h3><span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint)">{{ mfMeta }}</span></div>
           <div style="margin-top:16px;columns:3 140px;column-gap:12px">
             <sc-for list="{{ mfPics }}" as="cp" hint-placeholder-count="6">
-              <div role="button" onClick="{{ cp.open }}" style="display:block;margin:0 0 12px;break-inside:avoid;cursor:zoom-in"><img src="{{ cp.src }}" alt="{{ mfTitle }}" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid var(--border-hair)"></div>
+              <div data-zoom="" role="button" onClick="{{ cp.open }}" style="display:block;margin:0 0 12px;break-inside:avoid;cursor:zoom-in"><img src="{{ cp.src }}" alt="{{ mfTitle }}" loading="lazy" style="display:block;width:100%;height:auto;border:1px solid var(--border-hair)"></div>
             </sc-for>
           </div>
         </div>
         <div id="sec-clubs" data-toc-target="" style="margin-top:64px">
-          <x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="SEC 02" title="{{ clubTitle }}" hint-size="100%,16px"></x-import>
+          <div data-sech="" style="display:contents"><x-import component-from-global-scope="HALCYONHUDDesignSystem_6201ce.SectionHeader" index="SEC 02" title="{{ clubTitle }}" hint-size="100%,16px"></x-import></div>
           <div style="margin-top:14px;border-top:1px solid var(--border-hair)">
             <sc-for list="{{ clubs }}" as="r" hint-placeholder-count="3">
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:4px 40px;padding:14px 0;border-bottom:1px solid var(--border-hair);font-size:13px">
@@ -596,10 +650,11 @@
         <sc-if value="{{ skPop.ok }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.12em;padding:1px 6px;border:1px solid {{ skPop.tone }};color:{{ skPop.tone }}">{{ skPop.status }}</span></sc-if>
       </div>
       <span style="font-size:17px;line-height:1.35">{{ skPop.name }}</span>
-      <sc-if value="{{ skPop.hasDs }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;line-height:1.6;color:var(--text-secondary);white-space:pre-line;text-wrap:pretty">{{ skPop.ds }}</span></sc-if>
+      <sc-if value="{{ skPop.hasDs }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;line-height:1.6;color:var(--text-secondary);white-space:pre-line;text-wrap:pretty">{{ skPop.ds1 }}</span></sc-if>
+      <sc-if value="{{ skPop.hasKw }}" hint-placeholder-val="{{ false }}"><div class="sk-kw"><sc-for list="{{ skPop.kw }}" as="k" hint-placeholder-count="3"><span class="sk-k">{{ k }}</span></sc-for></div></sc-if>
       <sc-if value="{{ skPop.hasD }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:1px"><sc-for list="{{ skPop.d }}" as="leaf" hint-placeholder-count="0"><span style="font-size:12px;color:var(--text-secondary)">— {{ leaf }}</span></sc-for></div></sc-if>
       <sc-if value="{{ skPop.link }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:var(--text-signal)">{{ skPop.link }}</span></sc-if>
-      <sc-if value="{{ skPop.hasImg }}" hint-placeholder-val="{{ false }}"><div style="aspect-ratio:4 / 3;overflow:hidden;border:1px solid var(--border-hair)"><img src="{{ skPop.img0 }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div></sc-if>
+      <sc-if value="{{ skPop.hasImg }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat({{ skPop.popN }},minmax(0,1fr));gap:4px"><sc-for list="{{ skPop.imgs }}" as="im" hint-placeholder-count="1"><div role="button" title="{{ im.cap }}" onClick="{{ im.open }}" style="aspect-ratio:{{ skPop.popAr }};overflow:hidden;border:1px solid var(--border-hair);cursor:zoom-in"><img src="{{ im.th }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div></sc-for></div></sc-if>
       <sc-if value="{{ skPop.noImg }}" hint-placeholder-val="{{ true }}"><div class="slotwrap" style="position:relative;aspect-ratio:4 / 3;border:1px solid var(--border-hair)"><image-slot id="{{ skPop.slot }}" shape="rect" placeholder="[ 證明 ]"></image-slot></div></sc-if>
       <sc-if value="{{ skPop.hasGo }}" hint-placeholder-val="{{ false }}"><div role="button" class="sk-pop-more" onClick="{{ skPop.goPhoto }}" style="align-self:flex-start;font-size:11px;letter-spacing:.1em;color:var(--text-signal);cursor:pointer">{{ skPop.goLabel }}</div></sc-if>
       <sc-if value="{{ skPop.hasP }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.2em;color:var(--text-faint)">{{ skProofLabel }}</span>
@@ -612,7 +667,8 @@
     <!-- Phones: swipe left / right for the next / previous photo, swipe down to close (pinch-zoom still works). -->
     <div data-noprint="" data-lb="" role="dialog" aria-modal="true" aria-label="{{ lbAlt }}" onClick="{{ lbClose }}" style="touch-action:pinch-zoom;position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;cursor:zoom-out;background:color-mix(in srgb,var(--surface-page) 50%,transparent);backdrop-filter:blur(8px) saturate(.7);-webkit-backdrop-filter:blur(8px) saturate(.7);animation:lbVeil .25s ease both">
       <figure data-lbfig="" onClick="{{ lbStop }}" style="margin:0;display:flex;flex-direction:column;gap:10px;max-width:100%;cursor:default;animation:lbIn .38s cubic-bezier(.2,.8,.2,1) both">
-        <img src="{{ lbSrc }}" alt="{{ lbAlt }}" loading="lazy" draggable="false" style="animation:{{ lbAnim }} .34s cubic-bezier(.2,.8,.2,1) both;display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;object-fit:contain;border:1px solid var(--border-strong);background:var(--surface-plate);box-shadow:0 24px 60px rgba(0,0,0,.28)">
+        <sc-if value="{{ lbVid }}" hint-placeholder-val="{{ false }}"><video src="{{ lbSrc }}" preload="none" controls="" autoplay="" muted="" loop="" playsinline="" style="display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;background:#000;border:1px solid var(--border-strong);box-shadow:0 24px 60px rgba(0,0,0,.28)"></video></sc-if>
+        <sc-if value="{{ lbImg }}" hint-placeholder-val="{{ true }}"><img src="{{ lbSrc }}" alt="{{ lbAlt }}" loading="lazy" draggable="false" style="animation:{{ lbAnim }} .34s cubic-bezier(.2,.8,.2,1) both;display:block;max-width:min(92vw,1600px);max-height:82vh;width:auto;height:auto;object-fit:contain;border:1px solid var(--border-strong);background:var(--surface-plate);box-shadow:0 24px 60px rgba(0,0,0,.28)"></sc-if>
         <figcaption style="display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-secondary)">
           <span>{{ lbCount }}</span>
           <span style="display:flex;gap:6px">
@@ -647,12 +703,12 @@ const D = {
   ],
   research: [
     { year: "2024.09 – 2026.08", head: { zh: "碩士論文研究：混合式三維微電極陣列（H3D-MEA）", en: "M.S. thesis: Hybrid 3D Microelectrode Array (H3D-MEA)" }, org: { zh: "指導教授 吳玉威", en: "Advisor Prof. Yu-Wei Wu" } },
-    { year: "進行中", head: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless BCI" }, org: { zh: "生亦科技 · 宜特科技", en: "BioPro · iST" } },
-    { year: "2026", head: { zh: "微尺度探針入腦力學與血管破裂量測", en: "Brain penetration mechanics with microscale probes" }, org: { zh: "PNAS · 共同第一作者", en: "PNAS · co-first author" } },
+    { year: "2024 – 至今", head: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless BCI" }, org: { zh: "生亦科技 · 宜特科技", en: "BioPro · iST" } },
+    { year: "2026", head: { zh: "微尺度探針植入腦之力學與血管破裂量測", en: "Brain penetration mechanics with microscale probes" }, org: { zh: "PNAS · 共同第一作者", en: "PNAS · co-first author" } },
     { year: "2026.06 – 至今", head: { zh: "桌上型四足陪伴機器人", en: "Desktop quadruped companion robot" }, org: { zh: "Raspberry Pi 5 · 個人專案", en: "Raspberry Pi 5 · personal" } }
   ],
   publications: [
-    { cat: "journal", year: "2026.03", venue: "PNAS", photos: ["photos/acad/pnas.jpg"], head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · 共同第一作者", en: "Journal · Co-first author" },
+    { cat: "journal", year: "2026.03", venue: "PNAS", photos: ["photos/acad/pnas-fig.jpg"], head: { zh: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes", en: "Ultra-sensitive measurement of brain penetration mechanics and blood vessel rupture with microscale probes" }, org: { zh: "期刊論文 · 共同第一作者", en: "Journal · Co-first author" },
       paper: { authors: ["Abdulmalik Obaid", "Mina-Elraheb Hanna", "Song-Wen Huang", "+5", "Yu-Wei Wu"], self: "Song-Wen Huang", editor: "John A. Rogers, Northwestern University", received: "2025.10.13", accepted: "2026.02.19", published: "2026.03.26", cite: "PNAS 123 (13) e2529147123", doi: "10.1073/pnas.2529147123", url: "https://www.pnas.org/doi/10.1073/pnas.2529147123" } },
     { cat: "patent", year: "2026.04.15", noPic: true, head: { zh: "微線陣列排列與固結方法（U.S. 64/040,119）", en: "Methods for Producing Patterned Microwire Arrays (U.S. 64/040,119)" }, org: { zh: "美國臨時專利", en: "U.S. provisional patent" } },
     { cat: "invited", year: "2026", photos: ["photos/acad/cycu.jpg"], head: { zh: "CYCU-Leuven Joint International Workshop", en: "CYCU-Leuven Joint International Workshop" }, org: { zh: "青年邀請講者", en: "Invited young speaker" } },
@@ -693,33 +749,67 @@ const D = {
   // Project fields: summary, problem, role, method[], result, challenge[] ("what went wrong → how it was solved"), nextStep, note, tags. Empty fields are not shown.
   works: [
     { year: "2024 – 2026", title: { zh: "碩士論文研究：混合式三維微電極陣列（H3D-MEA）", en: "M.Sc. Thesis: Hybrid 3D Microelectrode Array (H3D-MEA)" },
-      summary: { zh: "混合式三維微電極陣列的設計、製作，以及小鼠活體神經記錄驗證。", en: "Design and fabrication of a hybrid 3D microelectrode array, validated by in-vivo neural recording in mice." },
-      note: { zh: "由於有未發表之資料，故只展示部分內容。", en: "Contains unpublished data, so only part of the work is shown." },
+      shotFit: "contain",
+      shots: [["photos/work/thesis-implant.jpg", "Fig. 3 植入式電極比較：Utah array、Microwire、Neuropixels 2.0", "Fig. 3: implants compared: Utah array, microwire, Neuropixels 2.0"],
+        ["photos/work/thesis-sem.jpg", "Fig. 10 電極實體照與 SEM 影像", "Fig. 10: the electrode, with SEM images"]],
+      summary: { zh: "==混合式三維微電極陣列==的設計、製作，以及==小鼠活體神經記錄驗證==。", en: "Design and fabrication of a ==hybrid 3D microelectrode array==, validated by ==in-vivo neural recording in mice==." },
+      note: { zh: "由於有未發表之資料，故只展示部分文件", en: "Contains unpublished data, so only some documents are shown" },
       tags: ["3D MEA", "Microfabrication", "Neural recording", "In vivo"] },
-    { _move: 1, year: "2026.06 – 至今", title: { zh: "桌上型四足陪伴機器人", en: "Desktop Quadruped Companion Robot" },
-      // Console screenshots: home, memory, I/O, architecture, progress.
-      shots: [["photos/work/robot-1.jpg", "主控台首頁", "Console home"], ["photos/work/robot-2.jpg", "記憶", "Memory"], ["photos/work/robot-3.jpg", "輸入輸出", "I/O"], ["photos/work/robot-4.jpg", "架構圖", "Architecture"], ["photos/work/robot-5.jpg", "進度表", "Progress"]],
-      summary: { zh: "樹莓派上的陪伴機器人：對話即時編碼、白天整理、夜間反思；辨識人臉與聲紋，口頭就能教會新規則。", en: "A Raspberry Pi companion that encodes conversation in real time, consolidates by day, reflects at night; recognises faces and voices and learns rules by being told." },
-      problem: { zh: "語言模型隔一段時間就分不出「使用者給的」和「自己生成的」，記憶會互相汙染。", en: "Over time an LLM cannot tell what the user said from what it generated; memories contaminate each other." },
-      role: { zh: "獨立設計與開發：系統架構、記憶流程、主控台。", en: "Solo design and build: architecture, memory pipeline, console." },
-      method: { zh: ["來源在寫入當下由程式判定，不交給模型事後猜", "兩個軸（流向、類型）加連結來組織記憶", "矛盾不覆蓋，排程成一個要問你的問題"], en: ["Provenance is set by code at write time, never guessed later", "Memories organised on two axes plus links", "Contradictions are never overwritten; they become scheduled questions"] },
-      result: { zh: "每條記憶可追溯、信心可驗證；一個畫面看完一條記憶的完整生命史。", en: "Every memory is traceable and its confidence verifiable; one view shows a memory's whole life." },
-      tags: ["Python", "Raspberry Pi", "SQLite", "LLM", "Face / Voice ID"] },
-    { year: "— 至今", title: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless BCI" },
-      summary: { zh: "應用於小鼠的 64 通道無線腦機介面，高空間解析度電極排列，用於觀察神經訊號動態。", en: "A 64-channel wireless brain-computer interface for mice, with a high-density electrode layout for tracking neural dynamics." },
-      problem: { zh: "神經訊號量測工具需要同時兼顧高穩定性、高生物相容性與高空間解析度。", en: "Neural recording tools must be stable, biocompatible and spatially dense at once." },
-      role: { zh: "負責主導整體系統架構整合與電極製作；與生亦科技、宜特科技合作開發。", en: "Led system integration and electrode fabrication, in collaboration with BioPro Scientific and iST." },
-      method: { zh: ["微電極陣列材料與製程設計、雷射消熔加工", "封裝製程、材料分析與可靠度測試優化（IST）", "開顱植入與腦組織切片染色驗證"], en: ["Microelectrode array materials and process design; laser ablation", "Packaging, materials analysis and reliability testing with IST", "Craniotomy implantation and histological validation"] },
-      result: { zh: "系統已完成初步驗證，預計於 2026–2027 年完成整體整合。", en: "Initial validation complete; full integration expected in 2026–2027." },
-      note: { zh: "由於有未發表之資料，故只展示部分內容。", en: "Contains unpublished data, so only part of the work is shown." },
-      tags: ["BCI", "Microelectrode array", "Laser ablation", "CAD", "In vivo"] },
-    { year: "2026", title: { zh: "微尺度探針入腦力學與血管破裂量測", en: "Brain Penetration Mechanics with Microscale Probes" },
-      summary: { zh: "超高靈敏度量測微尺度電極進入腦組織時的力學行為與血管破裂機制；以共同第一作者發表於 PNAS。", en: "Ultra-sensitive measurement of the mechanics and vessel rupture as microscale electrodes enter brain tissue; published in PNAS as co-first author." },
+    { _move: 1, year: "2026.06 – 至今", title: { zh: "桌上型四足陪伴機器人 SW01", en: "SW01: Desktop Quadruped Companion Robot" },
+      // Media, in the order of 素材/專案/4 (0 – 6). Videos carry their poster as the fourth item.
+      shotFit: "contain",
+      shots: [["photos/work/sw-0.jpg", "主控台首頁", "Console home"],
+        ["photos/work/sw-1.jpg", "機器人實體", "The robot"],
+        ["photos/work/sw-2.mp4", "腿部機構測試", "Leg mechanism test", "photos/work/sw-2.jpg"],
+        ["photos/work/sw-3.jpg", "對話中的機器人與主控台", "Mid-conversation, with the console behind"],
+        ["photos/work/sw-4.jpg", "OLED 眼睛表情", "OLED eyes"],
+        ["photos/work/sw-5.mp4", "輸入輸出：視覺", "I/O: vision", "photos/work/sw-5.jpg"],
+        ["photos/work/sw-6.jpg", "架構圖", "Architecture"]],
+      summary: {"zh": "一隻跑在樹莓派 5 上的四足陪伴機器人，會聽、會看、會轉頭。==每條長期記憶都能追到原話==，==口頭就能教會她新規則==。四隻腳正從 CAD 建模、模擬、手寫步態，一路走向強化學習。", "en": "A quadruped companion robot on a Raspberry Pi 5 that listens, sees and turns its head. ==Every long-term memory traces back to the original words==, and ==she learns new rules just by being told==. Her four legs are on their way from CAD and simulation, through a hand-written gait, to reinforcement learning."},
+      problem: {"zh": "陪伴機器人要記得你才有意義，但語言模型的長期記憶有兩個坑。第一，時間一久就分不出哪些是你說的、哪些是它自己生成的。第二，新舊說法打架時直接覆蓋。結果是==記得越多，錯得越理直氣壯==。", "en": "A companion robot only matters if it remembers you, but language-model memory has two traps. First, over time it can no longer tell what you said from what it generated itself. Second, when old and new claims conflict, the new one simply overwrites the old. ==The more it remembers, the more confidently wrong it gets==."},
+      role: {"zh": "借助語言模型獨立設計與開發：", "en": "Designed and built solo, with help from language models:"},
+      roleList: {"zh": ["機構（Shapr3D）", "系統架構（樹莓派保存記憶，筆電負責運算）", "記憶流程與評估題庫", "主控台", "腿部運動學、步態與模擬模型"], "en": ["Mechanism (Shapr3D)", "System architecture (memory on the Pi, compute on the laptop)", "Memory pipeline and evaluation benchmark", "Console", "Leg kinematics, gait and simulation model"]},
+      // Items may start with **a lead-in**：, shown in bold.
+      method: {"zh": ["**來源由程式判定**：每條記憶都附上根據哪句話、是誰說的。信心由程式依根據計算，不採用模型自報的數字；她自己講兩次，也不會變成事實。", "**白天整理、夜間反思**：閒置時把對話整理成一條條記憶。凌晨合併重複、標記過時、找出矛盾，並從失敗的動作歸納教訓，每晚有固定的呼叫預算。", "**矛盾不覆蓋**：根據比較弱的說法不能蓋掉比較強的。衝突的兩邊都保留，排成一個問題，等你有空時問你，你的回答隔夜定案。", "**兩個軸加連結**：用流向（IN／SELF／OUT）和類型兩個軸，加上記憶之間的連結（參考 A-MEM）來組織記憶。回想時多帶一層相關記憶，所以答得出要串兩件事的問題。", "**身體**：單腳逆運動學，膝蓋的兩組平行四邊形傳動和死點限制都算進去；50 Hz 對角小跑。從 STEP 和實際秤重建 MuJoCo 模型，馬達反應用實測的階躍響應擬合。"], "en": ["**Provenance set by code**: every memory records which sentence it came from and who said it. Confidence is computed by code from that evidence, never taken from the model's own estimate; saying something twice does not make it a fact.", "**Consolidate by day, reflect by night**: when idle, conversations become individual memories. In the early hours duplicates are merged, stale items flagged, contradictions found and lessons drawn from failed actions, within a fixed nightly call budget.", "**Contradictions are never overwritten**: a weaker claim cannot replace a stronger one. Both sides are kept and queued as a question for when you are free; your answer settles it overnight.", "**Two axes plus links**: memories are organised by flow (IN / SELF / OUT) and by type, plus links between them (after A-MEM). Recall brings in one extra layer of related memories, so she can answer questions that join two facts.", "**Body**: single-leg inverse kinematics that accounts for the knee's double-parallelogram linkage and its dead-point limits; a 50 Hz diagonal trot. A MuJoCo model built from the STEP file and weighed parts, with servo response fitted to measured step responses."]},
+      result: {"zh": ["**視覺**：認得人、手勢和家裡的貓；需要時讓多模態模型描述眼前的畫面；鏡頭會跟著人臉轉。", "**聽覺與說話**：本機語音辨識和聲紋認人，聽得出聲音的方向，邊想邊說，約 1–2 秒開口回話。", "**情境感知**：結合臉、聲音和聲音方向判斷是誰在說話；知道自己在哪裡、有沒有被拿起來。", "**表達**：螢幕表情跟著情緒變化，頭會轉向說話的人。", "**記憶**：每條記憶都追得到來源和信心，==不知道的事會說不知道==；一個畫面看完一條記憶的完整生命史。", "**機構與運動**：==自行設計四足機構==（14 顆伺服馬達），完成腿部運動學與小跑步態，並建立==對上實測數據的物理模擬==。", "**可靠性**：感官、記憶和說話都在機器人身上；雲端斷線時，思考自動退回本機模型。"], "en": ["**Vision**: recognises people, hand gestures and the household cat; asks a multimodal model to describe the scene when needed; the camera follows faces.", "**Hearing and speech**: on-device speech recognition and voice ID, sound direction, and replies that start in about 1–2 seconds while she is still thinking.", "**Context**: combines face, voice and sound direction to tell who is speaking, and knows where she is and when she is picked up.", "**Expression**: a screen face that follows her mood, and a head that turns toward the speaker.", "**Memory**: every memory carries its source and confidence, ==she says so when she does not know==, and one view shows a memory's whole life.", "**Mechanism and locomotion**: ==a self-designed quadruped with 14 servos==, leg kinematics and a trotting gait, and ==a physics simulation calibrated against measured hardware data==.", "**Resilience**: senses, memory and speech run on the robot itself, and thinking falls back to a local model when the cloud is unavailable."]},
+      challenge: {"zh": ["**模型會被自己的話汙染**：她以前說錯的話會被當成證據餵回去，別人說的事也會記到主人頭上。所以來源一律由程式判定，==模型自己的話不能當證據==。", "**在有限硬體上兼顧速度和準確**：樹莓派負責感官和記憶，筆電負責運算，==把一句話的延遲減半==。後來發現為了快犧牲思考會讓她講到一半改口，所以定下==準確優先於速度==的原則。", "**不能信任模型的輸出**：模型的回覆可能被截斷、格式錯誤，或把說明照字面執行。改成每一步都由程式驗證，不完整就不套用，避免記憶靜靜漏掉。", "**從模擬到實機**：便宜伺服馬達有延遲，被壓時也會偏，模擬結果對這些參數非常敏感。所以先實測馬達的反應和硬度去校正模擬，再進行強化學習。"], "en": ["**The model contaminates itself**: its own past mistakes were fed back as evidence, and other people's words got credited to the owner. Provenance is therefore set by code, and ==the model's own words never count as evidence==.", "**Speed versus accuracy on limited hardware**: the Pi handles senses and memory and the laptop handles compute, which ==halved reply latency==. Trading away thinking for speed made her correct herself mid-sentence, so ==accuracy now comes first==.", "**Model output cannot be trusted as-is**: replies may be truncated, malformed or taken too literally. Every step is now verified by code and incomplete results are not applied, so memories are never silently lost.", "**From simulation to hardware**: low-cost servos lag and give under load, and simulation results are highly sensitive to both. Response and stiffness are measured on real hardware to calibrate the simulation before any reinforcement learning."]},
+      nextStep: {"zh": ["四隻腳上機，實測站高、平衡點和馬達硬度，回頭校正模擬。", "在 MuJoCo Playground 用 PPO 學「手寫步態之外的修正量」，訓練時隨機加入 40–120 ms 延遲，最後轉成 ONNX 在樹莓派上以 50 Hz 執行。", "記憶題庫加第二份沒調過的劇本，避免只對一份題庫調好。", "不靠筆電也能獨立運作。"], "en": ["Mount all four legs and measure standing height, balance point and servo stiffness, then recalibrate the simulation.", "Use PPO in MuJoCo Playground to learn corrections on top of the hand-written gait, with random 40–120 ms latency during training, then export to ONNX and run it at 50 Hz on the Pi.", "Add a second, untuned script to the memory benchmark so it is not tuned to a single test.", "Run fully on its own, without the laptop."]},
+      tags: {"zh": ["Python", "Raspberry Pi 5", "SQLite", "LLM（Claude／Gemini／Ollama）", "人臉／聲紋辨識", "逆運動學", "MuJoCo", "強化學習"], "en": ["Python", "Raspberry Pi 5", "SQLite", "LLM (Claude / Gemini / Ollama)", "Face / voice ID", "Inverse kinematics", "MuJoCo", "Reinforcement learning"]} },
+    { year: "2024 – 至今", title: { zh: "64 通道無線腦機介面系統", en: "64-Channel Wireless Brain-Computer Interface System" },
+      shotFit: "contain",
+      shots: [["photos/work/bci-flow.jpg", "系統示意：小鼠頭戴式 64 通道無線腦機介面", "System render: the head-mounted 64-channel wireless BCI on a mouse"]],
+      summary: {"zh": "應用於==自由活動小鼠的 64 通道無線腦機介面==，整合微電極陣列與無線紀錄裝置。我==主導系統架構整合==與微電極製作，並擔任中研院、清華大學與宜特科技之間的技術協調窗口，串起電極設計、晶片封裝到對接。", "en": "A ==64-channel wireless BCI for freely moving mice== that pairs a microelectrode array with a wireless recorder. I ==lead system integration== and microelectrode fabrication, and coordinate Academia Sinica, National Tsing Hua University and iST from electrode design through chip packaging to bonding."},
+      problem: {"zh": "通道數越多，頭戴裝置通常越大越重；傳統紀錄又得頭部固定或接線，看不到小鼠自由活動時的自然行為。本專案要在==維持高通道數的同時，把裝置對小鼠活動的影響降到最低==。", "en": "More channels usually mean a bigger, heavier headstage, and conventional recording needs head fixation or cables, so natural behaviour in freely moving mice goes unseen. The goal is to ==keep a high channel count while minimising the device's impact on the mouse==."},
+      roleTitle: {"zh": "System Integration Lead & Microelectrode Development", "en": "System Integration Lead & Microelectrode Development"},
+      role: {"zh": "==主導系統架構整合與微電極製作==；負責跨單位溝通、進度協調與封裝規格確認。", "en": "I ==lead system integration and microelectrode fabrication==, and handle cross-institution communication, scheduling and packaging specifications."},
+      method: {"zh": ["**Microelectrode Array Design & Fabrication**：依紀錄晶片的尺寸重新設計電極陣列幾何與晶片端製程，並完成材料與結構的初步驗證。", "**Cross-disciplinary Project Management**：擔任中研院、清華大學、宜特科技三方的技術窗口，統籌會議、進度、需求傳達與封裝規格。", "**Precision Alignment System**：針對晶片微小的開窗與接點，==設計雙鏡頭視覺化對接系統==，輔助精密定位與壓接。", "**Peripheral Device Development**：Pogo Pin 充電介面、震動式植入輔助設備，以及電性測試用的保護封裝與配件。", "**Animal Adaptation & Load Testing**：評估頭戴裝置重量與結構的影響，確認小鼠能逐步適應並維持自然活動。"], "en": ["**Microelectrode Array Design & Fabrication**: redesigned the array geometry and chip-side process to fit the recording chip, and ran first validation of materials and structure.", "**Cross-disciplinary Project Management**: technical contact between Academia Sinica, National Tsing Hua University and iST, running meetings, progress, requirements and packaging specifications.", "**Precision Alignment System**: ==a dual-camera visual alignment system== for the chip's tiny openings and contacts, guiding precise positioning and bonding.", "**Peripheral Device Development**: a pogo-pin charging interface, a vibration-assisted implantation device, and protective housings and fixtures for electrical tests.", "**Animal Adaptation & Load Testing**: assessed the headstage's weight and structure, confirming that mice adapt and keep their natural activity."]},
+      challenge: {"zh": ["**跨領域系統整合**：中研院（電極）、清華大學（PCB／IC）、宜特科技（封裝）的背景與需求不同，要讓各階段規格一致、模組順利銜接。", "**微米尺度的精密對接**：晶片接點開窗極小，電極與晶片的對接需要極高精度，因此==自行設計雙鏡頭對接系統==。"], "en": ["**Cross-disciplinary system integration**: Academia Sinica (electrodes), National Tsing Hua University (PCB/IC) and iST (packaging) have different backgrounds and needs; the specifications had to stay consistent so the modules fit together.", "**Micron-scale precision alignment**: the chip's contact openings are tiny and bonding needs very high precision, so ==I designed a dual-camera alignment system==."]},
+      result: {"zh": ["**Electrode System**：微電極陣列==已完成初步製作與電性測試==。", "**Chip Packaging**：PCB／IC 晶片==已完成封裝==。", "**System Integration**：發現 PCB 電壓轉換問題，清華大學正設計中間轉接層（Interposer）改善。"], "en": ["**Electrode system**: ==first arrays fabricated and electrically tested==.", "**Chip packaging**: ==the PCB/IC chips are packaged==.", "**System integration**: a PCB voltage-conversion issue was found; National Tsing Hua University is designing an interposer to fix it."]},
+      nextStep: {"zh": "預計 2026 年至 2027 年初完成整體整合與驗證。", "en": "Full integration and validation by early 2027."},
+      note: {"zh": "部分內容涉及尚未發表的研究，因此僅展示部分資訊。", "en": "Includes unpublished research, so only part of the information is shown."},
+      tags: ["Brain-machine interface", "Wireless Neural Recording", "Freely-moving", "System Integration"] },
+    { year: "2026", title: { zh: "微尺度探針植入腦之力學與血管破裂量測", en: "Brain Penetration Mechanics with Microscale Probes" },
+      // Media: [file, 中文說明, English caption, poster/thumbnail for videos]. Videos play muted on a loop.
+      shotFit: "contain",
+      shots: [["photos/work/pnas-figure.jpg", "研究重點圖 · 圖：Obaid, Hanna, Huang et al., PNAS 2026", "Key figure · Obaid, Hanna, Huang et al., PNAS 2026"],
+        ["photos/work/pnas-pair.mp4", "左：較粗探針／右：較細探針，插入時的螢光影像與力量曲線（同步播放）", "Left: thicker probe / right: thinner probe — fluorescence imaging and force traces, played in sync", "photos/work/pnas-pair.jpg"],
+        ["photos/work/pnas-insert.mp4", "探針穿過腦表面時的即時力量量測", "Live force measurement as the probe crosses the brain surface", "photos/work/pnas-insert.jpg"],
+        ["photos/work/pnas-rig.jpg", "超高靈敏度力量量測平台", "The ultrasensitive force-measurement rig"]],
+      summary: { zh: "==超高靈敏度量測==微尺度電極進入腦組織時的力學行為與血管破裂機制；==以共同第一作者發表於 PNAS==。", en: "==Ultra-sensitive measurement== of the mechanics and vessel rupture as microscale electrodes enter brain tissue; ==published in PNAS as co-first author==." },
       problem: { zh: "神經探針與腦組織的交互作用直接影響神經介面的安全性與設計。", en: "Probe–tissue interaction determines the safety and design of neural interfaces." },
-      role: { zh: "共同第一作者；與 Stanford University 團隊合作。", en: "Co-first author, with a Stanford University team." },
-      method: { zh: ["審查期間一個月內重建並優化 Stanford 端量測系統與探針設計", "整理並取得高品質實驗數據以回應審查意見"], en: ["Rebuilt and optimised the Stanford measurement rig and probe design within one month of review", "Compiled high-quality data to answer the reviewers"] },
-      result: { zh: "通過審查，發表於《PNAS》。", en: "Accepted and published in PNAS." },
-      tags: ["PNAS", "Biomechanics", "Neural probes", "Stanford"] }
+      role: { zh: "共同第一作者；與 Stanford University 團隊合作。接到PNAS reviewer回應後，被要求在==1個月內補上缺失的資料==，但由於所有量測工具建置都在Stanford，因此需要==從零開始建置量測的設備==。", en: "Co-first author, with a Stanford University team. When the PNAS reviewers asked for the missing data ==within one month==, all the measurement tools were at Stanford, so ==the setup had to be built from scratch==." },
+      method: { zh: ["==建置活體腦力學量測的平台==（重建並優化 Stanford 端量測系統與探針設計）", "製備不同條件的微電極探針", "協助樣本的製備以及實驗（活體小鼠、瓊脂糖）", "分析穿刺力學變化與數據整理呈現，以回應審查意見"], en: ["==Built a platform for measuring brain mechanics in vivo== (rebuilding and refining the Stanford measurement system and probe design)", "Fabricated microelectrode probes under different conditions", "Helped prepare samples and run experiments (live mice, agarose)", "Analysed the penetration mechanics and organised and presented the data for the reviewers"] },
+      result: { zh: "收集並補上分析數據後即通過審查，==2026 3月發表於跨領域學科期刊Q1《PNAS》==。", en: "Once the missing data were collected and analysed, the paper passed review and was ==published in March 2026 in PNAS, a Q1 multidisciplinary journal==." },
+      challenge: { zh: ["! 此類跨領域(生物、材料)之實驗幾乎沒有可以參考的工具設計，時間趕，又是單人作業，在還需要修習碩士班課程的碩一下單人作業真的需要很好的時間控管以及實驗設計能力，另外由於量測設備在中山大學，因此==能夠上機測試的時間也只有短短兩次==。"],
+        en: ["! Cross-disciplinary experiments like this (biology and materials) have almost no tool designs to refer to. Time was short and I worked alone, in the second semester of my first master's year while still taking courses, which took careful time management and experiment design. On top of that, the instrument was at National Sun Yat-sen University, so there were ==only two sessions on the machine==."] },
+      // Longer write-up, one string per paragraph.
+      detail: { zh: ["微型神經探針是腦科學與腦機介面不可或缺的工具，但探針插入活體腦組織時到底需要多大的力、又會如何影響血管與周邊組織，過去一直沒有被精確量化。這個研究是我和指導教授吳玉威老師（中研院分生所），接續史丹佛大學團隊一起完成的。",
+          "我們把超高靈敏度的力量量測平台，和即時螢光顯微、雙光子顯微成像結合在一起，讓我們能一邊量力、一邊直接看到不同尺寸的探針插入小鼠腦部的過程。其中一部分實驗，是我在國立中山大學奈米中心完成的。",
+          "比較直徑 7.5 到 100 微米的探針後，我們發現==腦表面的軟腦膜才是植入時最主要的關卡==：探針越細，刺穿所需的力越小、組織也壓得越少；一旦穿過軟腦膜，往深處推進所需的力幾乎不再增加。其中最關鍵的發現是，==當探針細到約 25 微米以下，血管會被推開，而不是被勾住撕裂==，整個插入過程看不到出血。這些數據為設計更安全、低創傷、高密度的神經植入裝置，提供了具體的量化依據。"],
+        en: ["Microscale neural probes are essential tools for neuroscience and brain-computer interfaces, yet no one had precisely measured how much force it takes to push one into living brain tissue, or what that does to the surrounding blood vessels. I carried this work through with my advisor, Dr. Yu-Wei Wu (Institute of Molecular Biology, Academia Sinica), building on what a team at Stanford University had begun.",
+          "We paired an ultrasensitive force-measurement system with real-time fluorescence and two-photon imaging, so we could measure force while watching probes of different sizes enter the mouse brain. I ran part of these experiments at the Center for Nano Science and Nanotechnology, National Sun Yat-sen University.",
+          "Comparing probes from 7.5 to 100 µm in diameter, we found that ==the pia, the thin membrane on the brain's surface, is the main barrier==: thinner probes need less force to puncture it and compress less tissue, and once past it the force barely rises with depth. The key finding is that ==below about 25 µm, blood vessels are pushed aside instead of being caught and torn==, so insertion causes no visible bleeding. These numbers give concrete design rules for safer, lower-trauma, high-density neural implants."] },
+      tags: ["PNAS", "Research paper", "Biomechanics", "Neural probes", "Stanford"] }
   ],
   // Side projects (3D modelling). Drop an image into each slot; rename the titles here.
   minis: Array.from({ length: 8 }, () => ({ title: { zh: "建模作品", en: "3D model" } })),
@@ -751,6 +841,43 @@ const PHOTO_AR = { 1: 0.67, 7: 1.42, 8: 0.67, 9: 0.67, 10: 0.67, 12: 0.67, 13: 0
 const PHOTO_N = D.palettes.reduce((n, c) => n + c.pics.length, 0) + D.mindfreak.length;
 // Skill-tree text in other languages, looked up by the Chinese text — [English, 日本語, Deutsch].
 const SK_TR = {
+  "美學": ["Aesthetics", "美学", "Ästhetik"],
+  "神經": ["Neuroengineering", "神経工学", "Neurotechnik"],
+  "機電": ["Mechatronics", "メカトロニクス", "Mechatronik"],
+  "製造": ["Manufacturing", "製造", "Fertigung"],
+  "幾乎每日使用 CAD 軟體（SolidWorks、Shapr3D）進行工業設計、機構設計與 3D 建模，具備從概念發想到實際製造的完整設計經驗。": ["I use CAD software (SolidWorks, Shapr3D) almost every day for industrial design, mechanism design and 3D modelling, with hands-on experience from first concept through to manufacturing.", "ほぼ毎日 CAD ソフト（SolidWorks、Shapr3D）で工業デザイン、機構設計、3D モデリングを行い、構想から製造までの一貫した設計経験があります。", "Fast täglich CAD-Arbeit (SolidWorks, Shapr3D) für Industriedesign, Mechanikkonstruktion und 3D-Modellierung – mit Erfahrung vom ersten Konzept bis zur Fertigung."],
+  "數值最佳化與參數化建模": ["Numerical optimization & parametric modelling", "数値最適化とパラメトリックモデリング", "Numerische Optimierung & parametrische Modellierung"],
+  "針對專案中的微結構設計需求，整合多項幾何與物理限制，運用拓樸最佳化方法（SIMP、PARDISO、MMA）進行結構設計，以改善結構配置並提升後續製程的穩定性。\n此外，使用 CadQuery 自行開發參數化建模介面，提升模型生成與設計迭代效率。": ["For the micro-structures in my projects I combine several geometric and physical constraints and design them with topology optimization (SIMP, PARDISO, MMA), improving the layout and making later fabrication more reliable.\nI also built my own parametric-modelling interface with CadQuery to generate models and iterate on designs faster.", "プロジェクトの微細構造について、複数の幾何学的・物理的制約を統合し、トポロジー最適化（SIMP、PARDISO、MMA）で構造を設計して、配置の改善と後工程の安定性向上を図っています。\nまた、CadQuery でパラメトリックモデリング用のインターフェースを自作し、モデル生成と設計反復を効率化しました。", "Für die Mikrostrukturen meiner Projekte kombiniere ich mehrere geometrische und physikalische Randbedingungen und entwerfe sie per Topologieoptimierung (SIMP, PARDISO, MMA) – für bessere Strukturen und eine stabilere Fertigung.\nAußerdem habe ich mit CadQuery eine eigene Oberfläche für parametrische Modellierung entwickelt, um Modelle schneller zu erzeugen und zu iterieren."],
+  "Python 程式開發與資料分析": ["Python development & data analysis", "Python 開発とデータ解析", "Python-Entwicklung & Datenanalyse"],
+  "使用 Python 進行實驗數據整理、分析與視覺化，並透過 AI 與 MCP 整合 Python 開發專案工具，例如雙影像對位、阻抗分析等。": ["I use Python to organise, analyse and visualise experimental data, and build project tools by combining Python with AI through MCP, such as two-image registration and impedance analysis.", "Python で実験データの整理・解析・可視化を行い、AI と MCP を Python と組み合わせて、2 枚の画像の位置合わせやインピーダンス解析などのツールを開発しています。", "Mit Python ordne, analysiere und visualisiere ich Versuchsdaten und entwickle Projektwerkzeuge, indem ich KI über MCP mit Python verbinde – etwa für die Registrierung zweier Bilder oder Impedanzanalysen."],
+  "嵌入式系統與控制平台": ["Embedded systems & control platforms", "組込みシステムと制御プラットフォーム", "Embedded-Systeme & Steuerplattformen"],
+  "使用 Arduino、ESP32 與 Raspberry Pi 建立嵌入式控制系統，應用於實驗設備自動化及機器人開發，包含自動切割與循環機構、變速離心機及四足機器人等專案。": ["I build embedded control systems on Arduino, ESP32 and Raspberry Pi for lab automation and robotics, including an automatic cutting-and-cycling mechanism, a variable-speed centrifuge and a quadruped robot.", "Arduino、ESP32、Raspberry Pi で組込み制御システムを構築し、実験装置の自動化やロボット開発に活用しています。自動切断・循環機構、可変速遠心機、四足ロボットなどのプロジェクトがあります。", "Ich baue eingebettete Steuerungen mit Arduino, ESP32 und Raspberry Pi für Laborautomatisierung und Robotik – darunter ein automatischer Schneid- und Umlaufmechanismus, eine Zentrifuge mit variabler Drehzahl und ein Vierbeiner-Roboter."],
+  "控制介面與軟硬體整合": ["Control interfaces & hardware–software integration", "制御インターフェースとハード・ソフト統合", "Steueroberflächen & Hardware-Software-Integration"],
+  "使用 Qt Designer 與 PySide2 整合及改寫雙光子顯微鏡控制 API，開發符合實驗室需求的桌面控制介面，實現腦平面校正、自動影像拼接（Stitching）及自動螢光辨識等功能。\n此外，使用 HTML、CSS 與 JavaScript，並透過 AI 輔助開發網頁介面及互動式簡報。": ["With Qt Designer and PySide2 I integrated and rewrote the two-photon microscope's control API into a desktop interface built for the lab, with brain-plane correction, automatic image stitching and automatic fluorescence detection.\nI also build web interfaces and interactive presentations in HTML, CSS and JavaScript with AI assistance.", "Qt Designer と PySide2 で二光子顕微鏡の制御 API を統合・改修し、研究室向けのデスクトップ操作画面を開発しました。脳平面の補正、自動画像スティッチング、自動蛍光検出などの機能を備えています。\nまた、HTML、CSS、JavaScript と AI の支援で、Web インターフェースやインタラクティブなプレゼンテーションも作っています。", "Mit Qt Designer und PySide2 habe ich die Steuer-API des Zwei-Photonen-Mikroskops integriert und umgeschrieben – zu einer Desktop-Oberfläche für das Labor mit Korrektur der Hirnebene, automatischem Stitching und automatischer Fluoreszenzerkennung.\nAußerdem entwickle ich mit KI-Unterstützung Weboberflächen und interaktive Präsentationen in HTML, CSS und JavaScript."],
+  "感測器整合與系統架構": ["Sensor integration & system architecture", "センサー統合とシステム設計", "Sensorintegration & Systemarchitektur"],
+  "針對 Raspberry Pi 的記憶體限制與 ROS 系統負擔，將不同感測器模組化為獨立函式，自行建立類似 ROS 的感測器整合架構，以降低系統資源消耗並提升模組擴充性。": ["Given the Raspberry Pi's limited memory and the overhead of ROS, I wrote each sensor as an independent module and built my own ROS-like integration layer, cutting resource use and making the system easier to extend.", "Raspberry Pi のメモリ制約と ROS の負荷を踏まえ、各センサーを独立した関数としてモジュール化し、ROS に似たセンサー統合の仕組みを自作して、リソース消費を抑えつつ拡張しやすくしました。", "Wegen des begrenzten Speichers des Raspberry Pi und des Overheads von ROS habe ich jeden Sensor als eigenständiges Modul umgesetzt und eine eigene ROS-ähnliche Integrationsschicht gebaut – ressourcenschonend und leicht erweiterbar."],
+  "馬達控制與機構驅動": ["Motor control & actuation", "モーター制御と機構駆動", "Motorsteuerung & Antriebe"],
+  "無刷馬達：使用 PWM 控制馬達轉速曲線，自行製作高轉速離心機。\n步進馬達：結合直線滑軌與步進馬達，製作具備切割及上下往復震盪功能的穩定機構。\n伺服馬達：使用 14 顆伺服馬達驅動四足機器人的四肢與頸部。": ["Brushless motors: PWM control of the speed profile for a high-speed centrifuge I built myself.\nStepper motors: a linear rail and stepper motor in a stable mechanism that cuts and oscillates up and down.\nServo motors: 14 servos drive the legs and neck of a quadruped robot.", "ブラシレスモーター：PWM で回転数プロファイルを制御し、高速遠心機を自作しました。\nステッピングモーター：リニアガイドとステッピングモーターを組み合わせ、切断と上下往復振動ができる安定した機構を作りました。\nサーボモーター：14 個のサーボで四足ロボットの四肢と首を動かしています。", "Bürstenlose Motoren: PWM-Steuerung des Drehzahlprofils für eine selbst gebaute Hochgeschwindigkeitszentrifuge.\nSchrittmotoren: Linearführung und Schrittmotor in einem stabilen Mechanismus, der schneidet und auf und ab oszilliert.\nServomotoren: 14 Servos bewegen Beine und Hals eines Vierbeiner-Roboters."],
+  "硬體除錯與系統維護": ["Hardware debugging & maintenance", "ハードウェアのデバッグと保守", "Hardware-Debugging & Wartung"],
+  "具備實驗設備自主拆解、電路檢查及故障排除能力。曾針對 Phrozen 8K 3D 列印機及 MR.CARVE M1 PRO 雷射雕刻機進行維修，處理線路斷接、腳位錯接及 LCD 更換等問題。": ["I take lab equipment apart, check circuits and troubleshoot faults myself. I have repaired a Phrozen 8K 3D printer and an MR.CARVE M1 PRO laser engraver, fixing broken wiring and mis-wired pins and replacing an LCD.", "実験装置を自分で分解し、回路を点検して故障を切り分けられます。Phrozen 8K 3D プリンターや MR.CARVE M1 PRO レーザー彫刻機を修理し、断線、ピンの誤配線、LCD 交換などに対応しました。", "Ich zerlege Laborgeräte selbst, prüfe Schaltungen und behebe Fehler. Repariert habe ich u. a. einen Phrozen-8K-3D-Drucker und einen MR.CARVE-M1-PRO-Lasergravierer – unterbrochene Leitungen, falsch belegte Pins, LCD-Tausch."],
+  "積層製造": ["Additive manufacturing", "積層造形", "Additive Fertigung"],
+  "具備 10 μm 級高解析度 DLP 3D 列印設備長期操作經驗，使用過 MicroArch S140、Phrozen 8K 及拓竹消費級 3D 列印機。\n熟悉多種光固化樹脂與熔融沉積線材特性，包含生物相容性樹脂、鹼溶性犧牲樹脂、陶瓷樹脂、透明樹脂，以及 PLA、ABS、玻纖強化 ABS 等材料。": ["Long-term experience running 10 µm-class high-resolution DLP printers, including the MicroArch S140, a Phrozen 8K and Bambu Lab consumer printers.\nI know a wide range of photopolymer resins and FDM filaments: biocompatible, alkali-soluble sacrificial, ceramic and clear resins, plus PLA, ABS and glass-fibre-reinforced ABS.", "10 µm クラスの高解像度 DLP 3D プリンターを長く扱っており、MicroArch S140、Phrozen 8K、Bambu Lab の民生用プリンターの使用経験があります。\n生体適合性レジン、アルカリ可溶の犠牲レジン、セラミックレジン、透明レジン、PLA、ABS、ガラス繊維強化 ABS など、多様な光硬化レジンと FDM フィラメントの特性を把握しています。", "Langjährige Erfahrung mit hochauflösenden DLP-Druckern der 10-µm-Klasse, darunter MicroArch S140, Phrozen 8K und Bambu-Lab-Drucker.\nIch kenne viele Photopolymerharze und FDM-Filamente: biokompatible, alkalilösliche Opfer-, Keramik- und klare Harze sowie PLA, ABS und glasfaserverstärktes ABS."],
+  "機械加工與雷射加工": ["Machining & laser processing", "機械加工とレーザー加工", "Zerspanung & Laserbearbeitung"],
+  "與中研院精工室密切合作，具備銑床、鑽床、大型切割機及研磨機等設備操作經驗。\n此外，使用桌上型雷射切割機進行鋁件刻號與材料移除，並運用雙光子顯微鏡雷射進行微米級材料燒蝕。": ["Close collaboration with the Academia Sinica precision machine shop: milling and drilling machines, large cutting saws and grinders.\nI also use a desktop laser cutter to mark and remove material on aluminium parts, and the two-photon microscope's laser for micron-scale ablation.", "中央研究院の精密工作室と密に連携し、フライス盤、ボール盤、大型切断機、研削盤などの操作経験があります。\nまた、卓上レーザーカッターでアルミ部品の刻印・材料除去を行い、二光子顕微鏡のレーザーでミクロンスケールのアブレーションも行っています。", "Enge Zusammenarbeit mit der Feinmechanik-Werkstatt der Academia Sinica: Fräs- und Bohrmaschinen, große Trennmaschinen und Schleifmaschinen.\nAußerdem nutze ich einen Desktop-Laserschneider zum Beschriften und Abtragen an Aluminiumteilen und den Laser des Zwei-Photonen-Mikroskops für Ablation im Mikrometerbereich."],
+  "微電極製造與製程驗證": ["Microelectrode fabrication & process validation", "微小電極の作製とプロセス検証", "Mikroelektroden-Fertigung & Prozessvalidierung"],
+  "整合氧氣電漿、濕式蝕刻及雷射剝除等製程，進行微電極結構製作與加工。\n製程完成後，使用掃描式電子顯微鏡（SEM）觀察元件表面與結構，並透過電性阻抗量測進行品質檢驗與製程驗證。": ["I fabricate microelectrode structures by combining oxygen plasma, wet etching and laser ablation.\nAfterwards I inspect surfaces and structures with scanning electron microscopy (SEM) and use electrical impedance measurements for quality control and process validation.", "酸素プラズマ、ウェットエッチング、レーザーアブレーションなどのプロセスを組み合わせて微小電極構造を作製・加工しています。\n作製後は走査型電子顕微鏡（SEM）で表面と構造を観察し、電気インピーダンス測定で品質検査とプロセス検証を行います。", "Ich fertige Mikroelektroden-Strukturen durch eine Kombination aus Sauerstoffplasma, Nassätzen und Laserablation.\nDanach prüfe ich Oberflächen und Strukturen im Rasterelektronenmikroskop (REM) und nutze elektrische Impedanzmessungen zur Qualitätskontrolle und Prozessvalidierung."],
+  "動物手術與電極植入": ["Animal surgery & electrode implantation", "動物手術と電極埋め込み", "Tierchirurgie & Elektrodenimplantation"],
+  "具備小鼠立體定位手術經驗，包含立體定位、開顱及微電極植入等操作。": ["Experience with stereotaxic surgery in mice: stereotaxic targeting, craniotomy and microelectrode implantation.", "マウスの脳定位手術の経験があり、脳定位、開頭、微小電極の埋め込みを行います。", "Erfahrung mit stereotaktischer Chirurgie an Mäusen: stereotaktische Ausrichtung, Kraniotomie und Implantation von Mikroelektroden."],
+  "神經電生理與訊號紀錄": ["Electrophysiology & neural recording", "神経電気生理と信号記録", "Elektrophysiologie & neuronale Ableitung"],
+  "使用 MaxWell 高密度微電極陣列晶片進行平行電生理神經訊號紀錄，具備多通道神經訊號擷取與分析經驗。": ["Parallel electrophysiological recording on MaxWell high-density microelectrode-array chips, with experience acquiring and analysing multichannel neural signals.", "MaxWell の高密度微小電極アレイチップで電気生理の並列神経記録を行い、多チャンネル神経信号の取得と解析の経験があります。", "Parallele elektrophysiologische Ableitung auf hochdichten MaxWell-Mikroelektroden-Arrays, mit Erfahrung in Erfassung und Analyse mehrkanaliger neuronaler Signale."],
+  "動物行為實驗與設備開發": ["Behaviour experiments & apparatus", "動物行動実験と装置開発", "Verhaltensexperimente & Versuchsaufbauten"],
+  "使用 Open-field test 評估小鼠的負重與恢復能力，並參與小鼠 VR 系統及自動餵食器的硬體建置。": ["Open-field tests to assess load-bearing and recovery in mice; I also helped build the hardware for a mouse VR system and an automatic feeder.", "オープンフィールド試験でマウスの負荷耐性と回復力を評価し、マウス用 VR システムや自動給餌機のハードウェア構築にも参加しました。", "Open-Field-Tests zur Beurteilung von Belastbarkeit und Erholung bei Mäusen; außerdem Mitarbeit an der Hardware eines Maus-VR-Systems und eines automatischen Futterautomaten."],
+  "組織學與免疫染色": ["Histology & immunostaining", "組織学と免疫染色", "Histologie & Immunfärbung"],
+  "具備心臟灌流、冷凍切片及免疫染色等組織學操作經驗，用於評估電極植入位置及其對周圍神經組織的影響。": ["Hands-on histology – cardiac perfusion, cryosectioning and immunostaining – to verify where electrodes were implanted and how they affect the surrounding neural tissue.", "心臓灌流、凍結切片、免疫染色などの組織学的手技の経験があり、電極の埋め込み位置と周囲の神経組織への影響を評価しています。", "Praktische Histologie – Herzperfusion, Kryoschnitte und Immunfärbung –, um die Lage implantierter Elektroden und ihre Wirkung auf das umliegende Nervengewebe zu beurteilen."],
+  "平面設計與視覺編排": ["Graphic design & layout", "グラフィックデザインとレイアウト", "Grafikdesign & Layout"],
+  "曾於臺大椰風搖滾社擔任美宣，負責社徽設計、成果發表視覺製作及社群貼文編排。\n此外，曾於自發性成立的生科系系報擔任小組長，負責社群貼文設計及文字排版。\n長期對資訊整理與版面設計具有興趣，曾於生物學期末考自製開放攜帶的大抄，因資訊整理與版面設計表現獲授課教授分享至個人 Facebook。": ["As art and publicity lead of the NTU Palm Breeze Rock Club I designed the club logo, the visuals for our showcase concerts and our social-media posts.\nI also led a team on a student-run Life Science department newsletter, designing social posts and typesetting the text.\nI have long enjoyed organising information and laying it out: the open-book cheat sheet I made for a biology final was shared by the professor on Facebook for its organisation and layout.", "台湾大学の椰風ロック部で美術・広報を担当し、部のロゴ、成果発表会のビジュアル、SNS 投稿のレイアウトを手がけました。\nまた、学生有志で立ち上げた生命科学科の学科新聞で班長を務め、SNS 投稿のデザインと文字組みを担当しました。\n情報整理とレイアウトには以前から関心があり、生物学の期末試験用に作った持ち込み可のまとめシートが、その整理とレイアウトを評価されて担当教員の Facebook で紹介されました。", "Als Verantwortlicher für Gestaltung und Werbung im NTU Palm Breeze Rock Club habe ich das Club-Logo, die Visuals für unsere Abschlusskonzerte und die Social-Media-Posts gestaltet.\nIn einer von Studierenden gegründeten Fachbereichszeitung der Life Sciences leitete ich ein Team und gestaltete Social-Media-Posts und das Textlayout.\nInformationen zu ordnen und zu gestalten interessiert mich schon lange: Mein selbst erstellter Spickzettel für eine Biologie-Abschlussprüfung (erlaubtes Hilfsmittel) wurde wegen seiner Gestaltung vom Dozenten auf Facebook geteilt."],
+  "攝影與影像創作": ["Photography", "写真と映像制作", "Fotografie & Bildgestaltung"],
+  "自大三下開始接觸攝影，逐漸養成隨身攜帶相機、記錄生活細節的習慣。因參與椰風搖滾社，累積豐富的舞台與活動攝影經驗，目前亦以接案攝影師的形式承接不同類型的拍攝工作。\n拍攝題材涵蓋太極拳、魔術、表演藝術、打擊樂及西洋劍等，具備跨領域活動攝影經驗。\n大四下參加臺大、臺科大及師大三校聯盟的建築攝影課程，期末作品經修課同學、助教及曾參與臺北 101 設計的授課建築師巫基福建築師共同票選，獲得課程第一名。": ["I took up photography in the second half of my third undergraduate year and now carry a camera almost everywhere to record everyday details. The Palm Breeze Rock Club gave me a lot of stage and event photography, and I now also take on freelance shoots of different kinds.\nSubjects range from tai chi, magic and the performing arts to percussion and fencing.\nIn my final undergraduate semester I took an architectural photography course run jointly by NTU, NTUST and NTNU; my final project was voted first in the course by classmates, teaching assistants and the instructor, an architect who worked on the design of Taipei 101.", "大学 3 年の後期から写真を始め、カメラを持ち歩いて日常の細部を記録する習慣がつきました。椰風ロック部での活動を通じて舞台・イベント撮影の経験を重ね、現在はフリーランスのカメラマンとしてさまざまな撮影も請け負っています。\n太極拳、マジック、舞台芸術、打楽器、フェンシングなど、幅広いイベントを撮影してきました。\n大学 4 年の後期には台湾大学・台湾科技大学・台湾師範大学の 3 校連携による建築写真の授業を受講し、期末作品が受講生、TA、そして台北 101 の設計に携わった講師の建築家による投票で 1 位に選ばれました。", "Mit der Fotografie habe ich im zweiten Halbjahr meines dritten Studienjahres begonnen; seitdem habe ich die Kamera fast immer dabei. Im Palm Breeze Rock Club habe ich viel Bühnen- und Veranstaltungsfotografie gemacht, heute übernehme ich auch freiberufliche Aufträge verschiedener Art.\nDie Motive reichen von Tai-Chi, Zauberei und darstellender Kunst bis zu Percussion und Fechten.\nIm letzten Bachelorsemester belegte ich einen Architekturfotografie-Kurs der Universitätsallianz NTU, NTUST und NTNU; meine Abschlussarbeit wurde von Mitstudierenden, Tutoren und dem Dozenten – einem Architekten, der an der Planung des Taipei 101 mitwirkte – auf Platz eins gewählt."],
   "基礎": ["Foundations", "基礎", "Grundlagen"],
   "3D 建模與工程設計": ["3D modelling & engineering design", "3D モデリングと設計", "3D-Modellierung & Konstruktion"],
   "SolidWorks、Shapr3D": ["SolidWorks, Shapr3D", "SolidWorks、Shapr3D", "SolidWorks, Shapr3D"],
@@ -824,91 +951,108 @@ const SK_TR = {
   "Python：實驗數據皆以 Python 整理與繪圖；小型專案與工具則透過 AI 的 MCP 串接 Python 開發，例如雙影像對位、阻抗分析等。\nWeb UI（HTML／CSS／JavaScript）：主要以 Claude Design 進行 HTML 架構的介面設計，也用於製作簡報。": ["Python: all lab data is processed and plotted in Python; for small projects and tools I also connect AI through MCP into Python, e.g. two-image registration and impedance analysis.\nWeb UI (HTML / CSS / JavaScript): mainly HTML-based interface design with Claude Design, also used for slide decks.", "Python：研究室のデータはすべて Python で整理・グラフ化しています。小規模なプロジェクトやツールでは AI の MCP を Python につないで開発し、2 枚の画像の位置合わせやインピーダンス解析などを行っています。\nWeb UI（HTML／CSS／JavaScript）：主に Claude Design で HTML ベースのインターフェースを設計し、スライド作成にも使っています。", "Python: Alle Labordaten werte ich in Python aus und visualisiere sie; für kleinere Projekte und Tools binde ich KI über MCP in Python ein, z. B. für die Registrierung zweier Bilder oder Impedanzanalysen.\nWeb-UI (HTML / CSS / JavaScript): vor allem HTML-basiertes Interface-Design mit Claude Design, auch für Präsentationen."],
   "看作品 →": ["See the photos →", "作品を見る →", "Fotos ansehen →"]
 };
+// Shorter names for the tree itself in other languages (the pop-up and panel show the full name) — [English, 日本語, Deutsch].
+const SK_SH = {
+  "美學": ["Aesthetics", "美学", "Ästhetik"],
+  "神經": ["Neuroengineering", "神経工学", "Neurotechnik"],
+  "機電": ["Mechatronics", "メカトロニクス", "Mechatronik"],
+  "製造": ["Manufacturing", "製造", "Fertigung"],
+  "基礎": ["Foundations", "基礎", "Grundlagen"],
+  "3D 建模與工程設計": ["3D modelling & CAD", "3D モデリング", "3D-Modellierung"],
+  "數值最佳化與參數化建模": ["Topology optimization", "トポロジー最適化", "Topologieoptimierung"],
+  "Python 程式開發與資料分析": ["Python & data analysis", "Python とデータ解析", "Python & Datenanalyse"],
+  "嵌入式系統與控制平台": ["Embedded systems", "組込みシステム", "Embedded-Systeme"],
+  "控制介面與軟硬體整合": ["Control interfaces", "制御インターフェース", "Steueroberflächen"],
+  "感測器整合與系統架構": ["Sensor integration", "センサー統合", "Sensorintegration"],
+  "馬達控制與機構驅動": ["Motor control", "モーター制御", "Motorsteuerung"],
+  "硬體除錯與系統維護": ["Hardware debugging", "ハードのデバッグ", "Hardware-Debugging"],
+  "機械加工與雷射加工": ["Machining & laser", "機械・レーザー加工", "Zerspanung & Laser"],
+  "微電極製造與製程驗證": ["Microelectrodes", "微小電極の作製", "Mikroelektroden"],
+  "動物手術與電極植入": ["Surgery & implants", "手術と電極埋め込み", "Chirurgie & Implantate"],
+  "神經電生理與訊號紀錄": ["Electrophysiology", "電気生理", "Elektrophysiologie"],
+  "動物行為實驗與設備開發": ["Behaviour experiments", "行動実験", "Verhaltensversuche"],
+  "組織學與免疫染色": ["Histology & IHC", "組織学と免疫染色", "Histologie & IHC"],
+  "平面設計與視覺編排": ["Graphic design", "グラフィックデザイン", "Grafikdesign"],
+  "攝影與影像創作": ["Photography", "写真", "Fotografie"]
+};
 // Skill-tree icons: Lucide (lucide.dev, ISC licence), keyed by node id ("branch.item.sub"). Swap one by pasting another icon's inner SVG.
 const SK_IC = {
-  "1": "<path d=\"M12 16h.01\" /><path d=\"M16 16h.01\" /><path d=\"M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z\" /><path d=\"M8 16h.01\" />",
+  "help.hover": '<path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/>',
+  "help.click": '<path d="M14 4.1 12 6"/> <path d="m5.1 8-2.9-.8"/> <path d="m6 12-1.9 2"/> <path d="M7.2 2.2 8 5.1"/> <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/>',
+  "help.wheel": '<rect x="5" y="2" width="14" height="20" rx="7"/> <path d="M12 6v4"/>',
+  "help.grab": '<path d="M18 11.5V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1.4"/> <path d="M14 10V8a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/> <path d="M10 9.9V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v5"/> <path d="M6 14a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/> <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8 2 2 0 1 1 4 0"/>',
+  "help.reset": '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/> <path d="M3 3v5h5"/>',
+  "help.close": '<path d="M18 6 6 18"/> <path d="m6 6 12 12"/>',
+  "help.tap": '<path d="M22 14a8 8 0 0 1-8 8"/> <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/> <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/> <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/> <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+  "help.hold": '<path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/> <path d="M14 13.12c0 2.38 0 6.38-1 8.88"/> <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/> <path d="M2 12a10 10 0 0 1 18-6"/> <path d="M2 16h.01"/> <path d="M21.8 16c.2-2 .131-5.354 0-6"/> <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/> <path d="M8.65 22c.21-.66.45-1.32.57-2"/> <path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>',
+  "help.move": '<path d="M12 2v20"/> <path d="m15 19-3 3-3-3"/> <path d="m19 9 3 3-3 3"/> <path d="M2 12h20"/> <path d="m5 9-3 3 3 3"/> <path d="m9 5 3-3 3 3"/>',
+  "help.pinch": '<polyline points="15 3 21 3 21 9"/> <polyline points="9 21 3 21 3 15"/> <line x1="21" x2="14" y1="3" y2="10"/> <line x1="3" x2="10" y1="21" y2="14"/>',
+  "help.back": '<path d="M9 14 4 9l5-5"/> <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>',
   "0": "<path d=\"M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z\" /><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\" /><circle cx=\"17.5\" cy=\"17.5\" r=\"3.5\" />",
   "0.0": "<path d=\"M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z\" /><path d=\"m3.3 7 8.7 5 8.7-5\" /><path d=\"M12 22V12\" />",
-  "0.0.0": "<path d=\"m21.12 6.4-6.05-4.06a2 2 0 0 0-2.17-.05L2.95 8.41a2 2 0 0 0-.95 1.7v5.82a2 2 0 0 0 .88 1.66l6.05 4.07a2 2 0 0 0 2.17.05l9.95-6.12a2 2 0 0 0 .95-1.7V8.06a2 2 0 0 0-.88-1.66Z\" /><path d=\"M10 22v-8L2.25 9.15\" /><path d=\"m10 14 11.77-6.87\" />",
-  "0.0.1": "<path d=\"m12.99 6.74 1.93 3.44\" /><path d=\"M19.136 12a10 10 0 0 1-14.271 0\" /><path d=\"m21 21-2.16-3.84\" /><path d=\"m3 21 8.02-14.26\" /><circle cx=\"12\" cy=\"5\" r=\"2\" />",
-  "0.1": "<path d=\"m18 16 4-4-4-4\" /><path d=\"m6 8-4 4 4 4\" /><path d=\"m14.5 4-5 16\" />",
-  "0.1.0": "<path d=\"m7 11 2-2-2-2\" /><path d=\"M11 13h4\" /><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" ry=\"2\" />",
-  "0.1.1": "<rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\" /><path d=\"M10 4v4\" /><path d=\"M2 8h20\" /><path d=\"M6 4v4\" />",
-  "0.2": "<path d=\"m5 8 6 6\" /><path d=\"m4 14 6-6 2-3\" /><path d=\"M2 5h12\" /><path d=\"M7 2h1\" /><path d=\"m22 22-5-10-5 10\" /><path d=\"M14 18h6\" />",
-  "1.0": "<path d=\"M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z\" /><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z\" /><path d=\"M12 2v2\" /><path d=\"M12 22v-2\" /><path d=\"m17 20.66-1-1.73\" /><path d=\"M11 10.27 7 3.34\" /><path d=\"m20.66 17-1.73-1\" /><path d=\"m3.34 7 1.73 1\" /><path d=\"M14 12h8\" /><path d=\"M2 12h2\" /><path d=\"m20.66 7-1.73 1\" /><path d=\"m3.34 17 1.73-1\" /><path d=\"m17 3.34-1 1.73\" /><path d=\"m11 13.73-4 6.93\" />",
-  "1.0.0": "<path d=\"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z\" /><path d=\"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65\" /><path d=\"m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65\" />",
-  "1.0.1": "<path d=\"M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z\" /><path d=\"M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8\" /><path d=\"M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3\" /><path d=\"M18 6h4\" /><path d=\"m5 10-2 8\" /><path d=\"m7 18 2-8\" />",
+  "0.1": "<circle cx=\"19\" cy=\"5\" r=\"2\" /><circle cx=\"5\" cy=\"19\" r=\"2\" /><path d=\"M5 17A12 12 0 0 1 17 5\" />",
+  "0.2": "<path d=\"m18 16 4-4-4-4\" /><path d=\"m6 8-4 4 4 4\" /><path d=\"m14.5 4-5 16\" />",
+  "1": "<path d=\"M12 16h.01\" /><path d=\"M16 16h.01\" /><path d=\"M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z\" /><path d=\"M8 16h.01\" />",
+  "1.0": "<path d=\"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z\" /><path d=\"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65\" /><path d=\"m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65\" />",
+  "1.1": "<path d=\"M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z\" /><path d=\"M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8\" /><path d=\"M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3\" /><path d=\"M18 6h4\" /><path d=\"m5 10-2 8\" /><path d=\"m7 18 2-8\" />",
+  "1.2": "<circle cx=\"12\" cy=\"5\" r=\"1\" /><circle cx=\"19\" cy=\"5\" r=\"1\" /><circle cx=\"5\" cy=\"5\" r=\"1\" /><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /><circle cx=\"5\" cy=\"12\" r=\"1\" /><circle cx=\"12\" cy=\"19\" r=\"1\" /><circle cx=\"19\" cy=\"19\" r=\"1\" /><circle cx=\"5\" cy=\"19\" r=\"1\" />",
   "2": "<path d=\"M12 8V4H8\" /><rect width=\"16\" height=\"12\" x=\"4\" y=\"8\" rx=\"2\" /><path d=\"M2 14h2\" /><path d=\"M20 14h2\" /><path d=\"M15 13v2\" /><path d=\"M9 13v2\" />",
   "2.0": "<rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" /><path d=\"M11 9h4a2 2 0 0 0 2-2V3\" /><circle cx=\"9\" cy=\"9\" r=\"2\" /><path d=\"M7 21v-4a2 2 0 0 1 2-2h4\" /><circle cx=\"15\" cy=\"15\" r=\"2\" />",
-  "2.1": "<path d=\"M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1\" /><path d=\"M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9\" /><path d=\"M21 21v-2h-4\" /><path d=\"M3 5h4V3\" /><path d=\"M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3\" />",
-  "2.2": "<path d=\"M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z\" /><path d=\"M12 12v.01\" />",
-  "2.2.0": "<path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\" />",
-  "2.2.0.0": "<path d=\"m12 14 4-4\" /><path d=\"M3.34 19a10 10 0 1 1 17.32 0\" />",
-  "2.2.0.1": "<line x1=\"6\" x2=\"6\" y1=\"4\" y2=\"20\" /><polygon points=\"10,4 20,12 10,20\" />",
-  "2.3": "<path d=\"M19.07 4.93A10 10 0 0 0 6.99 3.34\" /><path d=\"M4 6h.01\" /><path d=\"M2.29 9.62A10 10 0 1 0 21.31 8.35\" /><path d=\"M16.24 7.76A6 6 0 1 0 8.23 16.67\" /><path d=\"M12 18h.01\" /><path d=\"M17.99 11.66A6 6 0 0 1 15.77 16.67\" /><circle cx=\"12\" cy=\"12\" r=\"2\" /><path d=\"m13.41 10.59 5.66-5.66\" />",
-  "2.4": "<rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\" />",
-  "1.1": "<path d=\"M18 12h2\" /><path d=\"M18 16h2\" /><path d=\"M18 20h2\" /><path d=\"M18 4h2\" /><path d=\"M18 8h2\" /><path d=\"M4 12h2\" /><path d=\"M4 16h2\" /><path d=\"M4 20h2\" /><path d=\"M4 4h2\" /><path d=\"M4 8h2\" /><path d=\"M8 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-1.5c-.276 0-.494.227-.562.495a2 2 0 0 1-3.876 0C9.994 2.227 9.776 2 9.5 2z\" />",
-  "1.1.0": "<circle cx=\"12\" cy=\"5\" r=\"1\" /><circle cx=\"19\" cy=\"5\" r=\"1\" /><circle cx=\"5\" cy=\"5\" r=\"1\" /><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /><circle cx=\"5\" cy=\"12\" r=\"1\" /><circle cx=\"12\" cy=\"19\" r=\"1\" /><circle cx=\"19\" cy=\"19\" r=\"1\" /><circle cx=\"5\" cy=\"19\" r=\"1\" />",
-  "1.1.0.0": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />",
-  "1.1.1": "<path d=\"M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z\" /><path d=\"m9 12 2 2 4-4\" />",
-  "1.1.1.0": "<path d=\"M3 3v16a2 2 0 0 0 2 2h16\" /><path d=\"M7 16c.5-2 1.5-7 4-7 2 0 2 3 4 3 2.5 0 4.5-5 5-7\" />",
+  "2.1": "<rect width=\"7\" height=\"9\" x=\"3\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"14\" y=\"3\" rx=\"1\" /><rect width=\"7\" height=\"9\" x=\"14\" y=\"12\" rx=\"1\" /><rect width=\"7\" height=\"5\" x=\"3\" y=\"16\" rx=\"1\" />",
+  "2.2": "<path d=\"M19.07 4.93A10 10 0 0 0 6.99 3.34\" /><path d=\"M4 6h.01\" /><path d=\"M2.29 9.62A10 10 0 1 0 21.31 8.35\" /><path d=\"M16.24 7.76A6 6 0 1 0 8.23 16.67\" /><path d=\"M12 18h.01\" /><path d=\"M17.99 11.66A6 6 0 0 1 15.77 16.67\" /><circle cx=\"12\" cy=\"12\" r=\"2\" /><path d=\"m13.41 10.59 5.66-5.66\" />",
+  "2.3": "<path d=\"M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z\" /><path d=\"M12 12v.01\" />",
+  "2.4": "<path d=\"M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1\" /><path d=\"M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9\" /><path d=\"M21 21v-2h-4\" /><path d=\"M3 5h4V3\" /><path d=\"M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3\" />",
   "3": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z\" /><path d=\"M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4\" /><path d=\"M17.599 6.5a3 3 0 0 0 .399-1.375\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M19.938 10.5a4 4 0 0 1 .585.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M19.967 17.484A4 4 0 0 1 18 18\" />",
-  "3.0": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /><path d=\"M9 13a4.5 4.5 0 0 0 3-4\" /><path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /><path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /><path d=\"M6 18a4 4 0 0 1-1.967-.516\" /><path d=\"M12 13h4\" /><path d=\"M12 18h6a2 2 0 0 1 2 2v1\" /><path d=\"M12 8h8\" /><path d=\"M16 8V5a2 2 0 0 1 2-2\" /><circle cx=\"16\" cy=\"13\" r=\".5\" /><circle cx=\"18\" cy=\"3\" r=\".5\" /><circle cx=\"20\" cy=\"21\" r=\".5\" /><circle cx=\"20\" cy=\"8\" r=\".5\" />",
-  "3.1": "<path d=\"M11 16.586V19a1 1 0 0 1-1 1H2L18.37 3.63a1 1 0 1 1 3 3l-9.663 9.663a1 1 0 0 1-1.414 0L8 14\" />",
-  "3.2": "<path d=\"M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2\" />",
-  "3.3": "<path d=\"M17 5c0-1.7-1.3-3-3-3s-3 1.3-3 3c0 .8.3 1.5.8 2H11c-3.9 0-7 3.1-7 7c0 2.2 1.8 4 4 4\" /><path d=\"M16.8 3.9c.3-.3.6-.5 1-.7 1.5-.6 3.3.1 3.9 1.6.6 1.5-.1 3.3-1.6 3.9l1.6 2.8c.2.3.2.7.2 1-.2.8-.9 1.2-1.7 1.1 0 0-1.6-.3-2.7-.6H17c-1.7 0-3 1.3-3 3\" /><path d=\"M13.2 18a3 3 0 0 0-2.2-5\" /><path d=\"M13 22H4a2 2 0 0 1 0-4h12\" /><path d=\"M16 9h.01\" />",
-  "3.4": "<path d=\"M6 18h8\" /><path d=\"M3 22h18\" /><path d=\"M14 22a7 7 0 1 0 0-14h-1\" /><path d=\"M9 14h2\" /><path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\" /><path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\" />",
+  "3.0": "<path d=\"M11 16.586V19a1 1 0 0 1-1 1H2L18.37 3.63a1 1 0 1 1 3 3l-9.663 9.663a1 1 0 0 1-1.414 0L8 14\" />",
+  "3.1": "<path d=\"M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2\" />",
+  "3.2": "<path d=\"M17 5c0-1.7-1.3-3-3-3s-3 1.3-3 3c0 .8.3 1.5.8 2H11c-3.9 0-7 3.1-7 7c0 2.2 1.8 4 4 4\" /><path d=\"M16.8 3.9c.3-.3.6-.5 1-.7 1.5-.6 3.3.1 3.9 1.6.6 1.5-.1 3.3-1.6 3.9l1.6 2.8c.2.3.2.7.2 1-.2.8-.9 1.2-1.7 1.1 0 0-1.6-.3-2.7-.6H17c-1.7 0-3 1.3-3 3\" /><path d=\"M13.2 18a3 3 0 0 0-2.2-5\" /><path d=\"M13 22H4a2 2 0 0 1 0-4h12\" /><path d=\"M16 9h.01\" />",
+  "3.3": "<path d=\"M6 18h8\" /><path d=\"M3 22h18\" /><path d=\"M14 22a7 7 0 1 0 0-14h-1\" /><path d=\"M9 14h2\" /><path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\" /><path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\" />",
   "4": "<circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"#000\" /><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"#000\" /><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"#000\" /><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"#000\" /><path d=\"M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z\" />",
-  "4.0": "<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\" /><circle cx=\"12\" cy=\"13\" r=\"3\" />",
-  "4.1": "<path d=\"M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z\" /><path d=\"m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18\" /><path d=\"m2.3 2.3 7.286 7.286\" /><circle cx=\"11\" cy=\"11\" r=\"2\" />",
-  "4.2": "<rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\" /><line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\" /><line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\" />"
+  "4.0": "<path d=\"M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z\" /><path d=\"m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18\" /><path d=\"m2.3 2.3 7.286 7.286\" /><circle cx=\"11\" cy=\"11\" r=\"2\" />",
+  "4.1": "<path d=\"M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z\" /><circle cx=\"12\" cy=\"13\" r=\"3\" />"
   };
+
 // Skill evidence: set ok:true and p:{zh,en} once confirmed
 const N = (n, c, x) => ({ n, c: c || [], ...(x || {}) });
 const SK = [
   N("基礎", [
-    N("3D 建模與工程設計", [], { ds: "幾乎每天使用 CAD 軟體（SolidWorks、Shapr3D）進行工業設計與建模。\n另做過拓樸最佳化與參數化建模：專案中的微結構需同時考量多項限制，因此以拓樸最佳化（SIMP、PARDISO、MMA）設計結構，並以 CadQuery 自建參數化建模的簡易介面，加快設計迭代。" }),
-    N("程式", [], { ds: "Python：實驗數據皆以 Python 整理與繪圖；小型專案與工具則透過 AI 的 MCP 串接 Python 開發，例如雙影像對位、阻抗分析等。\nWeb UI（HTML／CSS／JavaScript）：主要以 Claude Design 進行 HTML 架構的介面設計，也用於製作簡報。" }),
-    N("語言：中文（母語）、英文（TOEIC 835）")
+    N("3D 建模與工程設計", [], {"ds": "幾乎每日使用 CAD 軟體（SolidWorks、Shapr3D）進行工業設計、機構設計與 3D 建模，具備從概念發想到實際製造的完整設計經驗。", "kw": ["SolidWorks", "Shapr3D", "CAD", "Industrial Design", "3D Modeling"]}),
+    N("數值最佳化與參數化建模", [], {"ds": "針對專案中的微結構設計需求，整合多項幾何與物理限制，運用拓樸最佳化方法（SIMP、PARDISO、MMA）進行結構設計，以改善結構配置並提升後續製程的穩定性。\n此外，使用 CadQuery 自行開發參數化建模介面，提升模型生成與設計迭代效率。", "kw": ["Topology Optimization", "SIMP", "PARDISO", "MMA", "CadQuery", "Parametric Modeling"]}),
+    N("Python 程式開發與資料分析", [], {"ds": "使用 Python 進行實驗數據整理、分析與視覺化，並透過 AI 與 MCP 整合 Python 開發專案工具，例如雙影像對位、阻抗分析等。", "kw": ["Python", "Data Analysis", "Data Visualization", "MCP", "Automation"]})
   ], { sub: "跨領域共用" }),
-  N("製造／製程", [
-    N("機械製造", [N("積層：FDM／DLP 3D 列印", [], { ds: "操作 10 μm 級高解析度 DLP 3D 列印機、Phrozen 8K 與拓竹消費級 3D 列印機；熟悉各類樹脂與線材特性，包括生物相容性樹脂、鹼溶性犧牲樹脂、陶瓷樹脂、透明樹脂，以及 PLA、ABS、玻纖強化 ABS 等。" }), N("減材：雷射切割、銑床、鑽孔／攻牙", [], { ds: "與中研院精工室密切合作，操作過銑床、鑽床、大型切割機與研磨機等設備。\n以桌上型雷射切割機進行鋁件刻號與材料移除，並以雙光子顯微鏡的雷射進行微米級材料燒蝕。" })]),
-    N("微製程", [
-      N("微電極製造", [], { ds: "以氧氣電漿、濕式蝕刻與雷射剝除等製程製作微電極。" }),
-      N("元件驗證", [], { ds: "製程完成後，以電子顯微鏡（SEM）與電性阻抗量測進行品質檢驗（QC）。" })
-    ], { link: "→ 產出供神經工程使用" })
+  N("製造", [
+    N("積層製造", [], {"ds": "具備 10 μm 級高解析度 DLP 3D 列印設備長期操作經驗，使用過 MicroArch S140、Phrozen 8K 及拓竹消費級 3D 列印機。\n熟悉多種光固化樹脂與熔融沉積線材特性，包含生物相容性樹脂、鹼溶性犧牲樹脂、陶瓷樹脂、透明樹脂，以及 PLA、ABS、玻纖強化 ABS 等材料。", "kw": ["FDM", "DLP", "3D Printing", "High-resolution Printing", "Material Processing"]}),
+    N("機械加工與雷射加工", [], {"ds": "與中研院精工室密切合作，具備銑床、鑽床、大型切割機及研磨機等設備操作經驗。\n此外，使用桌上型雷射切割機進行鋁件刻號與材料移除，並運用雙光子顯微鏡雷射進行微米級材料燒蝕。", "kw": ["Milling", "Drilling", "Grinding", "Laser Cutting", "Mechanical Machining"]}),
+    N("微電極製造與製程驗證", [], {"ds": "整合氧氣電漿、濕式蝕刻及雷射剝除等製程，進行微電極結構製作與加工。\n製程完成後，使用掃描式電子顯微鏡（SEM）觀察元件表面與結構，並透過電性阻抗量測進行品質檢驗與製程驗證。", "kw": ["Microfabrication", "Microelectrode", "Oxygen Plasma", "Wet Etching", "Laser Ablation", "SEM", "Impedance Measurement"], "link": "→ 產出供神經工程使用"})
   ]),
-  N("機電整合與嵌入式", [
-    N("控制平台：Arduino、ESP32、Raspberry Pi"),
-    N("硬體除錯", [], { ds: "實驗室設備如 Phrozen 8K 3D 列印機、MR.CARVE M1 PRO 雷射雕刻機故障時，曾自行拆機排除問題並完成維修（斷線、腳位接錯、更換 LCD）。" }),
-    N("馬達控制", [], { ds: "無刷馬達：為控制離心轉速曲線，以 PWM 驅動，自製高轉速離心機。\n步進馬達：以直線滑軌搭配步進馬達，做出可切割並上下往復震盪的穩定機構。\n伺服馬達：以 14 顆伺服馬達驅動四足機器人的四肢與頸部。", go: "robot" }),
-    N("感測器整合：IMU、視覺、聲音", [], { ds: "機器人的樹莓派記憶體有限、ROS 負擔過重，因此將各感測器模組化為函式，自建類似 ROS 的感測器整合架構。", go: "robot" }),
-    N("介面：PySide2 桌面主控台、網頁主控台", [], { ds: "以 Qt Designer 與 PySide2 改寫雙光子顯微鏡的控制 API，使其符合實驗室成員的操作需求。" })
+  N("機電", [
+    N("嵌入式系統與控制平台", [], {"ds": "使用 Arduino、ESP32 與 Raspberry Pi 建立嵌入式控制系統，應用於實驗設備自動化及機器人開發，包含自動切割與循環機構、變速離心機及四足機器人等專案。", "kw": ["Arduino", "ESP32", "Raspberry Pi", "Embedded Systems", "Hardware Control"]}),
+    N("控制介面與軟硬體整合", [], {"ds": "使用 Qt Designer 與 PySide2 整合及改寫雙光子顯微鏡控制 API，開發符合實驗室需求的桌面控制介面，實現腦平面校正、自動影像拼接（Stitching）及自動螢光辨識等功能。\n此外，使用 HTML、CSS 與 JavaScript，並透過 AI 輔助開發網頁介面及互動式簡報。", "kw": ["PySide2", "Qt Designer", "API Integration", "Desktop GUI", "HTML", "CSS", "JavaScript"]}),
+    N("感測器整合與系統架構", [], {"ds": "針對 Raspberry Pi 的記憶體限制與 ROS 系統負擔，將不同感測器模組化為獨立函式，自行建立類似 ROS 的感測器整合架構，以降低系統資源消耗並提升模組擴充性。", "kw": ["IMU", "Computer Vision", "Audio Processing", "Sensor Integration", "ROS"], "go": "robot"}),
+    N("馬達控制與機構驅動", [], {"ds": "無刷馬達：使用 PWM 控制馬達轉速曲線，自行製作高轉速離心機。\n步進馬達：結合直線滑軌與步進馬達，製作具備切割及上下往復震盪功能的穩定機構。\n伺服馬達：使用 14 顆伺服馬達驅動四足機器人的四肢與頸部。", "kw": ["BLDC Motor", "Stepper Motor", "Servo Motor", "PWM", "Motion Control"], "go": "robot"}),
+    N("硬體除錯與系統維護", [], {"ds": "具備實驗設備自主拆解、電路檢查及故障排除能力。曾針對 Phrozen 8K 3D 列印機及 MR.CARVE M1 PRO 雷射雕刻機進行維修，處理線路斷接、腳位錯接及 LCD 更換等問題。", "kw": ["Hardware Debugging", "Troubleshooting", "Electronics Repair", "System Maintenance"]})
   ]),
-  N("神經工程", [
-    N("神經介面：微電極／植入式電極", [], { link: "← 微製程產出" }),
-    N("動物手術：立體定位 → 開顱 → 植入"),
-    N("神經訊號紀錄：電生理", [], { ds: "使用 MaxWell 高密度微電極陣列晶片進行平行電生理神經紀錄。" }),
-    N("行為：動物行為實驗、行為設備開發", [], { link: "← 用到機械＋機電", ds: "以 Open-field test 評估小鼠的負重與恢復能力，並參與小鼠 VR 系統與自動餵食器的硬體建置。" }),
-    N("組織學：心臟灌流、冷凍切片、免疫染色", [], { ds: "評估電極植入的位置及對組織的影響。" })
+  N("神經", [
+    N("動物手術與電極植入", [], {"ds": "具備小鼠立體定位手術經驗，包含立體定位、開顱及微電極植入等操作。", "kw": ["Stereotaxic Surgery", "Craniotomy", "Electrode Implantation"], "link": "← 微製程產出"}),
+    N("神經電生理與訊號紀錄", [], {"ds": "使用 MaxWell 高密度微電極陣列晶片進行平行電生理神經訊號紀錄，具備多通道神經訊號擷取與分析經驗。", "kw": ["Electrophysiology", "High-density MEA", "Neural Recording", "MaxWell"]}),
+    N("動物行為實驗與設備開發", [], {"ds": "使用 Open-field test 評估小鼠的負重與恢復能力，並參與小鼠 VR 系統及自動餵食器的硬體建置。", "kw": ["Open-field Test", "Behavioral Assessment", "VR System", "Automated Feeding"], "link": "← 用到機械＋機電"}),
+    N("組織學與免疫染色", [], {"ds": "具備心臟灌流、冷凍切片及免疫染色等組織學操作經驗，用於評估電極植入位置及其對周圍神經組織的影響。", "kw": ["Histology", "Cardiac Perfusion", "Cryosectioning", "Immunostaining"]})
   ], { sub: "照實驗流程排" }),
-  N("設計美學", [N("攝影", [], { go: "photo" }), N("平面設計"), N("UI／UX")])
+  N("美學", [
+    N("平面設計與視覺編排", [], {"ds": "曾於臺大椰風搖滾社擔任美宣，負責社徽設計、成果發表視覺製作及社群貼文編排。\n此外，曾於自發性成立的生科系系報擔任小組長，負責社群貼文設計及文字排版。\n長期對資訊整理與版面設計具有興趣，曾於生物學期末考自製開放攜帶的大抄，因資訊整理與版面設計表現獲授課教授分享至個人 Facebook。", "kw": ["Graphic Design", "Visual Communication", "Layout Design", "Social Media Design"]}),
+    N("攝影與影像創作", [], {"ds": "自大三下開始接觸攝影，逐漸養成隨身攜帶相機、記錄生活細節的習慣。因參與椰風搖滾社，累積豐富的舞台與活動攝影經驗，目前亦以接案攝影師的形式承接不同類型的拍攝工作。\n拍攝題材涵蓋太極拳、魔術、表演藝術、打擊樂及西洋劍等，具備跨領域活動攝影經驗。\n大四下參加臺大、臺科大及師大三校聯盟的建築攝影課程，期末作品經修課同學、助教及曾參與臺北 101 設計的授課建築師巫基福建築師共同票選，獲得課程第一名。", "kw": ["Photography", "Event Photography", "Stage Photography", "Architectural Photography", "Freelance Photographer"], "go": "photo"})
+  ])
 ];
 // Proficiency, 1–5 (the energy bar). Keyed by the item's Chinese name; a branch shows the average of everything under it.
-const SK_LV = {
-  "3D 建模與工程設計": 5, "程式": 3, "語言：中文（母語）、英文（TOEIC 835）": 4,
-  "積層：FDM／DLP 3D 列印": 5, "減材：雷射切割、銑床、鑽孔／攻牙": 5,
-  "控制平台：Arduino、ESP32、Raspberry Pi": 4, "硬體除錯": 4, "馬達控制": 5, "感測器整合：IMU、視覺、聲音": 4, "介面：PySide2 桌面主控台、網頁主控台": 3,
-  "微電極製造": 5, "氧氣電漿、濕式蝕刻、雷射剝除": 5, "元件驗證": 4, "SEM → 阻抗量測／EIS": 4,
-  "神經介面：微電極／植入式電極": 5, "動物手術：立體定位 → 開顱 → 植入": 4, "神經訊號紀錄：電生理": 4, "行為：動物行為實驗、行為設備開發": 4, "組織學：心臟灌流、冷凍切片、免疫染色": 4,
-  "攝影": 5, "平面設計": 4, "UI／UX": 4
-};
+const SK_LV = {"3D 建模與工程設計": 5, "數值最佳化與參數化建模": 4, "Python 程式開發與資料分析": 3, "積層製造": 5, "機械加工與雷射加工": 5, "微電極製造與製程驗證": 5, "嵌入式系統與控制平台": 4, "控制介面與軟硬體整合": 3, "感測器整合與系統架構": 4, "馬達控制與機構驅動": 5, "硬體除錯與系統維護": 4, "動物手術與電極植入": 4, "神經電生理與訊號紀錄": 4, "動物行為實驗與設備開發": 4, "組織學與免疫染色": 4, "平面設計與視覺編排": 4, "攝影與影像創作": 5};
 // Evidence photos for skill nodes (photos/skill/), keyed by node id. Several photos: the pop-up shows the first, the zoomed panel all.
-const SK_IMG = { "1.0.0": ["photos/skill/1-0-a.jpg", "photos/skill/1-0-b.jpg"], "1.0.1": ["photos/skill/1-1.jpg"], "2.1": ["photos/skill/2-1.jpg"], "1.1.0": ["photos/skill/3-0-0.jpg"],
-  "1.1.1": ["photos/skill/3-1-0.jpg"], "3.1": ["photos/skill/4-1.jpg"], "3.4": ["photos/skill/4-4.jpg"] };
+const SK_IMG = {"1.0": ["photos/skill/1-0-a.jpg", "photos/skill/1-0-b.jpg"], "1.1": ["photos/skill/1-1.jpg"], "1.2": ["photos/skill/3-0-0.jpg", "photos/skill/3-1-0.jpg"], "2.4": ["photos/skill/2-1.jpg"], "3.0": ["photos/skill/4-1.jpg"], "3.3": ["photos/skill/4-4.jpg"],
+  // 美學: [file, caption zh, caption en]; thumbnails live in photos/skill/s/
+  "4.0": [["photos/skill/4-0-01.jpg", "社團 icon", "Club logo"], ["photos/skill/4-0-02.jpg", "活動海報", "Event poster"], ["photos/skill/4-0-03.jpg", "台大杜鵑花節文宣", "NTU Azalea Festival flyer"], ["photos/skill/4-0-04.jpg", "活動社群貼文", "Event social post"], ["photos/skill/4-0-05.jpg", "內文排版", "Body-text layout"], ["photos/skill/4-0-06.jpg", "系報封面", "Department newsletter cover"], ["photos/skill/4-0-07.jpg", "普生實筆記", "General Biology Lab notes"], ["photos/skill/4-0-08.jpg", "普生實筆記", "General Biology Lab notes"], ["photos/skill/4-0-09.jpg", "教學插畫", "Teaching illustration"]],
+  "4.1": [["photos/skill/4-1-01.jpg", "紅", "Red"], ["photos/skill/4-1-02.jpg", "藍", "Blue"], ["photos/skill/4-1-03.jpg", "綠", "Green"], ["photos/skill/4-1-04.jpg", "打擊樂考核", "Percussion exam"], ["photos/skill/4-1-05.jpg", "學生社團表演", "Student club performance"]]};
 const UI = {
   tabs: [["home", "主頁", "Home"], ["acad", "學術", "Academic"], ["work", "專案", "Projects"], ["skills", "技能", "Skills"], ["other", "其他", "Other"]],
-  dl: { problem: ["問題", "Problem"], role: ["負責內容", "Responsibilities"], method: ["做法", "Method"], result: ["成果", "Result"], challenge: ["挑戰", "Challenges"], nextStep: ["下一步", "Next step"] }
+  dl: { problem: ["問題", "Problem"], role: ["負責內容", "Responsibilities"], method: ["實作內容", "Implementation"], result: ["成果", "Result"], challenge: ["挑戰", "Challenges"], nextStep: ["下一步", "Next step"] }
 };
 // Languages: zh / en live in D; Japanese and German are looked up here by the Chinese text — [日本語, Deutsch].
 // A string missing here falls back to English.
@@ -946,7 +1090,7 @@ const TR = {
   "指導教授 吳玉威": ["指導教員 呉玉威 教授", "Betreuer: Prof. Yu-Wei Wu"],
   "64 通道無線腦機介面系統": ["64チャンネル ワイヤレスBCIシステム", "Drahtloses 64-Kanal-BCI-System"],
   "生亦科技 · 宜特科技": ["BioPro · iST", "BioPro · iST"],
-  "微尺度探針入腦力學與血管破裂量測": ["微小プローブによる脳刺入力学と血管破裂の計測", "Hirnpenetrationsmechanik und Gefäßruptur mit mikroskaligen Sonden"],
+  "微尺度探針植入腦之力學與血管破裂量測": ["微小プローブによる脳刺入力学と血管破裂の計測", "Hirnpenetrationsmechanik und Gefäßruptur mit mikroskaligen Sonden"],
   "PNAS · 共同第一作者": ["PNAS · 共同筆頭著者", "PNAS · geteilte Erstautorschaft"],
   "桌上型四足陪伴機器人": ["卓上型四足コンパニオンロボット", "Vierbeiniger Tisch-Begleitroboter"],
   "Raspberry Pi 5 · 個人專案": ["Raspberry Pi 5 · 個人プロジェクト", "Raspberry Pi 5 · eigenes Projekt"],
@@ -1028,7 +1172,7 @@ const TR = {
   "作品集成果": ["主な作品", "Ausgewählte Arbeiten"], "攝影作品": ["写真作品", "Fotografie"],
   "四年攝影經驗，專注建築攝影；擔任 EMBO 國際研討會官方攝影師、臺大各社團與學系官方攝影師，拍過光舞、火舞、街舞、魔術、樂團、太極拳與擊劍。": ["写真歴4年、建築写真が中心。EMBO 国際会議の公式フォトグラファー、国立台湾大学の各部活・学科の公式フォトグラファーを務め、ライトダンス、ファイヤーダンス、ストリートダンス、マジック、バンド、太極拳、フェンシングを撮影。", "Vier Jahre Fotografie mit Schwerpunkt Architektur; offizieller Fotograf der EMBO-Konferenz sowie von Clubs und Fachbereichen der NTU – Licht- und Feuertanz, Streetdance, Zauberei, Bands, Tai-Chi und Fechten."],
   "社團與活動": ["サークル・課外活動", "Engagement & Aktivitäten"], "主頁": ["ホーム", "Start"],
-  "年份": ["年", "Jahr"], "狀態": ["状態", "Status"], "標籤": ["タグ", "Tags"], "已完成": ["完了", "Abgeschlossen"], "上一個": ["前へ", "Zurück"], "下一個": ["次へ", "Weiter"], "挑戰": ["課題", "Herausforderungen"], "負責內容": ["担当", "Verantwortung"], "下一步": ["次のステップ", "Nächster Schritt"],
+  "年份": ["年", "Jahr"], "狀態": ["状態", "Status"], "標籤": ["タグ", "Tags"], "已完成": ["完了", "Abgeschlossen"], "上一個": ["前へ", "Zurück"], "下一個": ["次へ", "Weiter"], "挑戰": ["課題", "Herausforderungen"], "負責內容": ["担当", "Verantwortung"], "實作內容": ["実施内容", "Umsetzung"], "簡介": ["概要", "Überblick"], "下一步": ["次のステップ", "Nächster Schritt"],
   "問題": ["課題", "Problem"], "角色": ["役割", "Rolle"], "做法": ["手法", "Vorgehen"], "成果": ["成果", "Ergebnis"],
   "◐ 自動": ["◐ 自動", "◐ AUTO"], "● 深色": ["● ダーク", "● DUNKEL"], "○ 淺色": ["○ ライト", "○ HELL"]
 };
@@ -1131,6 +1275,17 @@ class Component extends DCLogic {
       });
     };
     this.startBg();
+    // HUD magnifier cursor (mouse only): an octagonal lens with a handle, drawn in the current signal colour.
+    if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      const z = document.createElement("div"); z.className = "zcur"; z.setAttribute("aria-hidden", "true");
+      const lens = "M9.3 3h7.4l5.3 5.3v7.4L16.7 21H9.3L4 15.7V8.3z", hand = "M19.5 19.5L28 28", plus = "M13 9v8M9 13h8";
+      z.innerHTML = `<svg viewBox="0 0 30 30" fill="none"><path d="${lens}" stroke="currentColor" stroke-width="1.6"/><path d="${hand}" stroke="currentColor" stroke-width="3" stroke-linecap="square"/><path d="${plus}" stroke="currentColor" stroke-width="1.6"/></svg>`;
+      document.body.appendChild(z); this._zcur = z;
+      this.onZMove = e => { const hit = e.target && e.target.closest && e.target.closest("[data-zoom]");
+        z.classList.toggle("on", !!hit); if (hit) z.style.transform = `translate(${e.clientX}px,${e.clientY}px)`; };
+      this.onZLeave = () => z.classList.remove("on");
+      document.addEventListener("mousemove", this.onZMove, { passive: true }); document.addEventListener("mouseleave", this.onZLeave);
+    }
     this.before = () => this.setState({ printing: true }, this.applyMode);
     this.after = () => this.setState({ printing: false }, this.applyMode);
     window.addEventListener("beforeprint", this.before);
@@ -1188,6 +1343,7 @@ class Component extends DCLogic {
     // ---- Skill tree camera ----
     const camEl = () => document.querySelector("[data-skmap]"), viewEl = () => document.querySelector("[data-skview]");
     const camSet = c => { this._skCam = c; const el = camEl(); if (el) { el.style.transition = "none"; el.style.transform = `translate(${c.x}px,${c.y}px) scale(${c.s})`; } };
+    const skZoomed = () => { const c = this._skCam; return !!c && (c.s > 1.001 || Math.abs(c.x) > 0.5 || Math.abs(c.y) > 0.5); };
     // Zoom in on one node: it goes to the left of the window, its notes open on the right.
     this.skFocus = id => {
       const v = viewEl(), m = camEl(), g = this._skGeo; if (!v || !m || !g || !g.pos[id]) return;
@@ -1201,7 +1357,7 @@ class Component extends DCLogic {
     this.skUnfocus = () => {
       if (!this.state.skFocus) return;
       this._skCam = this._skCamPrev || { s: 1, x: 0, y: 0 }; this._skCamPrev = null; this._skAnimAt = Date.now();
-      this.setState({ skFocus: null }); clearTimeout(this._skClipT); this._skClipT = setTimeout(() => this.setState({ skClip: false }), 520);
+      this.setState({ skFocus: null }); clearTimeout(this._skClipT); this._skClipT = setTimeout(() => this.setState({ skClip: !this.state.skNarrow && skZoomed() }), 520);
     };
     // Phone: one finger drags the tree, two fingers zoom it, and holding a node zooms in on it.
     const ptrs = new Map(); let gs = null;
@@ -1211,7 +1367,7 @@ class Component extends DCLogic {
       gs = { cam: { ...(this._skCam || { s: 1, x: 0, y: 0 }) }, p, z, bx: m.offsetLeft, by: m.offsetTop, vw: v.clientWidth, vh: v.clientHeight, wi: m.offsetWidth, hi: m.offsetHeight, r, moved: gs ? gs.moved : false }; };
     this.onSkDown = e => {
       const v = e.target.closest && e.target.closest("[data-skview]");
-      if (!v || !this.state.skNarrow || e.pointerType === "mouse" || this.state.skFocus || e.target.closest("[data-skpanel]")) return;
+      if (!v || !this.state.skNarrow || e.pointerType === "mouse" || this.state.skFocus || e.target.closest("[data-skpanel], [data-skhelp], .sk-qbtn")) return;
       ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 1) gs = null; rebase(); if (gs && ptrs.size === 1) gs.moved = false;
       clearTimeout(this._skLT); const nd = e.target.closest("[data-skid]");
       if (nd && ptrs.size === 1) this._skLT = setTimeout(() => { if (gs && !gs.moved && ptrs.size === 1) { this._skLong = Date.now(); ptrs.clear(); gs = null; this.skFocus(nd.getAttribute("data-skid")); } }, 460);
@@ -1231,6 +1387,36 @@ class Component extends DCLogic {
     };
     this.onSkUp = e => { if (!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId); clearTimeout(this._skLT); if (gs && gs.moved) this._skDragT = Date.now(); rebase(); };
     this.onSkMenu = e => { if (this.state.skNarrow && e.target.closest && e.target.closest("[data-skview]") && !e.target.closest("[data-skpanel]")) e.preventDefault(); };
+    // Computer: the scroll wheel (or a trackpad pinch) zooms the tree around the pointer; once zoomed, drag with the mouse to move; double-click to see the whole tree again.
+    const deskClamp = (c, v, m) => { const vw = v.clientWidth, vh = v.clientHeight, wi = m.offsetWidth, hi = m.offsetHeight;
+      c.x = Math.max(vw - c.s * wi, Math.min(0, c.x)); c.y = Math.max(vh - c.s * hi, Math.min(0, c.y)); return c; };
+    const deskOk = e => { const v = e.target.closest && e.target.closest("[data-skview]");
+      return v && !this.state.skNarrow && !this.state.skFocus && !e.target.closest("[data-skpanel], [data-skpop]") ? v : null; };
+    const clipSync = () => { const w = skZoomed(); clearTimeout(this._skClipT); if (!!this.state.skClip !== w) this.setState({ skClip: w }); };
+    const popOff = () => { if (this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); } };
+    this.onSkWheel = e => {
+      const v = deskOk(e), m = camEl(); if (!v || !m) return;
+      if (this.state.skHelp !== false) { e.preventDefault(); this.setState({ skHelp: false }); return; }
+      const c0 = this._skCam || { s: 1, x: 0, y: 0 }, dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+      if (c0.s <= 1.001 && dy > 0 && !e.ctrlKey) return;   // fully zoomed out: the wheel scrolls the page as usual
+      e.preventDefault();
+      const s = Math.max(1, Math.min(3.2, c0.s * Math.exp(-dy * (e.ctrlKey ? 0.012 : 0.0018)))); if (s === c0.s) return;
+      const r = v.getBoundingClientRect(), z = r.width / (v.offsetWidth || r.width) || 1, px = (e.clientX - r.left) / z, py = (e.clientY - r.top) / z;
+      const cx = (px - c0.x) / c0.s, cy = (py - c0.y) / c0.s;
+      popOff(); camSet(deskClamp({ s, x: px - cx * s, y: py - cy * s }, v, m)); clipSync();
+    };
+    let md = null;
+    this.onSkMDown = e => { if (e.pointerType !== "mouse" || e.button !== 0 || !skZoomed()) return; const v = deskOk(e); if (!v) return;
+      const r = v.getBoundingClientRect(); md = { v, x: e.clientX, y: e.clientY, c: { ...this._skCam }, z: r.width / (v.offsetWidth || r.width) || 1, moved: false }; };
+    this.onSkMMove = e => { if (!md) return; const dx = (e.clientX - md.x) / md.z, dy = (e.clientY - md.y) / md.z, m = camEl(); if (!m) return;
+      if (!md.moved) { if (Math.hypot(dx, dy) < 5) return; md.moved = true; md.v.style.cursor = "grabbing"; popOff(); }
+      camSet(deskClamp({ s: md.c.s, x: md.c.x + dx, y: md.c.y + dy }, md.v, m)); };
+    this.onSkMUp = () => { if (!md) return; if (md.moved) this._skDragT = Date.now(); md.v.style.cursor = ""; md = null; };
+    this.onSkDbl = e => { if (!deskOk(e) || !skZoomed() || (e.target.closest && e.target.closest("[data-skid]"))) return;
+      this._skCam = { s: 1, x: 0, y: 0 }; this._skAnimAt = Date.now(); this.setState({ skN: (this.state.skN || 0) + 1 });
+      clearTimeout(this._skClipT); this._skClipT = setTimeout(() => this.setState({ skClip: false }), 480); };
+    document.addEventListener("wheel", this.onSkWheel, { passive: false }); document.addEventListener("dblclick", this.onSkDbl);
+    document.addEventListener("pointerdown", this.onSkMDown); document.addEventListener("pointermove", this.onSkMMove); document.addEventListener("pointerup", this.onSkMUp);
     document.addEventListener("pointerdown", this.onSkDown); document.addEventListener("pointermove", this.onSkMove);
     document.addEventListener("pointerup", this.onSkUp); document.addEventListener("pointercancel", this.onSkUp); document.addEventListener("contextmenu", this.onSkMenu);
     window.addEventListener("resize", this.onResize);
@@ -1501,12 +1687,14 @@ class Component extends DCLogic {
   }
   componentDidUpdate(pp, ps) {
     if (ps && (ps.theme !== this.state.theme || ps.palette !== this.state.palette)) this.applyMode();
+    if (ps && ps.tab !== this.state.tab && this.state.tab === "skills" && this.state.skHelp === false) this.setState({ skHelp: null });
     if (pp.device !== this.props.device && this._bgResize) setTimeout(this._bgResize, 60);
     if (this._bgStatic && ps && (ps.tab !== this.state.tab || ps.theme !== this.state.theme || ps.bg !== this.state.bg || ps.palette !== this.state.palette)) this._bgStatic();
     const hl = { zh: "zh-Hant", en: "en", ja: "ja", de: "de" }[this.state.lang || "en"] || "en";
     if (document.documentElement.lang !== hl) document.documentElement.lang = hl;
     this.measureTab();
     this.fitText();
+    document.querySelectorAll("video[data-auto], [data-lb] video").forEach(v => { if (!v._wk) { v._wk = 1; v.addEventListener("pause", () => { if (v.controls && !v.ended) v._userPaused = true; }); } if (!v.muted) v.muted = true; if (v.paused && !v._userPaused) { const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); } });
   }
   // Shrink single-line labels (name, role, section titles) until they fit on one line in every language.
   fitText(force) {
@@ -1523,6 +1711,8 @@ class Component extends DCLogic {
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.onDocDown);
     document.removeEventListener("pointerdown", this.onSkDown); document.removeEventListener("pointermove", this.onSkMove);
+    document.removeEventListener("wheel", this.onSkWheel); document.removeEventListener("dblclick", this.onSkDbl);
+    document.removeEventListener("pointerdown", this.onSkMDown); document.removeEventListener("pointermove", this.onSkMMove); document.removeEventListener("pointerup", this.onSkMUp);
     document.removeEventListener("pointerup", this.onSkUp); document.removeEventListener("pointercancel", this.onSkUp); document.removeEventListener("contextmenu", this.onSkMenu);
     clearTimeout(this._skLT); clearTimeout(this._skClipT);
     cancelAnimationFrame(this._pcRaf);
@@ -1531,6 +1721,7 @@ class Component extends DCLogic {
     document.removeEventListener("pointerdown", this.onPcDown); document.removeEventListener("pointermove", this.onPcMove);
     document.removeEventListener("pointerup", this.onPcUp); document.removeEventListener("pointercancel", this.onPcUp);
     document.removeEventListener("scroll", this.onTocScroll, true);
+    if (this._zcur) { document.removeEventListener("mousemove", this.onZMove); document.removeEventListener("mouseleave", this.onZLeave); this._zcur.remove(); }
     cancelAnimationFrame(this._bgRaf);
     window.removeEventListener("resize", this._bgResize);
     clearTimeout(this.exitT); clearTimeout(this.measT);
@@ -1604,20 +1795,26 @@ class Component extends DCLogic {
         if (window.innerWidth < 820) { const it = document.getElementById(`work-${i + 1}`), ls = it && it.parentElement; if (ls) ls.scrollTo({ left: it.offsetLeft - 16, behavior: "smooth" }); } }, 60); };
     const works = D.works.map((w, i) => {
       const on = i === wSel, arr = k => { const v = w[k] ? tv(w[k]) : null; return Array.isArray(v) ? v : []; }, txt = k => { const v = w[k] ? tv(w[k]) : ""; return Array.isArray(v) ? "" : v; };
-      const live = /至今|進行中/.test(w.year || ""), method = arr("method").map((text, j) => ({ n: String(j + 1).padStart(2, "0"), text }));
-      const problem = txt("problem"), role = txt("role"), result = txt("result"), nextStep = txt("nextStep"), note = txt("note");
-      const challenge = arr("challenge").map(c => { const [a, ...b] = String(c).split(/\s*→\s*/); return { a, b: b.join(" → "), hasB: b.length > 0 }; });
+      const sg = x => String(x || "").split(/(==[^=]+?==)/).filter(Boolean).map(p => /^==.+==$/.test(p) ? { t: p.slice(2, -2), c: "var(--text-signal)", w: 500 } : { t: p, c: "inherit", w: "inherit" });
+      const hd = x => { const m = /^\*\*(.+?)\*\*[：:]\s*([\s\S]*)$/.exec(String(x)); return m ? { h: m[1], t: m[2], hasH: true } : { h: "", t: String(x), hasH: false }; };
+      const live = /至今|進行中/.test(w.year || ""), method = arr("method").map((text, j) => ({ n: `${j + 1}.`, text, ...hd(text), col: hd(text).hasH ? "var(--text-secondary)" : "inherit", seg: sg(hd(text).t), lines: hd(text).t.split("\n").map(x => ({ x, seg: sg(x) })), multi: hd(text).t.includes("\n"), single: !hd(text).t.includes("\n") }));
+      const roleTitle = txt("roleTitle"), resultList = arr("result").map(x => ({ ...hd(x), seg: sg(hd(x).t) })), roleList = arr("roleList").map(text => ({ text, seg: sg(text) })), nextList = arr("nextStep").map(x => ({ ...hd(x), seg: sg(hd(x).t) }));
+      const problem = txt("problem"), role = txt("role"), result = txt("result"), nextStep = txt("nextStep"), note = txt("note"), detail = arr("detail").map(text => ({ text, seg: sg(text) }));
+      const challenge = arr("challenge").map(c => { const x = hd(String(c).replace(/^\s*[!！]\s*/, "")), [a, ...b] = x.t.split(/\s*→\s*/); return { a, b: b.join(" → "), aSeg: sg(a), bSeg: sg(b.join(" → ")), hasB: b.length > 0, h: x.h, hasH: x.hasH, col: x.hasH ? "var(--text-secondary)" : "var(--text-primary)" }; });
       return {
         num: String(i + 1).padStart(2, "0"), yearTxt: yr(w.year), short: dr(w) + t(w.title),
-        title: dr(w) + t(w.title), summary: t(w.summary), tags: w.tags,
-        problem, role, result, method, hasMethod: method.length > 0, challenge, hasChallenge: challenge.length > 0, nextStep, note,
-        hasBody: !!(problem || role || result || method.length || challenge.length || nextStep),
+        title: dr(w) + t(w.title), summary: t(w.summary), summarySeg: sg(t(w.summary)), problemSeg: sg(problem), roleSeg: sg(role), resultSeg: sg(result), nextSeg: sg(nextStep), tags: Array.isArray(w.tags) ? w.tags : (w.tags ? tv(w.tags) || [] : []),
+        problem, role, result, method, hasMethod: method.length > 0, challenge, hasChallenge: challenge.length > 0, nextStep, note, detail, hasDetail: detail.length > 0, resultList, hasResultList: resultList.length > 0, hasResultBox: !!(result || resultList.length), roleList, hasRoleList: roleList.length > 0, hasRoleCol: !!(role || roleList.length), roleTitle, nextList, hasNextList: nextList.length > 0, hasNext: !!(nextStep || nextList.length),
+        hasRoleRow: !!(role || roleList.length || method.length), hasEndRow: !!(challenge.length || result || resultList.length),
+        hasBody: !!(problem || role || roleList.length || result || resultList.length || method.length || challenge.length || nextStep || nextList.length),
         status: live ? L("進行中", "Ongoing") : L("已完成", "Completed"), stDot: live ? "●" : "✓", stColor: live ? "var(--text-signal)" : "var(--text-secondary)",
         slotId: `work-shot-${D._all.works.indexOf(w) + 1}`, anchor: `work-${i + 1}`,
         ...(() => { const sh = w.shots || [], sel = Math.max(0, Math.min((this.state.workPic || {})[i] || 0, sh.length - 1)), cur = sh[sel];
+          const isVid = src => /\.(mp4|webm)$/i.test(src || ""), vid = !!cur && isVid(cur[0]);
           return { hasShot: sh.length > 0, noShot: !sh.length, shot: cur ? cur[0] : "", shotCap: cur ? L(cur[1], cur[2]) : "", shotCount: cur ? `${sel + 1} / ${sh.length} · ${L(cur[1], cur[2])}` : "",
-            zoom: zoom(sh.map(([src, zh, en]) => ({ src, alt: L(zh, en) })), sel),
-            thumbs: sh.map(([src, zh, en], j) => ({ src, cap: L(zh, en), ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ workPic: { ...(s.workPic || {}), [i]: j } })) })) }; })(),
+            shotVid: vid, shotImg: !!cur && !vid, shotPoster: cur && cur[3] || "", fit: w.shotFit || "cover", fitPos: w.shotFit === "contain" ? "center" : "top left",
+            zoom: zoom(sh.map(([src, zh, en, po]) => ({ src, alt: L(zh, en), vid: isVid(src), poster: po || "" })), sel),
+            thumbCls: sh.length > 6 ? "many" : "", galCls: sh.length < 2 ? "one" : "", thumbs: sh.map(([src, zh, en, po], j) => ({ src: po || src, cap: L(zh, en), play: isVid(src), pos: w.shotFit === "contain" ? "center" : "top left", ring: "var(--border-hair)", sel: j === sel ? "ph-sel" : "", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ workPic: { ...(s.workPic || {}), [i]: j } })) })) }; })(),
         bar: on ? "var(--signal)" : "transparent", bg: on ? "var(--surface-plate)" : "transparent", noColor: on ? "var(--text-signal)" : "var(--text-faint)", titleColor: on ? "var(--text-primary)" : "var(--text-secondary)",
         pick: () => pickWork(i), anim: (this.state.wkN || 0) % 2 ? "wkInB" : "wkInA",
         prev: () => pickWork((i - 1 + wN) % wN), next: () => pickWork((i + 1) % wN),
@@ -1741,12 +1938,11 @@ class Component extends DCLogic {
               // Foundations straight up, its three items in one row.
               "0": [620, 195, "r", "v"], "0.0": [410, 80, "r", "v"], "0.1": [620, 80, "r", "v"], "0.2": [810, 80, "r", "v"],
               // Neuroengineering (left) and Mechatronics (right) mirror each other: out sideways, 45° up, items in a column.
-              "3": [380, 270, "t", "dh", 0, { t: 460 }], "3.0": [220, 150, "l", "h"], "3.1": [220, 210, "l", "h"], "3.2": [220, 270, "l", "h"], "3.3": [220, 330, "l", "h"], "3.4": [220, 390, "l", "h"],
-              "2": [860, 270, "t", "dh", 0, { t: 780 }], "2.0": [1020, 150, "r", "h"], "2.1": [1020, 210, "r", "h"], "2.3": [1020, 270, "r", "h"], "2.4": [1020, 330, "r", "h"], "2.2": [1020, 390, "r", "h"],
+              "3": [380, 270, "t", "dh", 0, { t: 460 }], "3.0": [220, 165, "l", "h"], "3.1": [220, 235, "l", "h"], "3.2": [220, 305, "l", "h"], "3.3": [220, 375, "l", "h"],
+              "2": [860, 270, "t", "dh", 0, { t: 780 }], "2.0": [1020, 150, "r", "h"], "2.1": [1020, 210, "r", "h"], "2.2": [1020, 270, "r", "h"], "2.3": [1020, 330, "r", "h"], "2.4": [1020, 390, "r", "h"],
               // Design (bottom left) and Fabrication & processing (bottom right): down first, then 45°.
-              "4": [440, 455, "l", "dv", 0, { o: -16, t: 405 }], "4.0": [330, 600, "b", "v"], "4.1": [440, 600, "b"], "4.2": [550, 600, "b", "v"],
-              "1": [800, 455, "r", "dv", 0, { o: 16, t: 405 }], "1.0": [710, 528, "r", "v"], "1.0.0": [645, 600, "r", "v"], "1.0.1": [765, 600, "r", "v"],
-              "1.1": [960, 528, "r", "v"], "1.1.0": [920, 600, "r", "v"], "1.1.1": [1090, 600, "r", "v"]
+              "4": [440, 455, "l", "dv", 0, { o: -16, t: 405 }], "4.0": [385, 600, "b", "v", 104], "4.1": [495, 600, "b", "v", 104],
+              "1": [800, 455, "r", "dv", 0, { o: 16, t: 405 }], "1.0": [690, 600, "b", "v", 104], "1.1": [800, 600, "b", "v", 104], "1.2": [910, 600, "b", "v", 104]
             };
             Object.keys(T).forEach(k => pos[k] = { x: T[k][0], y: T[k][1], side: T[k][2] || "r", via: T[k][3] || "", lw: T[k][4] || 0, opt: T[k][5] || {} });
             const pct = (v, of) => (v / of * 100).toFixed(3) + "%";
@@ -1790,6 +1986,7 @@ class Component extends DCLogic {
                 HOT.push({ l: pct(a[0], W), t: pct(a[1], H), w: pct(len, W), a: Math.atan2(b[1] - a[1], b[0] - a[0]).toFixed(4) + "rad", h: (h < 4 ? h + 1 : h) + "px",
                   dur: Math.max(0.01, len / total * DUR).toFixed(3) + "s", delay: (acc / total * DUR).toFixed(3) + "s", anim: (this._hotN || 0) % 2 ? "skrunA" : "skrunB" }); acc += len; }); }
             const short = s => s.split(/[：（]|: | \(/)[0].trim();
+            const skS = s => lang !== "zh" && SK_SH[s] ? SK_SH[s][lang === "en" ? 0 : lang === "ja" ? 1 : 2] : sk(s);
             const svgUri = id => "url(data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${SK_IC[id] || '<circle cx="12" cy="12" r="4"/>'}</svg>`).replace(/[()']/g, ch => "%" + ch.charCodeAt(0).toString(16)) + ")";
             const lvOf = n => SK_LV[n.n] || (() => { const v = desc(n).map(ch => SK_LV[ch.n]).filter(Boolean); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : 0; })();
             const cellsOf = n => { const k = lvOf(n); return [1, 2, 3, 4, 5].map(i => ({ bg: i <= k ? "var(--signal)" : "transparent", bd: i <= k ? "var(--signal)" : "var(--border-strong)" })); };
@@ -1799,7 +1996,7 @@ class Component extends DCLogic {
               const lblW = q.lw || (isCat ? 190 : q.side === "l" ? 170 : 126);
               const lblPos = q.side === "r" ? `left:100%;top:50%;transform:translateY(-50%);margin-left:${gapEm}` : q.side === "l" ? `right:100%;top:50%;transform:translateY(-50%);margin-right:${gapEm}`
                 : q.side === "t" ? `bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:.5em` : `top:100%;left:50%;transform:translateX(-50%);margin-top:.5em`;
-              P.push({ ...hand(id), id, isCat, no: "0" + (+id + 1), cells: isCat ? cellsOf(n) : [], lv: isCat ? `${d.filter(x => x.ok).length}/${d.length}` : "", name: isCat ? sk(n.n) : short(sk(n.n)),
+              P.push({ ...hand(id), id, isCat, no: "0" + (+id + 1), cells: isCat ? cellsOf(n) : [], lv: isCat ? `${d.filter(x => x.ok).length}/${d.length}` : "", name: isCat ? skS(n.n) : short(skS(n.n)),
                 l: pct(q.x - sz / 2, W), t: pct(q.y - sz / 2, H), w: pct(sz, W),
                 border: on ? "var(--signal)" : n.ok ? "var(--state-ok)" : isCat ? "var(--border-ink)" : "var(--border-strong)", bw: isCat ? "2px" : "1.5px",
                 bg: "var(--surface-plate)", ink: on ? "var(--signal)" : n.ok ? "var(--state-ok)" : isCat ? "var(--text-primary)" : "var(--text-secondary)",
@@ -1813,9 +2010,13 @@ class Component extends DCLogic {
               return { cat: sk(pb.n), no: pid.split(".").map(x => +x + 1).join("."), cells: cellsOf(pn), name: sk(pn.n), ok: !!pn.ok, hasP: !!pn.p, status: pn.ok ? L("已驗證", "VERIFIED") : L("待確認", "PENDING"), tone: pn.ok ? "var(--state-ok)" : "var(--text-faint)",
                 d: pd, hasD: pd.length > 0, link: sk(pn.link), slot: pid.includes(".") ? `skill-${pid}` : `skill-cat-${pid}`,
                 proof: pn.p ? (pn.p[lang] || pn.p.zh) : L("待補證明", "Evidence pending"), proofColor: pn.p ? "var(--text-primary)" : "var(--text-faint)",
-                ...(() => { const im = SK_IMG[pid] || []; return { hasImg: im.length > 0, noImg: !im.length, img0: im[0] || "", imgN: Math.max(1, im.length),
-                  imgs: im.map((src, i) => ({ src, open: e => { stop(e); zoom(im.map(u => ({ src: u, alt: sk(pn.n) })), i)(); } })) }; })(),
-                ds: sk(pn.ds), hasDs: !!pn.ds,
+                ...(() => { const im = (SK_IMG[pid] || []).map(x => Array.isArray(x) ? x : [x, "", ""]), n = im.length, th = u => u.replace("photos/skill/", "photos/skill/s/");
+                  // two or fewer photos: shown large; more: a grid of small square thumbnails (pop-up and zoom panel alike)
+                  const big = n <= 2, list = im.map(([u, z, e]) => ({ src: u, alt: z ? L(z, e) : sk(pn.n), cap: z ? L(z, e) : "" }));
+                  return { hasImg: n > 0, noImg: !n, imgN: big ? Math.max(1, n) : Math.min(n, 5), imgH: big ? "height:min(34vh,300px)" : "aspect-ratio:1 / 1;height:auto",
+                    popN: n <= 1 ? 1 : Math.min(n, 5), popAr: n <= 1 ? "4 / 3" : "1 / 1",
+                    imgs: im.map(([u, z, e], i) => ({ src: big ? u : th(u), th: n <= 1 ? u : th(u), cap: z ? L(z, e) : "", open: e => { stop(e); this._popPos = null; zoom(list, i)(); } })) }; })(),
+                ds: sk(pn.ds), hasDs: !!pn.ds, ds1: (s => { const ps = s.split("\n"); return ps.length > 1 ? ps[0] + " …" : s; })(sk(pn.ds) || ""), kw: pn.kw || [], hasKw: !!(pn.kw && pn.kw.length),
                 hasGo: !!pn.go, goLabel: sk(pn.go === "photo" ? "看作品 →" : "詳情 →"), goPhoto: e => { stop(e); this._popPos = null; this.setState({ skPop: null, skFocus: null, ...(pn.go === "photo" ? {} : { workSel: D.works.length - 1 }) }); this.go(pn.go === "photo" ? "other" : "work");
                   setTimeout(() => { const el = document.getElementById(pn.go === "photo" ? "sec-photo" : "work-dossier"); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 150); } }; };
             const pid = foc ? null : this.state.skPop, ppos = this._popPos || { l: "-9999px", t: "0px", tf: "none" };
@@ -1829,9 +2030,19 @@ class Component extends DCLogic {
               // Computer: the whole tree fits the window. Phone: the window opens on the root and its five branches (the tree is ~2× the window; drag / pinch to see the rest).
               skView: phone ? { box: "height:max(260px,calc((100vh - 172px) / 0.88));height:max(260px,calc((100svh - 172px) / 0.88))", clip: "hidden", touch: "none", w: "206.7%", l: "-53.35%", t: `calc(50% - ${(pos.root.y / W * 206.7).toFixed(2)}cqi)`,
                   cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none",
-                  hint: foc ? "" : L("角標內：拖曳移動、雙指縮放 · 點一下看路線 · 長按放大看說明", "Inside the corner marks: drag to move, pinch to zoom · tap for the route · long-press for details") }
+                  hb: "left:26px;right:26px;bottom:5px;text-align:center", hint: "" }
                 : { box: `aspect-ratio:${W} / ${H};max-width:min(1400px,calc((100vh - 170px) * ${(W / H).toFixed(3)}))`, clip: foc || this.state.skClip ? "hidden" : "visible", touch: "auto", w: "100%", l: "0", t: "0",
-                  cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none", hint: "" },
+                  cam: `translate(${cam.x}px,${cam.y}px) scale(${cam.s})`, camTr: recent(this._skAnimAt, 520) ? "transform .45s cubic-bezier(.2,.8,.2,1)" : "none", hb: "right:24px;top:2px;max-width:34%;text-align:right", hint: "" },
+              skHelp: (() => { const on = this.state.skHelp !== false && !foc, zh = [phone
+                  ? [["點一下節點", "亮起路線與簡介", "tap"], ["長按節點", "放大看完整說明", "hold"], ["單指拖曳", "移動畫面", "move"], ["雙指捏合", "縮放", "pinch"], ["點空白處", "返回", "back"]]
+                  : [["滑鼠移到節點", "預覽簡介", "hover"], ["點節點", "放大看完整說明", "click"], ["滾輪／觸控板", "縮放", "wheel"], ["放大後拖曳", "移動畫面", "grab"], ["雙擊空白處", "還原整棵樹", "reset"], ["點空白處", "關閉說明", "close"]]][0],
+                  en = phone
+                  ? [["Tap a node", "Light its route + summary", "tap"], ["Long-press a node", "Open full notes", "hold"], ["Drag", "Move", "move"], ["Pinch", "Zoom", "pinch"], ["Tap empty space", "Back", "back"]]
+                  : [["Hover a node", "Preview", "hover"], ["Click a node", "Open full notes", "click"], ["Scroll / pinch", "Zoom", "wheel"], ["Drag when zoomed", "Move", "grab"], ["Double-click empty space", "Reset the view", "reset"], ["Click empty space", "Close notes", "close"]];
+                return { on, btn: !on && !foc, title: L("操作方式", "How to explore"), foot: L(phone ? "點一下任意處開始" : "點擊任意處開始", phone ? "Tap anywhere to start" : "Click anywhere to start"),
+                  rows: (L("z", "e") === "z" ? zh : en).map(([k, v, i]) => ({ k, v, ic: svgUri("help." + i) })),
+                  close: e => { stop(e); this._skDragT = Date.now(); this.setState({ skHelp: false }); },
+                  open: e => { stop(e); this._popPos = null; this.setState({ skHelp: null, skPop: null }); } }; })(),
               skMapClick: () => { if (recent(this._skDragT, 350) || recent(this._skLong, 900)) return; if (foc) return this.skUnfocus(); if (this.state.skPop) { this._popPos = null; this.setState({ skPop: null }); } },
               skPop: pid ? { on: true, ...ppos, ...info(pid), moreLabel: sk("查看詳細 →"), more: e => { stop(e); this.skFocus(pid); }, stop } : { on: false },
               skFoc: foc ? { on: true, ...info(foc), slots: SK_IMG[foc] ? [] : [{ id: info(foc).slot }], left: phone ? "36%" : "42%", nameFs: phone ? "15px" : "20px", stop, close: e => { stop(e); this.skUnfocus(); } } : { on: false, slots: [] }
@@ -1911,10 +2122,10 @@ class Component extends DCLogic {
           thumbRow: pics.length > 1 && !low, arrows: pics.length > 1 && low,
           prev: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: (sel - 1 + pics.length) % pics.length } })); },
           next: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: (sel + 1) % pics.length } })); },
-          thumbs: pics.map((src, j) => ({ src: small(src), ring: j === sel ? "var(--signal)" : "var(--border-hair)", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
+          thumbs: pics.map((src, j) => ({ src: small(src), ring: "var(--border-hair)", sel: j === sel ? "ph-sel" : "", op: j === sel ? 1 : 0.6, go: () => this.setState(s => ({ acadPic: { ...(s.acadPic || {}), [sid]: j } })) })) };
       }) })),
       workTitle: L("專案", "Projects"), workPanels,
-      wkLbl: { year: L("年份", "Year"), status: L("狀態", "Status"), tags: L("標籤", "Tags"), problem: L(UI.dl.problem[0], UI.dl.problem[1]), role: L(UI.dl.role[0], UI.dl.role[1]), method: L(UI.dl.method[0], UI.dl.method[1]), result: L(UI.dl.result[0], UI.dl.result[1]), challenge: L(UI.dl.challenge[0], UI.dl.challenge[1]), nextStep: L(UI.dl.nextStep[0], UI.dl.nextStep[1]), prev: L("上一個", "Previous"), next: L("下一個", "Next") },
+      wkLbl: { year: L("年份", "Year"), status: L("狀態", "Status"), tags: L("標籤", "Tags"), problem: L(UI.dl.problem[0], UI.dl.problem[1]), role: L(UI.dl.role[0], UI.dl.role[1]), method: L(UI.dl.method[0], UI.dl.method[1]), result: L(UI.dl.result[0], UI.dl.result[1]), challenge: L(UI.dl.challenge[0], UI.dl.challenge[1]), nextStep: L(UI.dl.nextStep[0], UI.dl.nextStep[1]), detail: L("簡介", "Overview"), prev: L("上一個", "Previous"), next: L("下一個", "Next") },
       minisTitle: L("小專案", "Side projects"), minisIntro: L("之前做的 3D 建模。", "Earlier 3D modelling work."),
       minisCount: `${D.minis.length} ${L("件", "PIECES")}`,
       minis: D.minis.map((m, i) => ({ slotId: `mini-${D._all.minis.indexOf(m) + 1}`, no: String(i + 1).padStart(2, "0"), title: dr(m) + t(m.title) })),
@@ -1937,7 +2148,7 @@ class Component extends DCLogic {
             return { name: lang === "zh" ? `${c.zh} · ${c.en.toUpperCase()}` : c.en.toUpperCase(), sw: c.sw, count: `${c.pics.length}`, cover: "photos/photo/t/" + f(c.pics[0]),
               // position in the carousel: 0 = the middle; when a colour is chosen, further out = smaller, softer, fainter (the far ends are hidden so wrapping round is not seen)
               d: idle ? d.toFixed(4) : d, s: idle ? 0.8 : [1, 0.8, 0.64, 0.5][a], blur: idle ? "0px" : ["0px", "1.6px", "3px", "4px"][a], op: idle ? 1 : [1, 0.9, 0.55, 0][a], z: idle ? 5 : 8 - a, pe: !idle && a > 2 ? "none" : "auto",
-              ring: !idle && !a ? solid(c) : "var(--border-hair)",
+              ring: "var(--border-hair)", sel: !idle && !a ? "ph-sel" : "",
               go: () => { if (Date.now() - (this._pcDragT || 0) < 350) return; if (!idle && !a) return toIdle(); this.setState(s => ({ photoColor: i, pcN: (s.pcN || 0) + 1 })); } }; }),
           pcTr: idle ? "0s" : ".5s",
           pcPrev: e => { if (e && e.stopPropagation) e.stopPropagation(); this.pcStep(-1); }, pcNext: e => { if (e && e.stopPropagation) e.stopPropagation(); this.pcStep(1); },
@@ -1961,7 +2172,7 @@ class Component extends DCLogic {
             const step = d => e => { stop(e); this.lbStep(d); };
             // The photo slides in from the side it came from (two copies of each animation so it replays on every step).
             const lbAnim = !this.state.lbDir ? "none" : (this.state.lbDir > 0 ? "lbR" : "lbL") + ((this.state.lbN || 0) % 2);
-            return { lbAnim, lbOpen: !!cur, lbSrc: cur ? cur.src : "", lbAlt: cur ? cur.alt : "", lbCount: n ? `${k + 1} / ${n}` : "", lbMulti: n > 1,
+            return { lbAnim, lbOpen: !!cur, lbSrc: cur ? cur.src : "", lbVid: !!(cur && cur.vid), lbImg: !!cur && !cur.vid, lbPoster: cur && cur.poster || "", lbAlt: cur ? cur.alt : "", lbCount: n ? `${k + 1} / ${n}` + (cur && cur.cap ? ` · ${cur.cap}` : "") : "", lbMulti: n > 1,
               lbClose: e => { stop(e); if (Date.now() - (this._lbSwipeT || 0) < 400) return; this.setState({ lb: null }); }, lbStop: stop, lbPrev: step(-1), lbNext: step(1) };
           })()
         };
